@@ -1,6 +1,11 @@
 %define name pulseaudio
 %define version 0.9.5
+%define svn 1437
+%if %{svn}
+%define release %mkrel 1.%{svn}.1
+%else
 %define release %mkrel 1
+%endif
 %define major 0
 %define coremajor 2
 %define apiver 0.9
@@ -11,7 +16,13 @@ Summary: Sound server for Linux
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: http://0pointer.de/lennart/projects/pulseaudio/%{name}-%{version}.tar.bz2
+%if %{svn}
+Source0: %{name}-%{version}-%{svn}.tar.bz2
+%else
+Source0: %{name}-%{version}.tar.bz2
+%endif
+Patch0:  pulseaudio-0.9.5-use-master.patch
+Patch1:  pulseaudio-0.9.5-r1437-hal-log-fix.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -31,6 +42,7 @@ BuildRequires: hal-devel
 BuildRequires: doxygen
 BuildRequires: automake1.8
 BuildRequires: libltdl-devel
+BuildRequires: libatomic_ops-devel
 Provides: polypaudio
 Obsoletes: polypaudio
 
@@ -147,9 +159,15 @@ based applications.
 
 %prep
 %setup -q
+%patch0 -p0 -b .use-master
+%patch1 -p0 -b .hal-log
 
 %build
+%if %{svn}
+NOCONFIGURE=1 ./bootstrap.sh
+%else
 export CPPFLAGS=-I%_includedir/alsa
+%endif
 %configure2_5x --disable-glib1
 make
 make doxygen
@@ -213,5 +231,3 @@ rm -rf $RPM_BUILD_ROOT
 %_includedir/pulse/
 %_includedir/pulsecore/
 %_libdir/pkgconfig/*.pc
-
-
