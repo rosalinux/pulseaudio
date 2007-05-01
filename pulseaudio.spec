@@ -43,6 +43,7 @@ BuildRequires: doxygen
 BuildRequires: automake1.8
 BuildRequires: libltdl-devel
 BuildRequires: libatomic_ops-devel
+BuildRequires: gettext-devel
 Provides: polypaudio
 Obsoletes: polypaudio
 
