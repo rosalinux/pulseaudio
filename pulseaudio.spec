@@ -1,13 +1,13 @@
 %define name pulseaudio
-%define version 0.9.5
-%define svn 1437
+%define version 0.9.6
+%define svn 0
 %if %{svn}
 %define release %mkrel 1.%{svn}.1
 %else
 %define release %mkrel 1
 %endif
 %define major 0
-%define coremajor 2
+%define coremajor 3
 %define apiver 0.9
 %define libname %mklibname %name %major
 %define corelibname %mklibname pulsecore %coremajor
@@ -22,7 +22,6 @@ Source0: %{name}-%{version}-%{svn}.tar.bz2
 Source0: %{name}-%{version}.tar.bz2
 %endif
 Patch0:  pulseaudio-0.9.5-use-master.patch
-Patch1:  pulseaudio-0.9.5-r1437-hal-log-fix.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -161,7 +160,6 @@ based applications.
 %prep
 %setup -q
 %patch0 -p0 -b .use-master
-%patch1 -p0 -b .hal-log
 
 %build
 %if %{svn}
