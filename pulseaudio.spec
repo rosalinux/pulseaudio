@@ -1,10 +1,11 @@
 %define name pulseaudio
 %define version 0.9.6
+%define rel 2
 %define svn 0
 %if %{svn}
-%define release %mkrel 1.%{svn}.1
+%define release %mkrel 0.%{svn}.%rel
 %else
-%define release %mkrel 1
+%define release %mkrel %rel
 %endif
 %define major 0
 %define coremajor 3
@@ -22,6 +23,7 @@ Source0: %{name}-%{version}-%{svn}.tar.bz2
 Source0: %{name}-%{version}.tar.bz2
 %endif
 Patch0:  pulseaudio-0.9.5-use-master.patch
+Patch1:  pulseaudio-ignore-xrun.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -160,6 +162,7 @@ based applications.
 %prep
 %setup -q
 %patch0 -p0 -b .use-master
+%patch1 -p1 -b .tunnel-ignore-overflow
 
 %build
 %if %{svn}
