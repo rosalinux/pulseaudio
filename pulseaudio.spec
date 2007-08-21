@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.6
-%define rel 2
+%define rel 3
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -24,6 +24,7 @@ Source0: %{name}-%{version}.tar.bz2
 %endif
 Patch0:  pulseaudio-0.9.5-use-master.patch
 Patch1:  pulseaudio-ignore-xrun.patch
+Patch2:  pulseaudio-0.9.6-truncate-avahi-names.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -163,6 +164,7 @@ based applications.
 %setup -q
 %patch0 -p0 -b .use-master
 %patch1 -p1 -b .tunnel-ignore-overflow
+%patch2 -p0 -b .avahi-names
 
 %build
 %if %{svn}
