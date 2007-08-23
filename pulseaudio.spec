@@ -1,16 +1,19 @@
 %define name pulseaudio
 %define version 0.9.6
-%define rel 3
+%define rel 4
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
 %else
 %define release %mkrel %rel
 %endif
+
 %define major 0
 %define coremajor 3
 %define apiver 0.9
+
 %define libname %mklibname %name %major
+%define libname_devel %mklibname -d %name
 %define corelibname %mklibname pulsecore %coremajor
 
 Summary: Sound server for Linux
@@ -100,11 +103,11 @@ provides pulseaudio has:
 This contains the shared library needed by pulseaudio based applications.
 
 %package -n %libname
-Summary: Shared library part of the polpyaudio sound server
+Summary: Shared library part of the pulseaudio sound server
 Group: System/Libraries
 
 %description -n %libname
-pulseaudio is a sound server for Linux and other Unix like operating
+Pulseaudio is a sound server for Linux and other Unix like operating
 systems. It is intended to be an improved drop-in replacement for the
 Enlightened Sound Daemon (ESOUND). In addition to the features ESOUND
 provides pulseaudio has:
@@ -127,15 +130,17 @@ provides pulseaudio has:
 
 This contains the shared library needed by pulseaudio based applications.
 
-%package -n %libname-devel
-Summary: Development headers of the polpyaudio sound server
+%package -n %libname_devel
+Summary: Development headers of the pulseaudio sound server
 Group: Development/C
-Requires: %corelibname = %version
-Requires: %libname = %version
+Requires: %corelibname = %version-%release
+Requires: %libname = %version-%release
 Provides: lib%name-devel = %version-%release
+Provides: %name-devel = %version-%release
+Obsoletes: %mklibname -d %name %major
 
-%description -n %libname-devel
-pulseaudio is a sound server for Linux and other Unix like operating
+%description -n %libname_devel
+Pulseaudio is a sound server for Linux and other Unix like operating
 systems. It is intended to be an improved drop-in replacement for the
 Enlightened Sound Daemon (ESOUND). In addition to the features ESOUND
 provides pulseaudio has:
@@ -223,7 +228,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/pulse-%apiver/modules/*.so
 %attr(644,root,root) %_libdir/pulse-%apiver/modules/*.la
 
-%files -n %libname-devel
+%files -n %libname_devel
 %defattr(-,root,root)
 %attr(644,root,root) %_libdir/lib*.la
 %_libdir/lib*.a
