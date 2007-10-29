@@ -1,7 +1,7 @@
 %define name pulseaudio
-%define version 0.9.6
-%define rel 4
-%define svn 0
+%define version 0.9.7
+%define rel 1
+%define svn 1989
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
 %else
@@ -9,7 +9,7 @@
 %endif
 
 %define major 0
-%define coremajor 3
+%define coremajor 4
 %define apiver 0.9
 
 %define libname %mklibname %name %major
@@ -21,13 +21,10 @@ Name: %{name}
 Version: %{version}
 Release: %{release}
 %if %{svn}
-Source0: %{name}-%{version}-%{svn}.tar.bz2
+Source0: %{name}-%{svn}.tar.bz2
 %else
 Source0: %{name}-%{version}.tar.bz2
 %endif
-Patch0:  pulseaudio-0.9.5-use-master.patch
-Patch1:  pulseaudio-ignore-xrun.patch
-Patch2:  pulseaudio-0.9.6-truncate-avahi-names.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -49,6 +46,7 @@ BuildRequires: automake1.8
 BuildRequires: libltdl-devel
 BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
+#BuildRequires: libasyncns-devel
 Provides: polypaudio
 Obsoletes: polypaudio
 
@@ -166,13 +164,15 @@ based applications.
 
 
 %prep
+%if %{svn}
+%setup -q -n %{name}
+%else
 %setup -q
-%patch0 -p0 -b .use-master
-%patch1 -p1 -b .tunnel-ignore-overflow
-%patch2 -p0 -b .avahi-names
+%endif
 
 %build
 %if %{svn}
+libtoolize --force
 NOCONFIGURE=1 ./bootstrap.sh
 %else
 export CPPFLAGS=-I%_includedir/alsa
@@ -205,12 +205,15 @@ rm -rf $RPM_BUILD_ROOT
 %_bindir/padsp
 %_bindir/paplay
 %_bindir/parec
+%_bindir/pasuspender
 %_bindir/pax11publish
-%_libdir/pulse/
+%dir %_libdir/pulse
+%_libdir/pulse/gconf-helper
 %dir %_sysconfdir/pulse
 %config(noreplace) %_sysconfdir/pulse/client.conf
 %config(noreplace) %_sysconfdir/pulse/daemon.conf
 %config(noreplace) %_sysconfdir/pulse/default.pa
+%_sysconfdir/xdg/autostart/%name-module-xsmp.desktop
 
 %files -n %corelibname
 %defattr(-,root,root)
@@ -223,7 +226,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/libpulse-browse.so.%{major}*
 %_libdir/libpulse-mainloop-glib.so.%{major}*
 %_libdir/libpulse-simple.so.%{major}*
-%dir %_libdir/pulse-%apiver/
+%dir %_libdir/pulse-%apiver
 %dir %_libdir/pulse-%apiver/modules
 %_libdir/pulse-%apiver/modules/*.so
 %attr(644,root,root) %_libdir/pulse-%apiver/modules/*.la
@@ -237,6 +240,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/libpulse-browse.so
 %_libdir/libpulse-mainloop-glib.so
 %_libdir/libpulse-simple.so
-%_includedir/pulse/
-%_includedir/pulsecore/
+%dir %_includedir/pulse
+%_includedir/pulse/*.h
 %_libdir/pkgconfig/*.pc
