@@ -254,13 +254,6 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/pulse/daemon.conf
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %attr(4755,root,root) %{_bindir}/%{name}
-%{_bindir}/pacat
-%{_bindir}/pacmd
-%{_bindir}/pactl
-%{_bindir}/padsp
-%{_bindir}/paplay
-%{_bindir}/parec
-%{_bindir}/pasuspender
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libauthkey-prop.so
@@ -412,9 +405,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/pacat
 %{_bindir}/pacmd
 %{_bindir}/pactl
+%{_bindir}/padsp
 %{_bindir}/paplay
 %{_bindir}/parec
-%{_bindir}/padsp
 %{_bindir}/pasuspender
 # This is a is not a real shared library, it is used in LD_PRELOAD via padsp
 %{_libdir}/libpulsedsp.so
