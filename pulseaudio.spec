@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.7
 %define rel 1
-%define svn 1989
+%define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
 %else
@@ -23,7 +23,7 @@ Release: %{release}
 %if %{svn}
 Source0: %{name}-%{svn}.tar.bz2
 %else
-Source0: %{name}-%{version}.tar.bz2
+Source0: %{name}-%{version}.tar.gz
 %endif
 License: LGPL
 Group: Sound
@@ -174,8 +174,6 @@ based applications.
 %if %{svn}
 libtoolize --force
 NOCONFIGURE=1 ./bootstrap.sh
-%else
-export CPPFLAGS=-I%_includedir/alsa
 %endif
 %configure2_5x --disable-glib1
 make
