@@ -130,7 +130,7 @@ a GLIB 2.x based application.
 
 %package -n %{libname_devel}
 Summary: Headers and libraries for PulseAudio client development
-Group: Development/Libraries
+Group: Development/C
 Requires: %{corelibname} = %{version}-%{release}
 Requires: %{libname} = %{version}-%{release}
 Requires: %{zeroconflibname} = %{version}-%{release}
