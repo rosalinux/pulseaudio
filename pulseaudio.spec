@@ -106,7 +106,7 @@ to interface with a PulseAudio sound server.
 
 %package -n %{zeroconflibname}
 Summary:    Zeroconf support for PulseAudio clients
-Group:      System Environment/Libraries
+Group:      System/Libraries
 
 %description -n %{zeroconflibname}
 This package contains the runtime libraries and tools that allow PulseAudio
@@ -118,7 +118,7 @@ clients to automatically detect PulseAudio servers using Zeroconf.
 
 %package -n %{glib2libname}
 Summary:  GLIB 2.x bindings for PulseAudio clients
-Group:    System Environment/Libraries
+Group:    System/Libraries
 
 %description -n %{glib2libname}
 This package contains bindings to integrate the PulseAudio client library with
@@ -146,7 +146,7 @@ a PulseAudio sound server.
 
 %package esound-compat
 Summary:   PulseAudio EsounD daemon compatibility script
-Group:     System Environment/Daemons
+Group:     Sound
 Requires:  %{name} = %{version}-%{release}
 # Wait until we update this properly in esound package
 #Provides:  esound
@@ -159,7 +159,7 @@ and start PulseAudio with EsounD protocol modules.
 
 %package module-lirc
 Summary:   LIRC support for the PulseAudio sound server
-Group:     System Environment/Daemons
+Group:     Sound
 Requires:  %{name} = %{version}-%{release}
 
 %description module-lirc
@@ -168,7 +168,7 @@ LIRC volume control module for the PulseAudio sound server.
 
 %package module-x11
 Summary:   X11 support for the PulseAudio sound server
-Group:     System Environment/Daemons
+Group:     Sound
 Requires:  %{name} = %{version}-%{release}
 
 %description module-x11
@@ -177,7 +177,7 @@ X11 bell and security modules for the PulseAudio sound server.
 
 %package module-zeroconf
 Summary:   Zeroconf support for the PulseAudio sound server
-Group:     System Environment/Daemons
+Group:     Sound
 Requires:  %{name} = %{version}-%{release}
 
 %description module-zeroconf
@@ -186,7 +186,7 @@ Zeroconf publishing module for the PulseAudio sound server.
 
 %package module-jack
 Summary:   JACK support for the PulseAudio sound server
-Group:     System Environment/Daemons
+Group:     Sound
 Requires:  %{name} = %{version}-%{release}
 
 %description module-jack
@@ -195,7 +195,7 @@ JACK sink and source modules for the PulseAudio sound server.
 
 %package module-gconf
 Summary:   GConf support for the PulseAudio sound server
-Group:     System Environment/Daemons
+Group:     Sound
 Requires:  %{name} = %{version}-%{release}
 
 %description module-gconf
@@ -204,7 +204,7 @@ GConf configuration backend for the PulseAudio sound server.
 
 %package utils
 Summary:  PulseAudio sound server utilities
-Group:    Applications/Multimedia
+Group:    Sound
 
 %description utils
 This package contains command line utilities for the PulseAudio sound server.
