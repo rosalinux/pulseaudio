@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.7
-%define rel 3
+%define rel 4
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -336,15 +336,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n %{zeroconflibname}
 %defattr(-,root,root)
-%{_bindir}/pabrowse
 %{_libdir}/libpulse-browse.so.%{zeroconfmajor}*
 
 
 %files -n %{glib2libname}
 %defattr(-,root,root)
 %{_libdir}/libpulse-mainloop-glib.so.%{glib2major}*
-%dir %{_libdir}/pulse/
-%{_libdir}/pulse/gconf-helper
 
 %files -n %{libname_devel}
 %doc doxygen/html
@@ -398,7 +395,8 @@ rm -rf $RPM_BUILD_ROOT
 %files module-gconf
 %defattr(-,root,root)
 %{_libdir}/pulse-%{apiver}/modules/module-gconf.so
-%{_libexecdir}/pulse/gconf-helper
+%dir %{_libdir}/pulse/
+%{_libdir}/pulse/gconf-helper
 
 
 %files utils
