@@ -57,6 +57,10 @@ BuildRequires: lirc-devel
 #BuildRequires: libasyncns-devel
 Provides: polypaudio
 Obsoletes: polypaudio
+# (cg) This is for the backport of 0.9.7 to 2008
+#      pulseaudio fails when using older versions of libtool
+Requires: libltdl >= 1.5.24
+
 
 %description
 pulseaudio is a sound server for Linux and other Unix like operating
