@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.7
-%define rel 4
+%define rel 5
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -332,10 +332,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{libname}
 %defattr(-,root,root)
 %{_libdir}/libpulse.so.%{major}*
-%{_libdir}/libpulse-browse.so.%{major}*
-%{_libdir}/libpulse-mainloop-glib.so.%{major}*
 %{_libdir}/libpulse-simple.so.%{major}*
-%dir %{_libdir}/pulse-%{apiver}
 
 
 %files -n %{zeroconflibname}
