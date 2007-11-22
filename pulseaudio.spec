@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.8
-%define rel 1
+%define rel 2
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -32,6 +32,7 @@ Source0: %{name}-%{svn}.tar.bz2
 %else
 Source0: %{name}-%{version}.tar.gz
 %endif
+Patch0: fix-sample-loading.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -232,6 +233,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %else
 %setup -q
 %endif
+%patch0 -p2 -b .samples
 
 %build
 %if %{svn}
