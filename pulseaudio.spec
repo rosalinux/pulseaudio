@@ -1,6 +1,6 @@
 %define name pulseaudio
-%define version 0.9.7
-%define rel 5
+%define version 0.9.8
+%define rel 1
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -10,7 +10,7 @@
 
 # Majors
 %define major 0
-%define coremajor 4
+%define coremajor 5
 %define zeroconfmajor 0
 %define glib2major 0
 %define apiver 0.9
@@ -54,6 +54,7 @@ BuildRequires: libltdl-devel
 BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
 BuildRequires: lirc-devel
+BuildRequires: bluez-devel
 #BuildRequires: libasyncns-devel
 Provides: polypaudio
 Obsoletes: polypaudio
@@ -170,6 +171,15 @@ Requires:  %{name} = %{version}-%{release}
 LIRC volume control module for the PulseAudio sound server.
 
 
+%package module-bluetooth
+Summary:   Bluetooth proximity support for the PulseAudio sound server
+Group:     Sound
+Requires:  %{name} = %{version}-%{release}
+
+%description module-bluetooth
+Bluetooth proximity detection module for the PulseAudio sound server.
+
+
 %package module-x11
 Summary:   X11 support for the PulseAudio sound server
 Group:     Sound
@@ -228,7 +238,7 @@ This package contains command line utilities for the PulseAudio sound server.
 libtoolize --force
 NOCONFIGURE=1 ./bootstrap.sh
 %endif
-%configure2_5x --disable-glib1
+%configure2_5x --disable-polkit
 make
 make doxygen
 
@@ -259,6 +269,10 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/pulse/daemon.conf
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %attr(4755,root,root) %{_bindir}/%{name}
+%{_mandir}/man1/%{name}.1.*
+%{_mandir}/man5/pulse-client.conf.5.*
+%{_mandir}/man5/pulse-daemon.conf.5.*
+%{_mandir}/man5/default.pa.5.*
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libauthkey-prop.so
@@ -361,6 +375,13 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_bindir}/esdcompat
 %{_bindir}/esd
+%{_mandir}/man1/esdcompat.1.*
+
+
+%files module-bluetooth
+%defattr(-,root,root)
+%{_libdir}/pulse-%{apiver}/modules/module-bt-proximity.so
+%{_libdir}/pulse/bt-proximity-helper
 
 
 %files module-lirc
@@ -371,6 +392,7 @@ rm -rf $RPM_BUILD_ROOT
 %files module-x11
 %defattr(-,root,root)
 %{_bindir}/pax11publish
+%{_mandir}/man1/pax11publish.1.*
 %{_libdir}/pulse-%{apiver}/modules/libx11prop.so
 %{_libdir}/pulse-%{apiver}/modules/libx11wrap.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-bell.so
@@ -382,6 +404,7 @@ rm -rf $RPM_BUILD_ROOT
 %files module-zeroconf
 %defattr(-,root,root)
 %{_bindir}/pabrowse
+%{_mandir}/man1/pabrowse.1.*
 %{_libdir}/pulse-%{apiver}/modules/libavahi-wrap.so
 %{_libdir}/pulse-%{apiver}/modules/module-zeroconf-discover.so
 %{_libdir}/pulse-%{apiver}/modules/module-zeroconf-publish.so
@@ -409,6 +432,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/paplay
 %{_bindir}/parec
 %{_bindir}/pasuspender
+%{_mandir}/man1/pacat.1.*
+%{_mandir}/man1/pacmd.1.*
+%{_mandir}/man1/pactl.1.*
+%{_mandir}/man1/padsp.1.*
+%{_mandir}/man1/paplay.1.*
+#{_mandir}/man1/parec.1.*
+%{_mandir}/man1/pasuspender.1.*
 # This is a is not a real shared library, it is used in LD_PRELOAD via padsp
 %{_libdir}/libpulsedsp.so
+
+
 
