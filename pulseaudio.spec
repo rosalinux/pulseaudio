@@ -67,7 +67,7 @@ Requires: libltdl >= 1.5.24
 %description
 pulseaudio is a sound server for Linux and other Unix like operating
 systems. It is intended to be an improved drop-in replacement for the
-Enlightened Sound Daemon (ESOUND). In addition to the features ESOUND
+Enlightened Sound Daemon (EsounD). In addition to the features EsounD
 provides pulseaudio has:
      * Extensible plugin architecture (by loading dynamic loadable
        modules with dlopen())
