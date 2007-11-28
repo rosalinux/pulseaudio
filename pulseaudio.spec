@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.8
-%define rel 2
+%define rel 3
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -33,6 +33,7 @@ Source0: %{name}-%{svn}.tar.bz2
 Source0: %{name}-%{version}.tar.gz
 %endif
 Patch0: fix-sample-loading.patch
+Patch1: fix-tunnel-protocol.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -234,6 +235,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %setup -q
 %endif
 %patch0 -p2 -b .samples
+%patch1 -p0 -b .tunnel
 
 %build
 %if %{svn}
