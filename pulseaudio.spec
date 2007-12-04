@@ -35,6 +35,7 @@ Source0: %{name}-%{version}.tar.gz
 Patch0: fix-sample-loading.patch
 Patch1: fix-tunnel-protocol.patch
 Patch2: fix-volume-restore.patch
+Patch3: nofail-no-x11.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -238,6 +239,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch0 -p2 -b .samples
 %patch1 -p0 -b .tunnel
 %patch2 -p2 -b .volrest
+%patch3 -p0 -b .x11
 
 %build
 %if %{svn}
