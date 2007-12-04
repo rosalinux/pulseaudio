@@ -49,7 +49,7 @@ BuildRequires: libavahi-client-devel
 BuildRequires: liboil-devel
 BuildRequires: libGConf2-devel
 BuildRequires: libwrap-devel
-BuildRequires: XFree86-devel
+BuildRequires: X11-devel
 BuildRequires: hal-devel
 BuildRequires: doxygen
 BuildRequires: automake1.8
