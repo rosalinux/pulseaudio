@@ -89,7 +89,7 @@ provides pulseaudio has:
      * Client side latency interpolation
 
 %package -n %{corelibname}
-Summary: Core libraries for the PulseAudio sound server.
+Summary: Core libraries for the PulseAudio sound server
 Group: System/Libraries
 
 %description -n %{corelibname}
