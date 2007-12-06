@@ -32,12 +32,16 @@ Source0: %{name}-%{svn}.tar.bz2
 %else
 Source0: %{name}-%{version}.tar.gz
 %endif
+Source1: %{name}.sysconfig
+Source2: %{name}.xinit
 Patch0: fix-sample-loading.patch
 Patch1: fix-tunnel-protocol.patch
 Patch2: fix-volume-restore.patch
 Patch3: nofail-no-x11.patch
 # (fc) 0.9.8-6mdv fix PolicyKit detection (SVN)
 Patch4: pulseaudio-0.9.8-fixpolicykit.patch
+# (cg) 0.9.8-6mdv mandriva customisations to esdcompat
+Patch5: mandriva-esdcompat.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -61,7 +65,9 @@ BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
 BuildRequires: lirc-devel
 BuildRequires: bluez-devel
+%if %{mdkversion} > 200800
 BuildRequires: polkit-devel
+%endif
 #BuildRequires: libasyncns-devel
 Provides: polypaudio
 Obsoletes: polypaudio
@@ -244,19 +250,25 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch2 -p2 -b .volrest
 %patch3 -p0 -b .x11
 %patch4 -p1 -b .fixpolicykit
+%patch5 -p0 -b .esd
 
 %build
-%if %{svn}
+# (cg) Patch4 changes configure.ac and so we need to regenerate configure.
+#%if %{svn}
 libtoolize --force
 NOCONFIGURE=1 ./bootstrap.sh
-%endif
-%configure2_5x 
+#%endif
+%configure2_5x
 make
 make doxygen
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %makeinstall_std
+
+install -D -m 0644 %SOURCE1 %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -D -m 0755 %SOURCE2 %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
+
 # Remove static and metalink libraries
 find %{buildroot} \( -name *.a -o -name *.la \) -exec rm {} \;
 
@@ -280,12 +292,15 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/pulse/client.conf
 %config(noreplace) %{_sysconfdir}/pulse/daemon.conf
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
+%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %attr(4755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1.*
 %{_mandir}/man5/pulse-client.conf.5.*
 %{_mandir}/man5/pulse-daemon.conf.5.*
 %{_mandir}/man5/default.pa.5.*
+%if %{mdkversion} > 200800
 %{_datadir}/PolicyKit/policy/PulseAudio.policy
+%endif
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libauthkey-prop.so
@@ -404,6 +419,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files module-x11
 %defattr(-,root,root)
+%{_sysconfdir}/X11/xinit.d/50%{name}
 %{_bindir}/pax11publish
 %{_mandir}/man1/pax11publish.1.*
 %{_libdir}/pulse-%{apiver}/modules/libx11prop.so
@@ -411,7 +427,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pulse-%{apiver}/modules/module-x11-bell.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-publish.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-xsmp.so
-%config %{_sysconfdir}/xdg/autostart/pulseaudio-module-xsmp.desktop
+%{_sysconfdir}/xdg/autostart/pulseaudio-module-xsmp.desktop
 
 
 %files module-zeroconf
