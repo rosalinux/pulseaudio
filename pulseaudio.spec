@@ -42,6 +42,8 @@ Patch3: nofail-no-x11.patch
 Patch4: pulseaudio-0.9.8-fixpolicykit.patch
 # (cg) 0.9.8-6mdv mandriva customisations to esdcompat
 Patch5: mandriva-esdcompat.patch
+# (cg) 0.9.8-6mdv Increase the sample cache do deal with Ia Ora sounds
+Patch6: increase-sample-cache.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -251,6 +253,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch3 -p0 -b .x11
 %patch4 -p1 -b .fixpolicykit
 %patch5 -p0 -b .esd
+%patch6 -p0 -b .cache
 
 %build
 # (cg) Patch4 changes configure.ac and so we need to regenerate configure.
