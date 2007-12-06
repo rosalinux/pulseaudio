@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.8
-%define rel 5
+%define rel 6
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -36,6 +36,8 @@ Patch0: fix-sample-loading.patch
 Patch1: fix-tunnel-protocol.patch
 Patch2: fix-volume-restore.patch
 Patch3: nofail-no-x11.patch
+# (fc) 0.9.8-6mdv fix PolicyKit detection (SVN)
+Patch4: pulseaudio-0.9.8-fixpolicykit.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -59,6 +61,7 @@ BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
 BuildRequires: lirc-devel
 BuildRequires: bluez-devel
+BuildRequires: polkit-devel
 #BuildRequires: libasyncns-devel
 Provides: polypaudio
 Obsoletes: polypaudio
@@ -240,13 +243,14 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch1 -p0 -b .tunnel
 %patch2 -p2 -b .volrest
 %patch3 -p0 -b .x11
+%patch4 -p1 -b .fixpolicykit
 
 %build
 %if %{svn}
 libtoolize --force
 NOCONFIGURE=1 ./bootstrap.sh
 %endif
-%configure2_5x --disable-polkit
+%configure2_5x 
 make
 make doxygen
 
@@ -281,6 +285,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man5/pulse-client.conf.5.*
 %{_mandir}/man5/pulse-daemon.conf.5.*
 %{_mandir}/man5/default.pa.5.*
+%{_datadir}/PolicyKit/policy/PulseAudio.policy
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libauthkey-prop.so
