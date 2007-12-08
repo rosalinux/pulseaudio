@@ -1,6 +1,9 @@
 %define name pulseaudio
+# (cg) NB when upgrading to 0.9.9 (or higher) remember to enable the new
+# configure option for esd-socket path (--with-peruser-esound-socket).
+# See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.8
-%define rel 6
+%define rel 7
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -168,9 +171,10 @@ a PulseAudio sound server.
 Summary:   PulseAudio EsounD daemon compatibility script
 Group:     Sound
 Requires:  %{name} = %{version}-%{release}
-# Wait until we update this properly in esound package
-#Provides:  esound
-#Obsoletes: esound
+%if %{mdkversion} > 200800
+Provides:  esound
+Obsoletes: esound
+%endif
 
 %description esound-compat
 A compatibility script that allows applications to call /usr/bin/esd
@@ -277,10 +281,6 @@ find %{buildroot} \( -name *.a -o -name *.la \) -exec rm {} \;
 
 # Fix esd
 ln -s esdcompat %{buildroot}%{_bindir}/esd
-# Unlike most distros we do not patch esound to change the esound socket file
-# which as far as I can tell breaks user switching... :s
-# We need to use the esd socket favoured by esound
-sed -i 's,^\(load-module module-esound-protocol-unix\).*,\1 socket="/tmp/.esd/socket",' %{buildroot}%{_sysconfdir}/pulse/default.pa
 
 %clean
 rm -rf $RPM_BUILD_ROOT
