@@ -3,7 +3,7 @@
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.8
-%define rel 7
+%define rel 8
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -173,7 +173,8 @@ Group:     Sound
 Requires:  %{name} = %{version}-%{release}
 %if %{mdkversion} > 200800
 Provides:  esound
-Obsoletes: esound
+Obsoletes: esound < 0.2.38-5mdv
+Conflicts: esound-daemon
 %endif
 
 %description esound-compat
@@ -259,14 +260,12 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch5 -p0 -b .esd
 %patch6 -p0 -b .cache
 
+#needed by patch4
+autoconf
+
 %build
-# (cg) Patch4 changes configure.ac and so we need to regenerate configure.
-#%if %{svn}
-libtoolize --force
-NOCONFIGURE=1 ./bootstrap.sh
-#%endif
 %configure2_5x
-make
+%make
 make doxygen
 
 %install
