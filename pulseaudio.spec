@@ -3,7 +3,7 @@
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.8
-%define rel 8
+%define rel 9
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -47,6 +47,8 @@ Patch4: pulseaudio-0.9.8-fixpolicykit.patch
 Patch5: mandriva-esdcompat.patch
 # (cg) 0.9.8-6mdv Increase the sample cache do deal with Ia Ora sounds
 Patch6: increase-sample-cache.patch
+# (fc) 0.9.8-9mdv change PK policy to allow high priority and deny realtime
+Patch7: pulseaudio-0.9.8-mdvpolicy.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -259,6 +261,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch4 -p1 -b .fixpolicykit
 %patch5 -p0 -b .esd
 %patch6 -p0 -b .cache
+%patch7 -p1 -b .mdvpolicy
 
 #needed by patch4
 autoconf
