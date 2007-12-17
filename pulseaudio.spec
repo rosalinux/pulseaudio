@@ -52,7 +52,6 @@ Patch7: pulseaudio-0.9.8-mdvpolicy.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: glib2-devel
 BuildRequires: libcap-devel
 BuildRequires: libsndfile-devel
