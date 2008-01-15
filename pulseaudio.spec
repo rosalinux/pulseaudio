@@ -85,7 +85,8 @@ Obsoletes: polypaudio
 # (cg) This is for the backport of 0.9.7 to 2008
 #      pulseaudio fails when using older versions of libtool
 Requires: libltdl >= 1.5.24
-
+# (cg) When upgrading from pa < 0.9.7-1 things break due to spec restructure
+Conflicts: %{libname} < 0.9.7-2
 
 %description
 pulseaudio is a sound server for Linux and other Unix like operating
