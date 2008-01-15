@@ -3,7 +3,7 @@
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.8
-%define rel 12
+%define rel 13
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -49,8 +49,10 @@ Patch5: mandriva-esdcompat.patch
 Patch7: pulseaudio-0.9.8-mdvpolicy.patch
 # (cg) 0.9.8-11mdv don't send protocol >11 cmds to older clients (pa#183)
 Patch8: pulseaudio-0.9.8-old-protocol.patch
-# (cg 0.9.8-12mdv change order of environment variables for username check (pa#215)
+# (cg) 0.9.8-12mdv change order of environment variables for username check (mdv#36643) (pa#215)
 Patch9: pulseaudio-0.9.8-username-su-fix.patch
+# (cg) 0.9.8-13mdv hopefully fix (mdv#36750 and make padsp more robust.
+Patch10: pulseaudio-0.9.8-padsp-fix.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -265,6 +267,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch7 -p1 -b .mdvpolicy
 %patch8 -p1 -b .oldprotocol
 %patch9 -p0 -b .username
+%patch10 -p0 -b .padsp
 
 #needed by patch4
 autoconf
@@ -383,6 +386,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_libdir}/libpulse.so.%{major}*
 %{_libdir}/libpulse-simple.so.%{major}*
+# (cg) Although the following is not a shared library, putting this file here
+# will allow padsp to work on dual arch machines... (e.g. using padsp to start
+# a 32-bit app).
+%{_libdir}/libpulsedsp.so
 
 
 %files -n %{zeroconflibname}
@@ -476,8 +483,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/paplay.1.*
 #{_mandir}/man1/parec.1.*
 %{_mandir}/man1/pasuspender.1.*
-# This is a is not a real shared library, it is used in LD_PRELOAD via padsp
-%{_libdir}/libpulsedsp.so
-
-
-
