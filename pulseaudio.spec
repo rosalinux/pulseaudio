@@ -1,9 +1,9 @@
 %define name pulseaudio
-# (cg) NB when upgrading to 0.9.9 (or higher) remember to enable the new
+# (cg) NB when upgrading to 0.9.10 (or higher) remember to enable the new
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
-%define version 0.9.8
-%define rel 13
+%define version 0.9.9
+%define rel 1
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
