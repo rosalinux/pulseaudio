@@ -3,7 +3,7 @@
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.9
-%define rel 1
+%define rel 2
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -40,7 +40,8 @@ Source2: %{name}.xinit
 Patch0: fix-sample-loading.patch
 Patch1: fix-tunnel-protocol.patch
 Patch2: fix-volume-restore.patch
-Patch3: nofail-no-x11.patch
+# don't fail if X11 module can't be loaded ; try to load it after GConf module
+Patch3: nofail-no-x11-load-after-gconf.patch
 # (fc) 0.9.8-6mdv fix PolicyKit detection (SVN)
 Patch4: pulseaudio-0.9.8-fixpolicykit.patch
 # (cg) 0.9.8-6mdv mandriva customisations to esdcompat
@@ -53,6 +54,8 @@ Patch8: pulseaudio-0.9.8-old-protocol.patch
 Patch9: pulseaudio-0.9.8-username-su-fix.patch
 # (cg) 0.9.8-13mdv hopefully fix (mdv#36750 and make padsp more robust.
 Patch10: pulseaudio-0.9.8-padsp-fix.patch
+# (fc) 0.9.9-2mdv allow GConf module load to fail silently (Debian)
+Patch11: pulseaudio-0.9.8-gconf-fail.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -262,13 +265,14 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch0 -p2 -b .samples
 %patch1 -p0 -b .tunnel
 %patch2 -p2 -b .volrest
-%patch3 -p0 -b .x11
+%patch3 -p1 -b .x11
 %patch4 -p1 -b .fixpolicykit
 %patch5 -p0 -b .esd
 %patch7 -p1 -b .mdvpolicy
 %patch8 -p1 -b .oldprotocol
 %patch9 -p0 -b .username
 %patch10 -p0 -b .padsp
+%patch11 -p1 -b .gconf-fail
 
 #needed by patch4
 autoconf
