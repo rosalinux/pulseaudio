@@ -3,7 +3,7 @@
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.9
-%define rel 2
+%define rel 3
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -37,6 +37,9 @@ Source0: %{name}-%{version}.tar.gz
 %endif
 Source1: %{name}.sysconfig
 Source2: %{name}.xinit
+# (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
+# libesound from.... you guessed it... auto spawning.
+Source3: esd.conf
 Patch0: fix-sample-loading.patch
 Patch1: fix-tunnel-protocol.patch
 Patch2: fix-volume-restore.patch
@@ -288,6 +291,7 @@ rm -rf $RPM_BUILD_ROOT
 
 install -D -m 0644 %SOURCE1 %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -D -m 0755 %SOURCE2 %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
+install -D -m 0755 %SOURCE3 %{buildroot}%{_sysconfdir}/esd.conf
 
 # Remove static and metalink libraries
 find %{buildroot} \( -name *.a -o -name *.la \) -exec rm {} \;
@@ -421,6 +425,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files esound-compat
 %defattr(-,root,root)
+%config(noreplace) %{_sysconfdir}/esd.conf
 %{_bindir}/esdcompat
 %{_bindir}/esd
 %{_mandir}/man1/esdcompat.1.*
