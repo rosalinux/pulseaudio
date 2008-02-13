@@ -3,7 +3,7 @@
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.9
-%define rel 3
+%define rel 4
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -59,6 +59,8 @@ Patch9: pulseaudio-0.9.8-username-su-fix.patch
 Patch10: pulseaudio-0.9.8-padsp-fix.patch
 # (fc) 0.9.9-2mdv allow GConf module load to fail silently (Debian)
 Patch11: pulseaudio-0.9.8-gconf-fail.patch
+# (fc) 0.9.9-3mdv change resample to speex-fixed-0 (Mdv bug #36084)
+Patch12: pulseaudio-0.9.9-resample.patch
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -276,12 +278,14 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch9 -p0 -b .username
 %patch10 -p0 -b .padsp
 %patch11 -p1 -b .gconf-fail
+%patch12 -p1 -b .resample
 
 #needed by patch4
-autoconf
+autoreconf
 
 %build
 %configure2_5x
+
 %make
 make doxygen
 
