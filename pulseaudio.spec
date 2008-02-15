@@ -3,7 +3,7 @@
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.9
-%define rel 4
+%define rel 5
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
