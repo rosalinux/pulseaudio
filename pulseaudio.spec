@@ -3,7 +3,7 @@
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.9
-%define rel 5
+%define rel 6
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -61,6 +61,9 @@ Patch10: pulseaudio-0.9.8-padsp-fix.patch
 Patch11: pulseaudio-0.9.8-gconf-fail.patch
 # (fc) 0.9.9-3mdv change resample to speex-fixed-0 (Mdv bug #36084)
 Patch12: pulseaudio-0.9.9-resample.patch
+# (cg) 0.9.9-6mdv Fix when moving record streams (no gui for this tho) PA#244
+Patch13: pulseaudio-0.9.9-record-stream-moved.patch
+
 License: LGPL
 Group: Sound
 Url: http://pulseaudio.org/
@@ -279,6 +282,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch10 -p0 -b .padsp
 %patch11 -p1 -b .gconf-fail
 %patch12 -p1 -b .resample
+%patch13 -p1 -b .record-stream
 
 #needed by patch4
 autoreconf
