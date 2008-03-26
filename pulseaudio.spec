@@ -3,7 +3,7 @@
 # configure option for esd-socket path (--with-peruser-esound-socket).
 # See http://www.pulseaudio.org/changeset/2083
 %define version 0.9.9
-%define rel 6
+%define rel 7
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -63,6 +63,8 @@ Patch11: pulseaudio-0.9.8-gconf-fail.patch
 Patch12: pulseaudio-0.9.9-resample.patch
 # (cg) 0.9.9-6mdv Fix when moving record streams (no gui for this tho) PA#244
 Patch13: pulseaudio-0.9.9-record-stream-moved.patch
+# (cg) 0.9.9-7mdv Add a module that ensures there is always a sink loaded
+Patch14: pulseaudio-0.9.9-always-sink.patch
 
 License: LGPL
 Group: Sound
@@ -283,8 +285,9 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch11 -p1 -b .gconf-fail
 %patch12 -p1 -b .resample
 %patch13 -p1 -b .record-stream
+%patch14 -p0 -b .always-sink
 
-#needed by patch4
+#needed by patch4, 14
 autoreconf
 
 %build
@@ -357,6 +360,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pulse-%{apiver}/modules/libtagstruct.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-source.so
+%{_libdir}/pulse-%{apiver}/modules/module-always-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-cli-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-cli-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-cli.so
