@@ -1,6 +1,6 @@
 %define name pulseaudio
-%define version 0.9.9
-%define rel 7
+%define version 0.9.10
+%define rel 0.2
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -37,31 +37,14 @@ Source2: %{name}.xinit
 # (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
 # libesound from.... you guessed it... auto spawning.
 Source3: esd.conf
-Patch0: fix-sample-loading.patch
-Patch1: fix-tunnel-protocol.patch
-Patch2: fix-volume-restore.patch
-# don't fail if X11 module can't be loaded ; try to load it after GConf module
-Patch3: nofail-no-x11-load-after-gconf.patch
-# (fc) 0.9.8-6mdv fix PolicyKit detection (SVN)
-Patch4: pulseaudio-0.9.8-fixpolicykit.patch
 # (cg) 0.9.8-6mdv mandriva customisations to esdcompat
-Patch5: mandriva-esdcompat.patch
+Patch1: mandriva-esdcompat.patch
 # (fc) 0.9.8-9mdv change PK policy to allow high priority and deny realtime
-Patch7: pulseaudio-0.9.8-mdvpolicy.patch
-# (cg) 0.9.8-11mdv don't send protocol >11 cmds to older clients (pa#183)
-Patch8: pulseaudio-0.9.8-old-protocol.patch
-# (cg) 0.9.8-12mdv change order of environment variables for username check (mdv#36643) (pa#215)
-Patch9: pulseaudio-0.9.8-username-su-fix.patch
-# (cg) 0.9.8-13mdv hopefully fix (mdv#36750 and make padsp more robust.
-Patch10: pulseaudio-0.9.8-padsp-fix.patch
-# (fc) 0.9.9-2mdv allow GConf module load to fail silently (Debian)
-Patch11: pulseaudio-0.9.8-gconf-fail.patch
+Patch2: pulseaudio-0.9.8-mdvpolicy.patch
 # (fc) 0.9.9-3mdv change resample to speex-fixed-0 (Mdv bug #36084)
-Patch12: pulseaudio-0.9.9-resample.patch
-# (cg) 0.9.9-6mdv Fix when moving record streams (no gui for this tho) PA#244
-Patch13: pulseaudio-0.9.9-record-stream-moved.patch
+Patch3: pulseaudio-0.9.9-resample.patch
 # (cg) 0.9.9-7mdv Add a module that ensures there is always a sink loaded
-Patch14: pulseaudio-0.9.9-always-sink.patch
+Patch4: pulseaudio-0.9.9-always-sink.patch
 
 License: LGPL
 Group: Sound
@@ -269,22 +252,12 @@ This package contains command line utilities for the PulseAudio sound server.
 %else
 %setup -q
 %endif
-%patch0 -p2 -b .samples
-%patch1 -p0 -b .tunnel
-%patch2 -p2 -b .volrest
-%patch3 -p1 -b .x11
-%patch4 -p1 -b .fixpolicykit
-%patch5 -p0 -b .esd
-%patch7 -p1 -b .mdvpolicy
-%patch8 -p1 -b .oldprotocol
-%patch9 -p0 -b .username
-%patch10 -p0 -b .padsp
-%patch11 -p1 -b .gconf-fail
-%patch12 -p1 -b .resample
-%patch13 -p1 -b .record-stream
-%patch14 -p0 -b .always-sink
+%patch1 -p0 -b .esd
+%patch2 -p1 -b .mdvpolicy
+%patch3 -p1 -b .resample
+%patch4 -p0 -b .always-sink
 
-#needed by patch4, 14
+#needed by patch4
 autoreconf
 
 %build
@@ -327,7 +300,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man5/pulse-daemon.conf.5.*
 %{_mandir}/man5/default.pa.5.*
 %if %{mdkversion} > 200800
-%{_datadir}/PolicyKit/policy/PulseAudio.policy
+%{_datadir}/PolicyKit/policy/org.pulseaudio.policy
 %endif
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
