@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.10
-%define rel 0.2
+%define rel 1
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
