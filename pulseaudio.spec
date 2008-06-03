@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.10
-%define rel 1
+%define rel 2
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -45,6 +45,10 @@ Patch2: pulseaudio-0.9.8-mdvpolicy.patch
 Patch3: pulseaudio-0.9.9-resample.patch
 # (cg) 0.9.9-7mdv Add a module that ensures there is always a sink loaded
 Patch4: pulseaudio-0.9.9-always-sink.patch
+# (cg) 0.9.9-7.1mdv Load module gconf earlier so that module-volume-restore can save default devices
+Patch5: pulseaudio-0.9.10-load-gconf-earlier.patch
+# (cg) 0.9.9-7.1mdv Check the client.conf after x11 properties for configuration.
+Patch6: pulseaudio-0.9.9-xprops-before-conf.patch
 
 License: LGPL
 Group: Sound
@@ -256,6 +260,8 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch2 -p1 -b .mdvpolicy
 %patch3 -p1 -b .resample
 %patch4 -p0 -b .always-sink
+%patch5 -p1 -b .early-gconf
+%patch6 -p1 -b .xprops-before-conf
 
 #needed by patch4
 autoreconf
