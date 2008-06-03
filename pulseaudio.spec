@@ -49,6 +49,8 @@ Patch4: pulseaudio-0.9.9-always-sink.patch
 Patch5: pulseaudio-0.9.10-load-gconf-earlier.patch
 # (cg) 0.9.9-7.1mdv Check the client.conf after x11 properties for configuration.
 Patch6: pulseaudio-0.9.9-xprops-before-conf.patch
+# (cg) 0.9.10-2mdv Fix underlinking
+Patch7: pulseaudio-0.9.10-fix-underlinking.patch
 
 License: LGPL
 Group: Sound
@@ -262,6 +264,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch4 -p0 -b .always-sink
 %patch5 -p1 -b .early-gconf
 %patch6 -p1 -b .xprops-before-conf
+%patch7 -p1 -b .underlinking
 
 #needed by patch4
 autoreconf
