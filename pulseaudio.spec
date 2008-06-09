@@ -117,8 +117,12 @@ Group: System/Libraries
 This package contains runtime libraries that are used internally in the
 PulseAudio sound server.
 
+%if %mdkversion < 200900
 %post -n %{corelibname} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{corelibname} -p /sbin/ldconfig
+%endif
 
 
 %package -n %{libname}
@@ -129,8 +133,12 @@ Group: System/Libraries
 This package contains the runtime libraries for any application that wishes
 to interface with a PulseAudio sound server.
 
+%if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
+%endif
 
 
 %package -n %{zeroconflibname}
@@ -141,8 +149,12 @@ Group:      System/Libraries
 This package contains the runtime libraries and tools that allow PulseAudio
 clients to automatically detect PulseAudio servers using Zeroconf.
 
+%if %mdkversion < 200900
 %post -n %{zeroconflibname} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{zeroconflibname} -p /sbin/ldconfig
+%endif
 
 
 %package -n %{glib2libname}
@@ -153,8 +165,12 @@ Group:    System/Libraries
 This package contains bindings to integrate the PulseAudio client library with
 a GLIB 2.x based application.
 
+%if %mdkversion < 200900
 %post -n %{glib2libname} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{glib2libname} -p /sbin/ldconfig
+%endif
 
 
 %package -n %{libname_devel}
