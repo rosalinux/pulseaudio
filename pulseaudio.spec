@@ -1,4 +1,5 @@
 %define name pulseaudio
+# (cg) DO NOT update to 0.9.11. Please see cooker for explanation.
 %define version 0.9.10
 %define rel 4
 %define svn 0
