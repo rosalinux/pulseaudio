@@ -1,7 +1,7 @@
 %define name pulseaudio
 # (cg) DO NOT update to 0.9.11. Please see cooker for explanation.
 %define version 0.9.10
-%define rel 4
+%define rel 5
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -23,6 +23,8 @@
 %define zeroconflibname %mklibname pulsezeroconf %{zeroconfmajor}
 %define glib2libname %mklibname pulseglib2 %{glib2major}
 
+# (cg) Complete cop out until I fix my airtunes patch :p
+%define _disable_ld_no_undefined 1
 
 Summary: Sound server for Linux
 Name: %{name}
@@ -52,8 +54,11 @@ Patch5: pulseaudio-0.9.10-load-gconf-earlier.patch
 Patch6: pulseaudio-0.9.9-xprops-before-conf.patch
 # (cg) 0.9.10-2mdv Fix underlinking
 Patch7: pulseaudio-0.9.10-fix-underlinking.patch
+# (cg) 0.9.10-5mdv Airtunes support
+Patch8: airtunes.patch
 
-License: LGPL
+# Airtunes links to OpenSSL which is BSD-like and should be reflected here
+License: LGPL and BSD-like
 Group: Sound
 Url: http://pulseaudio.org/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -76,8 +81,11 @@ BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
 BuildRequires: lirc-devel
 BuildRequires: bluez-devel
+# (cg) Needed for airtunes
+BuildRequires: openssl-devel
 %if %{mdkversion} > 200800
 BuildRequires: polkit-devel
+BuildRequires: libasyncns-devel
 %endif
 #BuildRequires: libasyncns-devel
 Provides: polypaudio
@@ -282,6 +290,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch5 -p1 -b .early-gconf
 %patch6 -p1 -b .xprops-before-conf
 %patch7 -p1 -b .underlinking
+%patch8 -p1 -b .airtunes
 
 #needed by patch4
 autoreconf
@@ -379,6 +388,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pulse-%{apiver}/modules/module-oss.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-source.so
+%{_libdir}/pulse-%{apiver}/modules/module-raop-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-rescue-streams.so
 %{_libdir}/pulse-%{apiver}/modules/module-rtp-recv.so
 %{_libdir}/pulse-%{apiver}/modules/module-rtp-send.so
@@ -470,6 +480,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pulse-%{apiver}/modules/libavahi-wrap.so
 %{_libdir}/pulse-%{apiver}/modules/module-zeroconf-discover.so
 %{_libdir}/pulse-%{apiver}/modules/module-zeroconf-publish.so
+%{_libdir}/pulse-%{apiver}/modules/module-raop-discover.so
 
 
 %files module-jack
