@@ -1,7 +1,7 @@
 %define name pulseaudio
 # (cg) DO NOT update to 0.9.11. Please see cooker for explanation.
 %define version 0.9.10
-%define rel 5
+%define rel 6
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -22,9 +22,6 @@
 %define corelibname %mklibname pulsecore %{coremajor}
 %define zeroconflibname %mklibname pulsezeroconf %{zeroconfmajor}
 %define glib2libname %mklibname pulseglib2 %{glib2major}
-
-# (cg) Complete cop out until I fix my airtunes patch :p
-%define _disable_ld_no_undefined 1
 
 Summary: Sound server for Linux
 Name: %{name}
@@ -357,6 +354,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-simple.so
 %{_libdir}/pulse-%{apiver}/modules/libpstream-util.so
 %{_libdir}/pulse-%{apiver}/modules/libpstream.so
+%{_libdir}/pulse-%{apiver}/modules/libraop.so
 %{_libdir}/pulse-%{apiver}/modules/librtp.so
 %{_libdir}/pulse-%{apiver}/modules/libsocket-client.so
 %{_libdir}/pulse-%{apiver}/modules/libsocket-server.so
