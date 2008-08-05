@@ -1,7 +1,7 @@
 %define name pulseaudio
 # (cg) DO NOT update to 0.9.11. Please see cooker for explanation.
 %define version 0.9.10
-%define rel 6
+%define rel 7
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -37,22 +37,43 @@ Source2: %{name}.xinit
 # (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
 # libesound from.... you guessed it... auto spawning.
 Source3: esd.conf
-# (cg) 0.9.8-6mdv mandriva customisations to esdcompat
-Patch1: mandriva-esdcompat.patch
-# (fc) 0.9.8-9mdv change PK policy to allow high priority and deny realtime
-Patch2: pulseaudio-0.9.8-mdvpolicy.patch
-# (fc) 0.9.9-3mdv change resample to speex-fixed-0 (Mdv bug #36084)
-Patch3: pulseaudio-0.9.9-resample.patch
-# (cg) 0.9.9-7mdv Add a module that ensures there is always a sink loaded
-Patch4: pulseaudio-0.9.9-always-sink.patch
-# (cg) 0.9.9-7.1mdv Load module gconf earlier so that module-volume-restore can save default devices
-Patch5: pulseaudio-0.9.10-load-gconf-earlier.patch
-# (cg) 0.9.9-7.1mdv Check the client.conf after x11 properties for configuration.
-Patch6: pulseaudio-0.9.9-xprops-before-conf.patch
-# (cg) 0.9.10-2mdv Fix underlinking
-Patch7: pulseaudio-0.9.10-fix-underlinking.patch
-# (cg) 0.9.10-5mdv Airtunes support
-Patch8: airtunes.patch
+
+
+# (cg) Using git to manage patches
+# To recreate the structure
+# git clone git://git.0pointer.de/pulseaudio
+# git checkout origin/tags/release-0.9.10
+# git checkout -b mdv-0.9.10-cherry-picks
+# git am 00*.patch
+# git checkout -b mdv-0.9.10-patches
+# git am 05*.patch
+
+# To apply new custom patches
+# git checkout mdv-0.9.10-patches
+# (do stuff)
+
+# To apply new cherry-picks
+# git checkout mdv-0.9.10-cherry-picks
+# git cherry-pick <blah>
+# git checkout mdv-0.9.10-patches
+# git rebase mdv-0.9.10-cherry-picks
+
+# Cherry Pick Patches
+# git format-patch origin/tags/release-0.9.10..mdv-0.9.10-cherry-picks
+Patch1: 0001-Perfer-client.conf-over-X11-property-variables.patch
+Patch2: 0002-Also-link-libpulsecore.la-to-some-libraries-needed.patch
+Patch3: 0003-Rejig-r2495-slightly-and-directly-compile-the-necess.patch
+Patch4: 0004-Do-not-invalidate-the-cookie-if-no-file-was-specifie.patch
+Patch5: 0005-fix-error-path-spotted-by-Coling-Guthrie.patch
+
+# Mandriva Patches
+# git format-patch --start-number 500 mdv-0.9.10-cherry-picks..mdv-0.9.10-patches
+Patch500: 0500-Some-customisations-to-esdcompat-in-order-to-adhere.patch
+Patch501: 0501-Change-policykit-policy-to-allow-high-priority-and-d.patch
+Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0.patch
+Patch503: 0503-Load-module-gconf-earlier-so-that-module-volume-rest.patch
+Patch504: 0504-Add-my-always-sink-patch-to-ensure-a-valid-sink-is-a.patch
+Patch505: 0505-Airtunes-patch.-This-is-the-latest-version-of-my-air.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -280,16 +301,21 @@ This package contains command line utilities for the PulseAudio sound server.
 %else
 %setup -q
 %endif
-%patch1 -p0 -b .esd
-%patch2 -p1 -b .mdvpolicy
-%patch3 -p1 -b .resample
-%patch4 -p0 -b .always-sink
-%patch5 -p1 -b .early-gconf
-%patch6 -p1 -b .xprops-before-conf
-%patch7 -p1 -b .underlinking
-%patch8 -p1 -b .airtunes
 
-#needed by patch4
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+
+%patch500 -p1
+%patch501 -p1
+%patch502 -p1
+%patch503 -p1
+%patch504 -p1
+%patch505 -p1
+
+# Needed by some patches
 autoreconf
 
 %build
