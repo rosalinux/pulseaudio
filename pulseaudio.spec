@@ -1,7 +1,7 @@
 %define name pulseaudio
 # (cg) DO NOT update to 0.9.11. Please see cooker for explanation.
 %define version 0.9.10
-%define rel 7
+%define rel 8
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -74,6 +74,7 @@ Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0.patch
 Patch503: 0503-Load-module-gconf-earlier-so-that-module-volume-rest.patch
 Patch504: 0504-Add-my-always-sink-patch-to-ensure-a-valid-sink-is-a.patch
 Patch505: 0505-Airtunes-patch.-This-is-the-latest-version-of-my-air.patch
+Patch506: 0506-More-robust-pid-file-handling.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -314,6 +315,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch503 -p1
 %patch504 -p1
 %patch505 -p1
+%patch506 -p1
 
 # Needed by some patches
 autoreconf
