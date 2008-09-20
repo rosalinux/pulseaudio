@@ -1,7 +1,7 @@
 %define name pulseaudio
-# (cg) DO NOT update to 0.9.11. Please see cooker for explanation.
+# (cg) DO NOT update to 0.9.11 or 0.9.12. Please see cooker for explanation.
 %define version 0.9.10
-%define rel 8
+%define rel 9
 %define svn 0
 %if %{svn}
 %define release %mkrel 0.%{svn}.%rel
@@ -37,6 +37,7 @@ Source2: %{name}.xinit
 # (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
 # libesound from.... you guessed it... auto spawning.
 Source3: esd.conf
+Source4: %{name}.svg
 
 
 # (cg) Using git to manage patches
@@ -107,6 +108,8 @@ BuildRequires: polkit-devel
 BuildRequires: libasyncns-devel
 %endif
 #BuildRequires: libasyncns-devel
+BuildRequires: imagemagick
+
 Provides: polypaudio
 Obsoletes: polypaudio
 # (cg) This is for the backport of 0.9.7 to 2008
@@ -330,9 +333,18 @@ make doxygen
 rm -rf $RPM_BUILD_ROOT
 %makeinstall_std
 
-install -D -m 0644 %SOURCE1 %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -D -m 0755 %SOURCE2 %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
-install -D -m 0755 %SOURCE3 %{buildroot}%{_sysconfdir}/esd.conf
+install -D -m 0644 %{_sourcedir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -D -m 0755 %{_sourcedir}/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
+install -D -m 0755 %{_sourcedir}/esd.conf %{buildroot}%{_sysconfdir}/
+
+install -D -m 0644 %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/devices
+ln -s ../apps/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/devices/audio-backend-pulseaudio.svg
+for size in 16 22 32 48 64 128; do
+  mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/{apps,devices}
+  convert -geometry ${size}x${size} %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
+  ln -s ../apps/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/devices/audio-backend-pulseaudio.png
+done
 
 # Remove static and metalink libraries
 find %{buildroot} \( -name *.a -o -name *.la \) -exec rm {} \;
@@ -362,6 +374,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{mdkversion} > 200800
 %{_datadir}/PolicyKit/policy/org.pulseaudio.policy
 %endif
+%{_datadir}/icons/hicolor/*
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libauthkey-prop.so
