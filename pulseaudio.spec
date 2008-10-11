@@ -1,17 +1,16 @@
 %define name pulseaudio
-# (cg) DO NOT update to 0.9.11 or 0.9.12. Please see cooker for explanation.
-%define version 0.9.10
-%define rel 11
-%define svn 0
-%if %{svn}
-%define release %mkrel 0.%{svn}.%rel
+%define version 0.9.13
+%define rel 1
+%define git 0
+%if %{git}
+%define release %mkrel 0.%{git}.%rel
 %else
 %define release %mkrel %rel
 %endif
 
 # Majors
 %define major 0
-%define coremajor 5
+%define coremajor 8
 %define zeroconfmajor 0
 %define glib2major 0
 %define apiver 0.9
@@ -23,12 +22,13 @@
 %define zeroconflibname %mklibname pulsezeroconf %{zeroconfmajor}
 %define glib2libname %mklibname pulseglib2 %{glib2major}
 
+
 Summary: Sound server for Linux
 Name: %{name}
 Version: %{version}
 Release: %{release}
-%if %{svn}
-Source0: %{name}-%{svn}.tar.bz2
+%if %{git}
+Source0: %{name}-%{git}.tar.lzma
 %else
 Source0: %{name}-%{version}.tar.gz
 %endif
@@ -43,41 +43,33 @@ Source4: %{name}.svg
 # (cg) Using git to manage patches
 # To recreate the structure
 # git clone git://git.0pointer.de/pulseaudio
-# git checkout origin/tags/release-0.9.10
-# git checkout -b mdv-0.9.10-cherry-picks
+# git checkout v0.9.13
+# git checkout -b mdv-0.9.13-cherry-picks
 # git am 00*.patch
-# git checkout -b mdv-0.9.10-patches
+# git checkout -b mdv-0.9.13-patches
 # git am 05*.patch
 
 # To apply new custom patches
-# git checkout mdv-0.9.10-patches
+# git checkout mdv-0.9.13-patches
 # (do stuff)
 
 # To apply new cherry-picks
-# git checkout mdv-0.9.10-cherry-picks
+# git checkout mdv-0.9.13-cherry-picks
 # git cherry-pick <blah>
-# git checkout mdv-0.9.10-patches
-# git rebase mdv-0.9.10-cherry-picks
+# git checkout mdv-0.9.13-patches
+# git rebase mdv-0.9.13-cherry-picks
 
 # Cherry Pick Patches
-# git format-patch origin/tags/release-0.9.10..mdv-0.9.10-cherry-picks
-Patch1: 0001-Perfer-client.conf-over-X11-property-variables.patch
-Patch2: 0002-Also-link-libpulsecore.la-to-some-libraries-needed.patch
-Patch3: 0003-Rejig-r2495-slightly-and-directly-compile-the-necess.patch
-Patch4: 0004-Do-not-invalidate-the-cookie-if-no-file-was-specifie.patch
-Patch5: 0005-fix-error-path-spotted-by-Coling-Guthrie.patch
+# git format-patch origin/tags/release-0.9.13..mdv-0.9.13-cherry-picks
 
 # Mandriva Patches
-# git format-patch --start-number 500 mdv-0.9.10-cherry-picks..mdv-0.9.10-patches
-Patch500: 0500-Some-customisations-to-esdcompat-in-order-to-adhere.patch
-Patch501: 0501-Change-policykit-policy-to-allow-high-priority-and-d.patch
-Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0.patch
-Patch503: 0503-Load-module-gconf-earlier-so-that-module-volume-rest.patch
-Patch504: 0504-Add-my-always-sink-patch-to-ensure-a-valid-sink-is-a.patch
-Patch505: 0505-Airtunes-patch.-This-is-the-latest-version-of-my-air.patch
-Patch506: 0506-More-robust-pid-file-handling.patch
-Patch507: 0507-Disable-hotplug-sound-as-it-interferes-with-too-many.patch
-Patch508: 0508-Fix-errors-in-pid-file-robustneness-patch.patch
+# git format-patch --start-number 500 mdv-0.9.13-cherry-picks..mdv-0.9.13-patches
+Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
+Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere.patch
+Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
+Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0.patch
+Patch504: 0504-Load-module-gconf-earlier-so-that-module-volume-rest.patch
+Patch505: 0505-Airtunes-patch-http-colin.guthr.ie-git-pulseaudio.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -103,13 +95,15 @@ BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
 BuildRequires: lirc-devel
 BuildRequires: bluez-devel
+BuildRequires: gdbm-devel
+BuildRequires: speex-devel
 # (cg) Needed for airtunes
 BuildRequires: openssl-devel
 %if %{mdkversion} > 200800
 BuildRequires: polkit-devel
-BuildRequires: libasyncns-devel
 %endif
 #BuildRequires: libasyncns-devel
+BuildRequires: intltool
 BuildRequires: imagemagick
 
 Provides: polypaudio
@@ -150,12 +144,8 @@ Group: System/Libraries
 This package contains runtime libraries that are used internally in the
 PulseAudio sound server.
 
-%if %mdkversion < 200900
 %post -n %{corelibname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
 %postun -n %{corelibname} -p /sbin/ldconfig
-%endif
 
 
 %package -n %{libname}
@@ -166,12 +156,8 @@ Group: System/Libraries
 This package contains the runtime libraries for any application that wishes
 to interface with a PulseAudio sound server.
 
-%if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
-%endif
 
 
 %package -n %{zeroconflibname}
@@ -182,12 +168,8 @@ Group:      System/Libraries
 This package contains the runtime libraries and tools that allow PulseAudio
 clients to automatically detect PulseAudio servers using Zeroconf.
 
-%if %mdkversion < 200900
 %post -n %{zeroconflibname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
 %postun -n %{zeroconflibname} -p /sbin/ldconfig
-%endif
 
 
 %package -n %{glib2libname}
@@ -198,12 +180,8 @@ Group:    System/Libraries
 This package contains bindings to integrate the PulseAudio client library with
 a GLIB 2.x based application.
 
-%if %mdkversion < 200900
 %post -n %{glib2libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
 %postun -n %{glib2libname} -p /sbin/ldconfig
-%endif
 
 
 %package -n %{libname_devel}
@@ -247,12 +225,13 @@ LIRC volume control module for the PulseAudio sound server.
 
 
 %package module-bluetooth
-Summary:   Bluetooth proximity support for the PulseAudio sound server
+Summary:   Bluetooth support for the PulseAudio sound server
 Group:     Sound
 Requires:  %{name} = %{version}-%{release}
 
 %description module-bluetooth
-Bluetooth proximity detection module for the PulseAudio sound server.
+Bluetooth modules for the PulseAudio sound server to provide support
+for headsets and proximity detection.
 
 
 %package module-x11
@@ -302,17 +281,11 @@ This package contains command line utilities for the PulseAudio sound server.
 
 
 %prep
-%if %{svn}
+%if %{git}
 %setup -q -n %{name}
 %else
 %setup -q
 %endif
-
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 %patch500 -p1
 %patch501 -p1
@@ -320,21 +293,20 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch503 -p1
 %patch504 -p1
 %patch505 -p1
-%patch506 -p1
-%patch507 -p1
-%patch508 -p1
 
-# Needed by some patches
-autoreconf
+%if %{git}
+echo "clean:" > Makefile
+./bootstrap.sh -V
+%endif
 
 %build
-%configure2_5x
+%configure2_5x --disable-asyncns
 
 %make
 make doxygen
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 %makeinstall_std
 
 install -D -m 0644 %{_sourcedir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
@@ -356,19 +328,22 @@ find %{buildroot} \( -name *.a -o -name *.la \) -exec rm {} \;
 # Fix esd
 ln -s esdcompat %{buildroot}%{_bindir}/esd
 
+%find_lang %{name}
+
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 
 
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root)
 %doc README
 %dir %{_sysconfdir}/pulse/
 %config(noreplace) %{_sysconfdir}/pulse/client.conf
 %config(noreplace) %{_sysconfdir}/pulse/daemon.conf
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
+%config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %attr(4755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1.*
@@ -381,8 +356,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/icons/hicolor/*
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
-%{_libdir}/pulse-%{apiver}/modules/libauthkey-prop.so
 %{_libdir}/pulse-%{apiver}/modules/libauthkey.so
+%{_libdir}/pulse-%{apiver}/modules/libauth-cookie.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
 %{_libdir}/pulse-%{apiver}/modules/libdbus-util.so
 %{_libdir}/pulse-%{apiver}/modules/libiochannel.so
@@ -413,7 +388,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pulse-%{apiver}/modules/module-cli-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-cli.so
 %{_libdir}/pulse-%{apiver}/modules/module-combine.so
+%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
 %{_libdir}/pulse-%{apiver}/modules/module-detect.so
+%{_libdir}/pulse-%{apiver}/modules/module-device-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-compat-spawnfd.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-compat-spawnpid.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-protocol-tcp.so
@@ -432,6 +409,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-raop-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-position-event-sounds.so
 %{_libdir}/pulse-%{apiver}/modules/module-rescue-streams.so
 %{_libdir}/pulse-%{apiver}/modules/module-rtp-recv.so
 %{_libdir}/pulse-%{apiver}/modules/module-rtp-send.so
@@ -441,6 +419,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pulse-%{apiver}/modules/module-tunnel-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-tunnel-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-volume-restore.so
+%{_libdir}/pulse-%{apiver}/modules/module-stream-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-suspend-on-idle.so
 %{_libdir}/pulse-%{apiver}/modules/module-default-device-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-ladspa-sink.so
@@ -491,11 +470,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/esd
 %{_mandir}/man1/esdcompat.1.*
 
-
 %files module-bluetooth
 %defattr(-,root,root)
-%{_libdir}/pulse-%{apiver}/modules/module-bt-proximity.so
-%{_libdir}/pulse/bt-proximity-helper
+%{_libdir}/pulse-%{apiver}/modules/libbluetooth-ipc.so
+%{_libdir}/pulse-%{apiver}/modules/libbluetooth-sbc.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-device.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-discover.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-proximity.so
+%{_libdir}/pulse/proximity-helper
 
 
 %files module-lirc
@@ -507,13 +489,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_sysconfdir}/X11/xinit.d/50%{name}
 %{_bindir}/pax11publish
+%{_bindir}/start-pulseaudio-x11
 %{_mandir}/man1/pax11publish.1.*
 %{_libdir}/pulse-%{apiver}/modules/libx11prop.so
 %{_libdir}/pulse-%{apiver}/modules/libx11wrap.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-bell.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-publish.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-xsmp.so
-%{_sysconfdir}/xdg/autostart/pulseaudio-module-xsmp.desktop
+%{_sysconfdir}/xdg/autostart/pulseaudio.desktop
 
 
 %files module-zeroconf
@@ -553,5 +536,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/pactl.1.*
 %{_mandir}/man1/padsp.1.*
 %{_mandir}/man1/paplay.1.*
-#{_mandir}/man1/parec.1.*
 %{_mandir}/man1/pasuspender.1.*
