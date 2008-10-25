@@ -1,24 +1,31 @@
 %define name pulseaudio
-%define version 0.9.13
-%define rel 2
-%define git 0
+%define version 0.9.14
+%define rel 1
+%define git 20081025
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
 %define release %mkrel %rel
 %endif
 
+# (cg) Lennart has introduced a circular dependancy in the libraries
+# libpulse requires libpulsecommon but libpulsecommon requires libpulse.
+# This breaks no-undefined.
+# Further issues in some test apps (maybe more) require that as-needed is required.
+%define _disable_ld_no_undefined 1
+%define _disable_ld_as_needed 1
+%define _requires_exceptions devel(libpulsecommon
+
 # Majors
 %define major 0
-%define coremajor 8
 %define zeroconfmajor 0
 %define glib2major 0
-%define apiver 0.9
+%define apiver 0.9.13
 
 # Library names
 %define libname %mklibname %{name} %{major}
 %define libname_devel %mklibname -d %{name}
-%define corelibname %mklibname pulsecore %{coremajor}
+
 %define zeroconflibname %mklibname pulsezeroconf %{zeroconfmajor}
 %define glib2libname %mklibname pulseglib2 %{glib2major}
 
@@ -60,17 +67,15 @@ Source4: %{name}.svg
 # git rebase mdv-0.9.13-cherry-picks
 
 # Cherry Pick Patches
-# git format-patch origin/tags/release-0.9.13..mdv-0.9.13-cherry-picks
+# git format-patch master..mdv-0.9.14-cherry-picks
 
 # Mandriva Patches
-# git format-patch --start-number 500 mdv-0.9.13-cherry-picks..mdv-0.9.13-patches
+# git format-patch --start-number 500 mdv-0.9.14-cherry-picks..mdv-0.9.14-patches
 Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere.patch
 Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
 Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0.patch
 Patch504: 0504-Load-module-gconf-earlier-so-that-module-volume-rest.patch
-Patch505: 0505-Airtunes-patch-http-colin.guthr.ie-git-pulseaudio.patch
-Patch506: 0506-Fix-two-typos-that-broke-tunnels.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -114,6 +119,15 @@ Obsoletes: polypaudio
 Requires: libltdl >= 1.5.24
 # (cg) When upgrading from pa < 0.9.7-1 things break due to spec restructure
 Conflicts: %{libname} < 0.9.7-2
+# (cg) libpulsecore has been moved to a dlopen'ed system.
+Obsoletes: %mklibname pulsecore 1
+Obsoletes: %mklibname pulsecore 2
+Obsoletes: %mklibname pulsecore 3
+Obsoletes: %mklibname pulsecore 4
+Obsoletes: %mklibname pulsecore 5
+Obsoletes: %mklibname pulsecore 6
+Obsoletes: %mklibname pulsecore 7
+Obsoletes: %mklibname pulsecore 8
 
 %description
 pulseaudio is a sound server for Linux and other Unix like operating
@@ -136,17 +150,6 @@ provides pulseaudio has:
      * May be used to combine multiple sound cards to one (with sample
        rate adjustment)
      * Client side latency interpolation
-
-%package -n %{corelibname}
-Summary: Core libraries for the PulseAudio sound server
-Group: System/Libraries
-
-%description -n %{corelibname}
-This package contains runtime libraries that are used internally in the
-PulseAudio sound server.
-
-%post -n %{corelibname} -p /sbin/ldconfig
-%postun -n %{corelibname} -p /sbin/ldconfig
 
 
 %package -n %{libname}
@@ -188,7 +191,6 @@ a GLIB 2.x based application.
 %package -n %{libname_devel}
 Summary: Headers and libraries for PulseAudio client development
 Group: Development/C
-Requires: %{corelibname} = %{version}-%{release}
 Requires: %{libname} = %{version}-%{release}
 Requires: %{zeroconflibname} = %{version}-%{release}
 Requires: %{glib2libname} = %{version}-%{release}
@@ -283,7 +285,7 @@ This package contains command line utilities for the PulseAudio sound server.
 
 %prep
 %if %{git}
-%setup -q -n %{name}
+%setup -q -n %{name}-%{git}
 %else
 %setup -q
 %endif
@@ -293,8 +295,6 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch502 -p1
 %patch503 -p1
 %patch504 -p1
-%patch505 -p1
-%patch506 -p1
 
 %if %{git}
 echo "clean:" > Makefile
@@ -357,32 +357,21 @@ rm -rf %{buildroot}
 %endif
 %{_datadir}/icons/hicolor/*
 %dir %{_libdir}/pulse-%{apiver}/modules/
+# (cg) These are more modules than any "real" library.
+%{_libdir}/libpulsecommon-%{apiver}.so
+%{_libdir}/libpulsecore-%{apiver}.so
+# (cg) And the real module stuff
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
-%{_libdir}/pulse-%{apiver}/modules/libauthkey.so
-%{_libdir}/pulse-%{apiver}/modules/libauth-cookie.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
 %{_libdir}/pulse-%{apiver}/modules/libdbus-util.so
-%{_libdir}/pulse-%{apiver}/modules/libiochannel.so
-%{_libdir}/pulse-%{apiver}/modules/libioline.so
-%{_libdir}/pulse-%{apiver}/modules/libipacl.so
 %{_libdir}/pulse-%{apiver}/modules/liboss-util.so
-%{_libdir}/pulse-%{apiver}/modules/libpacket.so
-%{_libdir}/pulse-%{apiver}/modules/libparseaddr.so
-%{_libdir}/pulse-%{apiver}/modules/libpdispatch.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-cli.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-esound.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-http.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-native.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-simple.so
-%{_libdir}/pulse-%{apiver}/modules/libpstream-util.so
-%{_libdir}/pulse-%{apiver}/modules/libpstream.so
 %{_libdir}/pulse-%{apiver}/modules/libraop.so
 %{_libdir}/pulse-%{apiver}/modules/librtp.so
-%{_libdir}/pulse-%{apiver}/modules/libsocket-client.so
-%{_libdir}/pulse-%{apiver}/modules/libsocket-server.so
-%{_libdir}/pulse-%{apiver}/modules/libsocket-util.so
-%{_libdir}/pulse-%{apiver}/modules/libstrlist.so
-%{_libdir}/pulse-%{apiver}/modules/libtagstruct.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-always-sink.so
@@ -398,6 +387,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-esound-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-flat-volume.so
 %{_libdir}/pulse-%{apiver}/modules/module-hal-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-unix.so
@@ -428,11 +418,6 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-remap-sink.so
 
 
-%files -n %{corelibname}
-%defattr(-,root,root)
-%{_libdir}/libpulsecore.so.%{coremajor}*
-
-
 %files -n %{libname}
 %defattr(-,root,root)
 %{_libdir}/libpulse.so.%{major}*
@@ -456,7 +441,6 @@ rm -rf %{buildroot}
 %doc doxygen/html
 %defattr(-,root,root)
 %{_libdir}/libpulse.so
-%{_libdir}/libpulsecore.so
 %{_libdir}/libpulse-browse.so
 %{_libdir}/libpulse-mainloop-glib.so
 %{_libdir}/libpulse-simple.so
@@ -493,8 +477,6 @@ rm -rf %{buildroot}
 %{_bindir}/pax11publish
 %{_bindir}/start-pulseaudio-x11
 %{_mandir}/man1/pax11publish.1.*
-%{_libdir}/pulse-%{apiver}/modules/libx11prop.so
-%{_libdir}/pulse-%{apiver}/modules/libx11wrap.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-bell.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-publish.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-xsmp.so
