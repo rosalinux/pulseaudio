@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.14
-%define rel 1
+%define rel 2
 %define git 20081025
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
@@ -357,10 +357,6 @@ rm -rf %{buildroot}
 %endif
 %{_datadir}/icons/hicolor/*
 %dir %{_libdir}/pulse-%{apiver}/modules/
-# (cg) These are more modules than any "real" library.
-%{_libdir}/libpulsecommon-%{apiver}.so
-%{_libdir}/libpulsecore-%{apiver}.so
-# (cg) And the real module stuff
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
 %{_libdir}/pulse-%{apiver}/modules/libdbus-util.so
@@ -422,6 +418,8 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_libdir}/libpulse.so.%{major}*
 %{_libdir}/libpulse-simple.so.%{major}*
+%{_libdir}/libpulsecommon-%{apiver}.so
+%{_libdir}/libpulsecore-%{apiver}.so
 # (cg) Although the following is not a shared library, putting this file here
 # will allow padsp to work on dual arch machines... (e.g. using padsp to start
 # a 32-bit app).
