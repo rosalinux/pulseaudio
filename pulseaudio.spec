@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.14
 %define rel 1
-%define git 20081105
+%define git 20090109
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -75,9 +75,11 @@ Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere.patch
 Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
 Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0.patch
-Patch504: 0504-Load-module-gconf-earlier-so-that-module-volume-rest.patch
-Patch505: 0505-Revert-back-to-using-pa_-sink-source-_used_by-as-o.patch
-Patch506: 0506-Add-in-libcli.la-into-the-libprotocol-cli.so-to-find.patch
+Patch504: 0504-Add-in-libcli.la-into-the-libprotocol-cli.so-to-find.patch
+
+Patch800: 0800-Revert-fix-implementation-of-bind-now-ltdl-loader-f.patch
+Patch801: 0801-Revert-libtool-2.2-updates.patch
+Patch802: 0802-Revert-2ee9276d97f15ea965fb8a88f2aa184355b9903a-lib.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -297,8 +299,11 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch502 -p1
 %patch503 -p1
 %patch504 -p1
-%patch505 -p1
-%patch506 -p1
+
+%patch800 -p1
+%patch801 -p1
+%patch802 -p1
+
 
 %if %{git}
 echo "clean:" > Makefile
@@ -408,6 +413,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-simple-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-simple-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-sine.so
+%{_libdir}/pulse-%{apiver}/modules/module-sine-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-tunnel-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-tunnel-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-volume-restore.so
