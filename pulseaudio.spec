@@ -98,6 +98,8 @@ BuildRequires: libGConf2-devel
 BuildRequires: libwrap-devel
 BuildRequires: X11-devel
 BuildRequires: hal-devel
+#gw libtool dep:
+BuildRequires: dbus-glib-devel
 BuildRequires: doxygen
 BuildRequires: automake1.8
 BuildRequires: libltdl-devel
