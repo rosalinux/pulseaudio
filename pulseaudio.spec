@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.14
-%define rel 1
+%define rel 2
 %define git 20090109
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
@@ -300,10 +300,11 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch503 -p1
 %patch504 -p1
 
+%if %mdvver < 200910
 %patch800 -p1
 %patch801 -p1
 %patch802 -p1
-
+%endif
 
 %if %{git}
 echo "clean:" > Makefile
