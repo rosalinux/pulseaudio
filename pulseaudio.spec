@@ -1,7 +1,7 @@
 %define name pulseaudio
-%define version 0.9.14
-%define rel 2
-%define git 20090109
+%define version 0.9.15
+%define rel 1
+%define git 20090203
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -50,36 +50,31 @@ Source4: %{name}.svg
 # (cg) Using git to manage patches
 # To recreate the structure
 # git clone git://git.0pointer.de/pulseaudio
-# git checkout v0.9.13
-# git checkout -b mdv-0.9.13-cherry-picks
+# git checkout v0.9.15
+# git checkout -b mdv-0.9.15-cherry-picks
 # git am 00*.patch
-# git checkout -b mdv-0.9.13-patches
+# git checkout -b mdv-0.9.15-patches
 # git am 05*.patch
 
 # To apply new custom patches
-# git checkout mdv-0.9.13-patches
+# git checkout mdv-0.9.15-patches
 # (do stuff)
 
 # To apply new cherry-picks
-# git checkout mdv-0.9.13-cherry-picks
+# git checkout mdv-0.9.15-cherry-picks
 # git cherry-pick <blah>
-# git checkout mdv-0.9.13-patches
-# git rebase mdv-0.9.13-cherry-picks
+# git checkout mdv-0.9.15-patches
+# git rebase mdv-0.9.15-cherry-picks
 
 # Cherry Pick Patches
-# git format-patch master..mdv-0.9.14-cherry-picks
+# git format-patch master..mdv-0.9.15-cherry-picks
 
 # Mandriva Patches
-# git format-patch --start-number 500 mdv-0.9.14-cherry-picks..mdv-0.9.14-patches
+# git format-patch --start-number 500 mdv-0.9.15-cherry-picks..mdv-0.9.15-patches
 Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere.patch
 Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
 Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0.patch
-Patch504: 0504-Add-in-libcli.la-into-the-libprotocol-cli.so-to-find.patch
-
-Patch800: 0800-Revert-fix-implementation-of-bind-now-ltdl-loader-f.patch
-Patch801: 0801-Revert-libtool-2.2-updates.patch
-Patch802: 0802-Revert-2ee9276d97f15ea965fb8a88f2aa184355b9903a-lib.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -300,13 +295,6 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch501 -p1
 %patch502 -p1
 %patch503 -p1
-%patch504 -p1
-
-%if %mdvver < 200910
-%patch800 -p1
-%patch801 -p1
-%patch802 -p1
-%endif
 
 %if %{git}
 echo "clean:" > Makefile
@@ -322,6 +310,9 @@ make doxygen
 %install
 rm -rf %{buildroot}
 %makeinstall_std
+
+# (cg) Hack until lennart fixes a segv in pavucontrol... already reported :)
+sed -i 's/^load-module module-stream-restore$/#load-module module-stream-restore/' %{buildroot}%{_sysconfdir}/pulse/default.pa
 
 install -D -m 0644 %{_sourcedir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -D -m 0755 %{_sourcedir}/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
@@ -380,9 +371,11 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-simple.so
 %{_libdir}/pulse-%{apiver}/modules/libraop.so
 %{_libdir}/pulse-%{apiver}/modules/librtp.so
+%{_libdir}/pulse-%{apiver}/modules/module-alsa-card.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-always-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-card-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-cli-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-cli-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-cli.so
@@ -395,7 +388,6 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-esound-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-sink.so
-%{_libdir}/pulse-%{apiver}/modules/module-flat-volume.so
 %{_libdir}/pulse-%{apiver}/modules/module-hal-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-unix.so
@@ -471,6 +463,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_libdir}/pulse-%{apiver}/modules/libbluetooth-ipc.so
 %{_libdir}/pulse-%{apiver}/modules/libbluetooth-sbc.so
+%{_libdir}/pulse-%{apiver}/modules/libbluetooth-util.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-device.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-discover.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-proximity.so
