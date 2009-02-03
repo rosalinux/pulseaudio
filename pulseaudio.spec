@@ -304,8 +304,9 @@ echo "clean:" > Makefile
 %build
 %configure2_5x --disable-asyncns
 
-%make
-make doxygen
+# (cg) There appears to be issues with parallel make right now :s
+make -j1
+make -j1 doxygen
 
 %install
 rm -rf %{buildroot}
