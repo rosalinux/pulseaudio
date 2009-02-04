@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.15
-%define rel 1
+%define rel 2
 %define git 20090204
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
@@ -311,6 +311,9 @@ make doxygen
 %install
 rm -rf %{buildroot}
 %makeinstall_std
+
+# (cg) Hack until positional event sounds is fixed... already reported :)
+		sed -i 's/^load-module module-position-event-sounds$/#load-module module-position-event-sounds/' %{buildroot}%{_sysconfdir}/pulse/default.pa
 
 install -D -m 0644 %{_sourcedir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -D -m 0755 %{_sourcedir}/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
