@@ -75,6 +75,8 @@ Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere.patch
 Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
 Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0.patch
+Patch504: 0504-Clean-up-volume-mute-settings-a-bit.patch
+Patch505: 0505-A-couple-of-dependancy-ordering-fixes.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -295,6 +297,8 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch501 -p1
 %patch502 -p1
 %patch503 -p1
+%patch504 -p1
+%patch505 -p1
 
 %if %{git}
 echo "clean:" > Makefile
@@ -305,8 +309,8 @@ echo "clean:" > Makefile
 %configure2_5x --disable-asyncns
 
 # (cg) There appears to be issues with parallel make right now :s
-make -j1
-make -j1 doxygen
+%make
+make doxygen
 
 %install
 rm -rf %{buildroot}
