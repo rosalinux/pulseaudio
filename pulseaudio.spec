@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.15
+%define git 20090222
 %define rel 1
-%define git 20090212
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -75,6 +75,8 @@ Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere.patch
 Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
 Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0.patch
+Patch504: 0504-Remove-references-to-trademarked-terms.patch
+Patch505: 0505-Add-the-module-dir-to-the-libpulse-pkgconfig-file-n.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -295,6 +297,8 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch501 -p1
 %patch502 -p1
 %patch503 -p1
+%patch504 -p1
+%patch505 -p1
 
 %if %{git}
 echo "clean:" > Makefile
@@ -482,6 +486,7 @@ rm -rf %{buildroot}
 %{_bindir}/start-pulseaudio-x11
 %{_mandir}/man1/pax11publish.1.*
 %{_libdir}/pulse-%{apiver}/modules/module-x11-bell.so
+%{_libdir}/pulse-%{apiver}/modules/module-x11-cork-request.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-publish.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-xsmp.so
 %{_sysconfdir}/xdg/autostart/pulseaudio.desktop
