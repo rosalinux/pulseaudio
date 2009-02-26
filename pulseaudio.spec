@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.15
-%define git 20090222
+%define git 20090225
 %define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
@@ -75,8 +75,7 @@ Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere.patch
 Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
 Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0.patch
-Patch504: 0504-Remove-references-to-trademarked-terms.patch
-Patch505: 0505-Add-the-module-dir-to-the-libpulse-pkgconfig-file-n.patch
+Patch504: 0504-Fix-a-very-strange-file-not-found-error-in-module.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -298,7 +297,6 @@ This package contains command line utilities for the PulseAudio sound server.
 %patch502 -p1
 %patch503 -p1
 %patch504 -p1
-%patch505 -p1
 
 %if %{git}
 echo "clean:" > Makefile
