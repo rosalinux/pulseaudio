@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.15
-%define git 20090305
+%define git 20090401
 %define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
@@ -360,7 +360,7 @@ rm -rf %{buildroot}
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
-%{_libdir}/pulse-%{apiver}/modules/libdbus-util.so
+#{_libdir}/pulse-%{apiver}/modules/libdbus-util.so
 %{_libdir}/pulse-%{apiver}/modules/liboss-util.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-cli.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-esound.so
