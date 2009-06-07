@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.15
 %define git 0
-%define rel 4
+%define rel 5
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -74,6 +74,7 @@ Patch102: 0102-endian-fix-LE-BE-order-for-24-bit-accessor-function.patch
 Patch103: 0103-sample-correctly-pass-s24-32-formats.patch
 Patch104: 0104-sconv-fix-a-few-minor-conversion-issues.patch
 Patch105: 0105-Revert-core-when-applying-delay-memblockq-take-mon.patch
+Patch106: 0106-core-make-sure-soft-mute-status-stays-in-sync-with-h.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 mdv-0.9.15-cherry-picks..mdv-0.9.15-patches
@@ -298,18 +299,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %setup -q
 %endif
 
-%patch100 -p1
-%patch101 -p1
-%patch102 -p1
-%patch103 -p1
-%patch104 -p1
-%patch105 -p1
-
-%patch500 -p1
-%patch501 -p1
-%patch502 -p1
-%patch503 -p1
-%patch504 -p1
+%apply_patches
 
 %if %{git}
 echo "clean:" > Makefile
@@ -319,7 +309,6 @@ echo "clean:" > Makefile
 %build
 %configure2_5x --disable-asyncns
 
-# (cg) There appears to be issues with parallel make right now :s
 %make
 make doxygen
 
