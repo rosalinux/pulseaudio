@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.15
 %define git 0
-%define rel 5
+%define rel 6
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -75,6 +75,27 @@ Patch103: 0103-sample-correctly-pass-s24-32-formats.patch
 Patch104: 0104-sconv-fix-a-few-minor-conversion-issues.patch
 Patch105: 0105-Revert-core-when-applying-delay-memblockq-take-mon.patch
 Patch106: 0106-core-make-sure-soft-mute-status-stays-in-sync-with-h.patch
+Patch107: 0107-alsa-allow-configuration-of-fallback-device-strings-.patch
+Patch108: 0108-util-if-NULL-is-passed-to-pa_path_get_filename-just-.patch
+Patch109: 0109-alsa-don-t-hit-an-assert-when-invalid-module-argumen.patch
+Patch110: 0110-alsa-fix-wording-we-are-speaking-of-card-profiles-no.patch
+Patch111: 0111-alsa-initialize-buffer-size-before-number-of-periods.patch
+Patch112: 0112-conf-remove-obsolete-module-idle-time-directive-from.patch
+Patch113: 0113-log-print-file-name-only-when-we-have-it.patch
+Patch114: 0114-man-document-24bit-sample-types-in-man-page.patch
+Patch115: 0115-man-document-log-related-daemon.conf-options.patch
+Patch116: 0116-man-document-that-tsched-doesn-t-use-fragment-settin.patch
+Patch117: 0117-mutex-when-we-fail-to-fill-in-mutex-into-static-mute.patch
+Patch118: 0118-oss-don-t-deadlock-when-we-try-to-resume-an-OSS-devi.patch
+Patch119: 0119-simple-protocol-don-t-hit-an-assert-when-we-call-con.patch
+Patch120: 0120-idxset-add-enumeration-macro-PA_IDXSET_FOREACH.patch
+Patch121: 0121-rescue-streams-when-one-stream-move-fails-try-to-con.patch
+Patch122: 0122-shm-page-align-shm-size-when-mmap-ing-it.patch
+Patch123: 0123-alsa-be-a-bit-more-verbose-when-a-hwparam-call-fails.patch
+Patch124: 0124-rescue-make-we-don-t-end-up-in-an-endless-loop-when-.patch
+Patch125: 0125-core-introduce-pa_-sink-source-_set_fixed_latency.patch
+Patch126: 0126-core-cache-requested-latency-only-when-we-are-runnin.patch
+Patch127: 0127-sample-fix-build-on-BE-archs.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 mdv-0.9.15-cherry-picks..mdv-0.9.15-patches
