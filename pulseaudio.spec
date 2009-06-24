@@ -80,9 +80,8 @@ Source4: %{name}.svg
 # git format-patch --start-number 500 mdv-0.9.16-cherry-picks..mdv-0.9.16-patches
 Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-#Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
-Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0-.patch
-Patch504: 0504-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
+Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
+Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
