@@ -124,8 +124,10 @@ Provides: polypaudio
 Obsoletes: polypaudio
 # (cg) This is for the backport of 0.9.7 to 2008
 #      pulseaudio fails when using older versions of libtool
-Requires: rtkit
 Requires: libltdl >= 1.5.24
+# (cg) Just incase people backport, require specific udev
+Requires: udev >= 143
+Requires: rtkit
 # (cg) When upgrading from pa < 0.9.7-1 things break due to spec restructure
 Conflicts: %{libname} < 0.9.7-2
 # (cg) libpulsecore has been moved to a dlopen'ed system.
