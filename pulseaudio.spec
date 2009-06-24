@@ -1,7 +1,7 @@
 %define name pulseaudio
-%define version 0.9.15
+%define version 0.9.16
 %define git 0
-%define rel 7
+%define rel 0.test1.1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -37,7 +37,7 @@ Release: %{release}
 %if %{git}
 Source0: %{name}-%{git}.tar.lzma
 %else
-Source0: %{name}-%{version}.tar.gz
+Source0: %{name}-%{version}-test1.tar.gz
 %endif
 Source1: %{name}.sysconfig
 Source2: %{name}.xinit
@@ -67,35 +67,7 @@ Source4: %{name}.svg
 # git rebase mdv-0.9.15-cherry-picks
 
 # Cherry Pick Patches
-# git format-patch --start-number 100 v0.9.15..mdv-0.9.15-cherry-picks
-Patch100: 0100-alsa-allow-configuration-of-fallback-device-strings-.patch
-Patch101: 0101-util-if-NULL-is-passed-to-pa_path_get_filename-just-.patch
-Patch102: 0102-alsa-don-t-hit-an-assert-when-invalid-module-argumen.patch
-Patch103: 0103-alsa-fix-wording-we-are-speaking-of-card-profiles-no.patch
-Patch104: 0104-alsa-initialize-buffer-size-before-number-of-periods.patch
-Patch105: 0105-conf-remove-obsolete-module-idle-time-directive-from.patch
-Patch106: 0106-core-make-sure-soft-mute-status-stays-in-sync-with-h.patch
-Patch107: 0107-endian-fix-LE-BE-order-for-24-bit-accessor-functions.patch
-Patch108: 0108-log-print-file-name-only-when-we-have-it.patch
-Patch109: 0109-man-document-24bit-sample-types-in-man-page.patch
-Patch110: 0110-man-document-log-related-daemon.conf-options.patch
-Patch111: 0111-man-document-that-tsched-doesn-t-use-fragment-settin.patch
-Patch112: 0112-mutex-when-we-fail-to-fill-in-mutex-into-static-mute.patch
-Patch113: 0113-oss-don-t-deadlock-when-we-try-to-resume-an-OSS-devi.patch
-Patch114: 0114-simple-protocol-don-t-hit-an-assert-when-we-call-con.patch
-Patch115: 0115-idxset-add-enumeration-macro-PA_IDXSET_FOREACH.patch
-Patch116: 0116-rescue-streams-when-one-stream-move-fails-try-to-con.patch
-Patch117: 0117-sample-correctly-pass-s24-32-formats.patch
-Patch118: 0118-sample-util-fix-iteration-loop-when-adjusting-volume.patch
-Patch119: 0119-sample-util-properly-allocate-silence-block-for-s24-.patch
-Patch120: 0120-sconv-fix-a-few-minor-conversion-issues.patch
-Patch121: 0121-alsa-be-a-bit-more-verbose-when-a-hwparam-call-fails.patch
-Patch122: 0122-rescue-make-we-don-t-end-up-in-an-endless-loop-when-.patch
-Patch123: 0123-core-introduce-pa_-sink-source-_set_fixed_latency.patch
-Patch124: 0124-core-cache-requested-latency-only-when-we-are-runnin.patch
-Patch125: 0125-sample-fix-build-on-BE-archs.patch
-Patch126: 0126-alsa-properly-convert-return-values-of-snd_strerror-.patch
-Patch127: 0127-alsa-remove-debug-code.patch
+# git format-patch --start-number 100 v0.9.16..mdv-0.9.16-cherry-picks
 
 # Not currently reverting:
 # This is being tracked in https://qa.mandriva.com/show_bug.cgi?id=49947
@@ -105,13 +77,12 @@ Patch127: 0127-alsa-remove-debug-code.patch
 # This reverts commit a4cea4e469d3baf27890820eba030b7acdf63daa.
 
 # Mandriva Patches
-# git format-patch --start-number 500 mdv-0.9.15-cherry-picks..mdv-0.9.15-patches
+# git format-patch --start-number 500 mdv-0.9.16-cherry-picks..mdv-0.9.16-patches
 Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
-Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere.patch
-Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
-Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0.patch
+Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
+#Patch502: 0502-Change-policykit-policy-to-allow-high-priority-and-d.patch
+Patch503: 0503-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch504: 0504-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
-Patch505: 0505-Do-not-start-pulseaudio-daemon-if-PULSE_SERVER-direc.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -139,7 +110,7 @@ BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
 BuildRequires: lirc-devel
 BuildRequires: bluez-devel
-BuildRequires: gdbm-devel
+BuildRequires: tdb-devel
 BuildRequires: speex-devel
 # (cg) Needed for airtunes
 BuildRequires: openssl-devel
@@ -154,6 +125,7 @@ Provides: polypaudio
 Obsoletes: polypaudio
 # (cg) This is for the backport of 0.9.7 to 2008
 #      pulseaudio fails when using older versions of libtool
+Requires: rtkit
 Requires: libltdl >= 1.5.24
 # (cg) When upgrading from pa < 0.9.7-1 things break due to spec restructure
 Conflicts: %{libname} < 0.9.7-2
@@ -325,7 +297,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %if %{git}
 %setup -q -n %{name}-%{git}
 %else
-%setup -q
+%setup -q -n %{name}-%{version}-test1
 %endif
 
 %apply_patches
@@ -386,10 +358,10 @@ rm -rf %{buildroot}
 %{_mandir}/man5/pulse-client.conf.5.*
 %{_mandir}/man5/pulse-daemon.conf.5.*
 %{_mandir}/man5/default.pa.5.*
-%if %{mdkversion} > 200800
-%{_datadir}/PolicyKit/policy/org.pulseaudio.policy
-%endif
 %{_datadir}/icons/hicolor/*
+%dir %{_datadir}/%{name}/
+%{_datadir}/%{name}/alsa-mixer
+/lib/udev/rules.d/90-pulseaudio.rules
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
@@ -423,6 +395,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-hal-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-unix.so
+%{_libdir}/pulse-%{apiver}/modules/module-intended-roles.so
 %{_libdir}/pulse-%{apiver}/modules/module-match.so
 %{_libdir}/pulse-%{apiver}/modules/module-mmkbd-evdev.so
 %{_libdir}/pulse-%{apiver}/modules/module-native-protocol-fd.so
@@ -433,6 +406,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-raop-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-rygel-media-server.so
 %{_libdir}/pulse-%{apiver}/modules/module-position-event-sounds.so
 %{_libdir}/pulse-%{apiver}/modules/module-rescue-streams.so
 %{_libdir}/pulse-%{apiver}/modules/module-rtp-recv.so
@@ -443,6 +417,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-sine-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-tunnel-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-tunnel-source.so
+%{_libdir}/pulse-%{apiver}/modules/module-udev-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-volume-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-stream-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-suspend-on-idle.so
@@ -549,8 +524,10 @@ rm -rf %{buildroot}
 %{_bindir}/pacmd
 %{_bindir}/pactl
 %{_bindir}/padsp
+%{_bindir}/pamon
 %{_bindir}/paplay
 %{_bindir}/parec
+%{_bindir}/parecord
 %{_bindir}/pasuspender
 %{_mandir}/man1/pacat.1.*
 %{_mandir}/man1/pacmd.1.*
