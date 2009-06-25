@@ -99,6 +99,7 @@ BuildRequires: liboil-devel
 BuildRequires: libGConf2-devel
 BuildRequires: libwrap-devel
 BuildRequires: X11-devel
+BuildRequires: udev-devel
 BuildRequires: hal-devel
 #gw libtool dep:
 BuildRequires: dbus-glib-devel
