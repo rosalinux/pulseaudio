@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.16
 %define git 0
-%define rel 0.test1.1
+%define rel 0.test1.2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -67,7 +67,20 @@ Source4: %{name}.svg
 # git rebase mdv-0.9.15-cherry-picks
 
 # Cherry Pick Patches
-# git format-patch --start-number 100 v0.9.16..mdv-0.9.16-cherry-picks
+# git format-patch --start-number 100 origin/master..mdv-0.9.16-cherry-picks
+Patch100: 0100-udev-Don-t-install-the-udev-rules-if-we-re-not-compi.patch
+Patch101: 0101-combine-Do-not-set-and-update-description-if-the-use.patch
+Patch102: 0102-introspect-Fix-a-bug-in-sink-source-info-protocol-ha.patch
+
+# (cg) My History patches
+# git format-patch --start-number 200 mdv-0.9.16-cherry-picks..mdv-0.9.16-history
+Patch200: 0200-device-manager-Add-a-new-module-to-keep-track-of-the.patch
+Patch201: 0201-device-manager-Add-an-untested-protocol-extension.patch
+Patch202: 0202-device-manager-Fix-indentation.patch
+Patch203: 0203-device-manager-Export-device-manager-extension-funct.patch
+Patch204: 0204-device-manager-Link-native-protocol-library.patch
+Patch205: 0205-device-manager-Fix-tagstruct-description-extraction-.patch
+Patch206: 0206-device-restore-Fix-the-application-of-an-entry-to-al.patch
 
 # Not currently reverting:
 # This is being tracked in https://qa.mandriva.com/show_bug.cgi?id=49947
@@ -77,7 +90,7 @@ Source4: %{name}.svg
 # This reverts commit a4cea4e469d3baf27890820eba030b7acdf63daa.
 
 # Mandriva Patches
-# git format-patch --start-number 500 mdv-0.9.16-cherry-picks..mdv-0.9.16-patches
+# git format-patch --start-number 500 mdv-0.9.16-history..mdv-0.9.16-patches
 Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
@@ -304,10 +317,18 @@ This package contains command line utilities for the PulseAudio sound server.
 
 %apply_patches
 
-%if %{git}
+# (cg) If autoconf is retriggered (which can happen automatically) we need this file.
+cat >git-version-gen <<EOF
+#!/bin/bash
+echo -n %{version}-%{release}
+EOF
+chmod a+x git-version-gen
+
+# (cg) Always needed for history patches
+#%if %{git}
 echo "clean:" > Makefile
 ./bootstrap.sh -V
-%endif
+#%endif
 
 %build
 %configure2_5x --disable-asyncns
@@ -388,6 +409,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-cork-music-on-phone.so
 %{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
 %{_libdir}/pulse-%{apiver}/modules/module-detect.so
+%{_libdir}/pulse-%{apiver}/modules/module-device-manager.so
 %{_libdir}/pulse-%{apiver}/modules/module-device-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-compat-spawnfd.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-compat-spawnpid.so
