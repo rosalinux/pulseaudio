@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.16
 %define git 0
-%define rel 0.test1.2
+%define rel 0.test2.1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -37,7 +37,7 @@ Release: %{release}
 %if %{git}
 Source0: %{name}-%{git}.tar.lzma
 %else
-Source0: %{name}-%{version}-test1.tar.gz
+Source0: %{name}-%{version}-test2.tar.gz
 %endif
 Source1: %{name}.sysconfig
 Source2: %{name}.xinit
@@ -68,9 +68,6 @@ Source4: %{name}.svg
 
 # Cherry Pick Patches
 # git format-patch --start-number 100 origin/master..mdv-0.9.16-cherry-picks
-Patch100: 0100-udev-Don-t-install-the-udev-rules-if-we-re-not-compi.patch
-Patch101: 0101-combine-Do-not-set-and-update-description-if-the-use.patch
-Patch102: 0102-introspect-Fix-a-bug-in-sink-source-info-protocol-ha.patch
 
 # (cg) My History patches
 # git format-patch --start-number 200 mdv-0.9.16-cherry-picks..mdv-0.9.16-history
@@ -81,6 +78,8 @@ Patch203: 0203-device-manager-Export-device-manager-extension-funct.patch
 Patch204: 0204-device-manager-Link-native-protocol-library.patch
 Patch205: 0205-device-manager-Fix-tagstruct-description-extraction-.patch
 Patch206: 0206-device-restore-Fix-the-application-of-an-entry-to-al.patch
+Patch207: 0207-stream-restore-Preventative-initialistion-to-NULL.patch
+Patch208: 0208-device-manager-Only-store-and-save-details-for-non-m.patch
 
 # Not currently reverting:
 # This is being tracked in https://qa.mandriva.com/show_bug.cgi?id=49947
@@ -312,7 +311,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %if %{git}
 %setup -q -n %{name}-%{git}
 %else
-%setup -q -n %{name}-%{version}-test1
+%setup -q -n %{name}-%{version}-test2
 %endif
 
 %apply_patches
