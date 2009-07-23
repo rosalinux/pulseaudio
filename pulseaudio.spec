@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.16
-%define git 0
-%define rel 0.test2.1
+%define git 20090723
+%define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -126,7 +126,9 @@ BuildRequires: tdb-devel
 BuildRequires: speex-devel
 # (cg) Needed for airtunes
 BuildRequires: openssl-devel
-%if %{mdkversion} > 200800
+%if %{mdkversion} >= 201000
+BuildRequires: polkit-1-devel
+%elseif %{mdkversion} > 200800
 BuildRequires: polkit-devel
 %endif
 #BuildRequires: libasyncns-devel
