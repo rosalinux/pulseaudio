@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.16
-%define git 20090805
+%define git 20090816
 %define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
@@ -181,6 +181,7 @@ provides pulseaudio has:
 %package -n %{libname}
 Summary: Libraries for PulseAudio clients
 Group: System/Libraries
+Requires: %{name}-client-config
 
 %description -n %{libname}
 This package contains the runtime libraries for any application that wishes
@@ -188,6 +189,29 @@ to interface with a PulseAudio sound server.
 
 %post -n %{libname} -p /sbin/ldconfig
 %postun -n %{libname} -p /sbin/ldconfig
+
+
+%define alt_name soundprofile
+%define alt_priority 20
+
+%package client-config
+Summary: Client configuration for PulseAudio clients
+Group: System/Libraries
+Conflicts: %{name} < 0.9.16-0.20090816.1
+
+%description client-config
+This package contains the client configuration files for any application that wishes
+to interface with a PulseAudio sound server.
+
+
+%post client-config
+%{_sbindir}/update-alternatives \
+  --install %{_sysconfdir}/sound/profiles/current %{alt_name} %{_sysconfdir}/sound/profiles/pulse %{alt_priority}
+
+%postun client-config
+if [ ! -f %{_sysconfdir}/sound/profiles/pulse/profile.conf ]; then
+  /usr/sbin/update-alternatives --remove %{alt_name} %{_sysconfdir}/sound/profiles/pulse
+fi
 
 
 %package -n %{zeroconflibname}
@@ -360,19 +384,20 @@ find %{buildroot} \( -name *.a -o -name *.la \) -exec rm {} \;
 # Fix esd
 ln -s esdcompat %{buildroot}%{_bindir}/esd
 
+# (cg) For sound profile support
+mkdir -p %{buildroot}%{_sysconfdir}/sound/profiles/pulse
+echo "SOUNDPROFILE=pulse" >%{buildroot}%{_sysconfdir}/sound/profiles/pulse/profile.conf
+
 %find_lang %{name}
 
 %clean
 rm -rf %{buildroot}
 
 
-
-
 %files -f %{name}.lang
 %defattr(-,root,root)
 %doc README
 %dir %{_sysconfdir}/pulse/
-%config(noreplace) %{_sysconfdir}/pulse/client.conf
 %config(noreplace) %{_sysconfdir}/pulse/daemon.conf
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
@@ -386,6 +411,7 @@ rm -rf %{buildroot}
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
 /lib/udev/rules.d/90-pulseaudio.rules
+%{_sysconfdir}/dbus-1/system.d/%{name}-system.conf
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
@@ -461,6 +487,14 @@ rm -rf %{buildroot}
 # will allow padsp to work on dual arch machines... (e.g. using padsp to start
 # a 32-bit app).
 %{_libdir}/libpulsedsp.so
+
+
+%files client-config
+%defattr(-,root,root)
+%dir 
+%config(noreplace) %{_sysconfdir}/pulse/client.conf
+%dir %{_sysconfdir}/sound/profiles/pulse
+%{_sysconfdir}/sound/profiles/pulse/profile.conf
 
 
 %files -n %{zeroconflibname}
