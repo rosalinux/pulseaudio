@@ -126,11 +126,7 @@ BuildRequires: tdb-devel
 BuildRequires: speex-devel
 # (cg) Needed for airtunes
 BuildRequires: openssl-devel
-%if %{mdkversion} >= 201000
 BuildRequires: polkit-1-devel
-%elseif %{mdkversion} > 200800
-BuildRequires: polkit-devel
-%endif
 #BuildRequires: libasyncns-devel
 BuildRequires: intltool
 BuildRequires: imagemagick
@@ -191,9 +187,6 @@ Requires: %{name}-client-config
 This package contains the runtime libraries for any application that wishes
 to interface with a PulseAudio sound server.
 
-%post -n %{libname} -p /sbin/ldconfig
-%postun -n %{libname} -p /sbin/ldconfig
-
 
 %define alt_name soundprofile
 %define alt_priority 20
@@ -228,9 +221,6 @@ Group:      System/Libraries
 This package contains the runtime libraries and tools that allow PulseAudio
 clients to automatically detect PulseAudio servers using Zeroconf.
 
-%post -n %{zeroconflibname} -p /sbin/ldconfig
-%postun -n %{zeroconflibname} -p /sbin/ldconfig
-
 
 %package -n %{glib2libname}
 Summary:  GLIB 2.x bindings for PulseAudio clients
@@ -239,9 +229,6 @@ Group:    System/Libraries
 %description -n %{glib2libname}
 This package contains bindings to integrate the PulseAudio client library with
 a GLIB 2.x based application.
-
-%post -n %{glib2libname} -p /sbin/ldconfig
-%postun -n %{glib2libname} -p /sbin/ldconfig
 
 
 %package -n %{libname_devel}
