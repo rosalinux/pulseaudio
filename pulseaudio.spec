@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.16
-%define git 20090816
+%define git 20090817
 %define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
@@ -143,6 +143,7 @@ Requires: libltdl >= 1.5.24
 # (cg) Just incase people backport, require specific udev
 Requires: udev >= 143
 Requires: rtkit
+Requires(post): ccp
 # (cg) When upgrading from pa < 0.9.7-1 things break due to spec restructure
 Conflicts: %{libname} < 0.9.7-2
 # (cg) libpulsecore has been moved to a dlopen'ed system.
@@ -177,6 +178,9 @@ provides pulseaudio has:
        rate adjustment)
      * Client side latency interpolation
 
+%post
+ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %{_sysconfdir}/pulse/daemon.conf.rpmnew
+
 
 %package -n %{libname}
 Summary: Libraries for PulseAudio clients
@@ -197,6 +201,7 @@ to interface with a PulseAudio sound server.
 %package client-config
 Summary: Client configuration for PulseAudio clients
 Group: System/Libraries
+Requires(post): ccp
 Conflicts: %{name} < 0.9.16-0.20090816.1
 
 %description client-config
@@ -205,6 +210,7 @@ to interface with a PulseAudio sound server.
 
 
 %post client-config
+ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/client.conf --newfile %{_sysconfdir}/pulse/client.conf.rpmnew
 %{_sbindir}/update-alternatives \
   --install %{_sysconfdir}/sound/profiles/current %{alt_name} %{_sysconfdir}/sound/profiles/pulse %{alt_priority}
 
