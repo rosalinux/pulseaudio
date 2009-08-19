@@ -395,7 +395,7 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%attr(4755,root,root) %{_bindir}/%{name}
+%{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1.*
 %{_mandir}/man5/pulse-client.conf.5.*
 %{_mandir}/man5/pulse-daemon.conf.5.*
