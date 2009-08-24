@@ -381,6 +381,10 @@ ln -s esdcompat %{buildroot}%{_bindir}/esd
 mkdir -p %{buildroot}%{_sysconfdir}/sound/profiles/pulse
 echo "SOUNDPROFILE=pulse" >%{buildroot}%{_sysconfdir}/sound/profiles/pulse/profile.conf
 
+# (cg) HAL support is no longer the default, and we don't officially support system wide, so
+# System Wide + HAL is pretty unlikely.
+rm -f %{buildroot}%{_sysconfdir}/dbus-1/system.d/%{name}-system.conf
+
 %find_lang %{name}
 
 %clean
@@ -404,7 +408,6 @@ rm -rf %{buildroot}
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
 /lib/udev/rules.d/90-pulseaudio.rules
-%{_sysconfdir}/dbus-1/system.d/%{name}-system.conf
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
