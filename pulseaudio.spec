@@ -1,6 +1,6 @@
 %define name pulseaudio
 %define version 0.9.16
-%define git 20090824
+%define git 20090827
 %define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
@@ -443,6 +443,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-intended-roles.so
+%{_libdir}/pulse-%{apiver}/modules/module-loopback.so
 %{_libdir}/pulse-%{apiver}/modules/module-match.so
 %{_libdir}/pulse-%{apiver}/modules/module-mmkbd-evdev.so
 %{_libdir}/pulse-%{apiver}/modules/module-native-protocol-fd.so
