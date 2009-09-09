@@ -1,8 +1,7 @@
 %define name pulseaudio
 %define version 0.9.16
-# (cg) NB for testing the current snapshot is 71e066c873e5bd31bd446ac0f8d0e97cc0b12ace
 %define git 20090909
-%define rel 1
+%define rel 2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
