@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.16
-%define git 20090909
-%define rel 2
+%define git 0
+%define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -37,7 +37,7 @@ Release: %{release}
 %if %{git}
 Source0: %{name}-%{git}.tar.lzma
 %else
-Source0: %{name}-%{version}-test2.tar.gz
+Source0: %{name}-%{version}.tar.gz
 %endif
 Source1: %{name}.sysconfig
 Source2: %{name}.xinit
@@ -80,13 +80,6 @@ Patch205: 0205-device-manager-Fix-tagstruct-description-extraction-.patch
 Patch206: 0206-device-restore-Fix-the-application-of-an-entry-to-al.patch
 Patch207: 0207-stream-restore-Preventative-initialistion-to-NULL.patch
 Patch208: 0208-device-manager-Only-store-and-save-details-for-non-m.patch
-
-# Not currently reverting:
-# This is being tracked in https://qa.mandriva.com/show_bug.cgi?id=49947
-# This commit seems to have caused problems in skype, so we'll try without
-# it and see what the users say :)
-
-# This reverts commit a4cea4e469d3baf27890820eba030b7acdf63daa.
 
 # Mandriva Patches
 # git format-patch --start-number 500 mdv-0.9.16-history..mdv-0.9.16-patches
@@ -332,7 +325,7 @@ This package contains command line utilities for the PulseAudio sound server.
 %if %{git}
 %setup -q -n %{name}-%{git}
 %else
-%setup -q -n %{name}-%{version}-test2
+%setup -q -n %{name}-%{version}
 %endif
 
 %apply_patches
