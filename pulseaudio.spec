@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.16
 %define git 0
-%define rel 1
+%define rel 2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -68,6 +68,7 @@ Source4: %{name}.svg
 
 # Cherry Pick Patches
 # git format-patch --start-number 100 origin/master..mdv-0.9.16-cherry-picks
+Patch100: 0100-Revert-alsa-rework-buffer-period-configuration.patch
 
 # (cg) My History patches
 # git format-patch --start-number 200 mdv-0.9.16-cherry-picks..mdv-0.9.16-history
