@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.17
 %define git 0
-%define rel 1
+%define rel 2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -50,27 +50,33 @@ Source4: %{name}.svg
 # (cg) Using git to manage patches
 # To recreate the structure
 # git clone git://git.0pointer.de/pulseaudio
-# git checkout v0.9.15
-# git checkout -b mdv-0.9.15-cherry-picks
+# git checkout v0.9.17
+# git checkout -b mdv-0.9.17-cherry-picks
 # git am 00*.patch
-# git checkout -b mdv-0.9.15-patches
+# git checkout -b mdv-0.9.17-patches
 # git am 05*.patch
 
 # To apply new custom patches
-# git checkout mdv-0.9.15-patches
+# git checkout mdv-0.9.17-patches
 # (do stuff)
 
 # To apply new cherry-picks
-# git checkout mdv-0.9.15-cherry-picks
+# git checkout mdv-0.9.17-cherry-picks
 # git cherry-pick <blah>
-# git checkout mdv-0.9.15-patches
-# git rebase mdv-0.9.15-cherry-picks
+# git checkout mdv-0.9.17-patches
+# git rebase mdv-0.9.17-cherry-picks
 
-# Cherry Pick Patches
-# git format-patch --start-number 100 origin/master..mdv-0.9.16-cherry-picks
+# Stable Branch Patches
+# git format-patch --start-number 100 v0.9.17..0.9.17-stable
+Patch100: 0100-macro-introduce-PA_INT_TYPE_MIN-PA_INT_TYPE_MAX-PA_I.patch
+Patch101: 0101-timeval-make-pa_timeval_sub-saturating.patch
+Patch102: 0102-raop-Use-pa_module_unload_request_by_index-as-per-mo.patch
+Patch103: 0103-rtp-Factor-out-direct-io-writing-and-use-ioline-inst.patch
+Patch104: 0104-rtp-Remove-fix-me-comment-after-it-was-actually-fixe.patch
+Patch105: 0105-alsa-Give-all-ports-a-human-name-to-allow-UI-tools-t.patch
 
 # (cg) My History patches
-# git format-patch --start-number 200 mdv-0.9.16-cherry-picks..mdv-0.9.16-history
+# git format-patch --start-number 200 0.9.17-stable..mdv-0.9.17-history
 Patch200: 0200-device-manager-Add-a-new-module-to-keep-track-of-the.patch
 Patch201: 0201-device-manager-Add-an-untested-protocol-extension.patch
 Patch202: 0202-device-manager-Fix-indentation.patch
@@ -82,7 +88,7 @@ Patch207: 0207-stream-restore-Preventative-initialistion-to-NULL.patch
 Patch208: 0208-device-manager-Only-store-and-save-details-for-non-m.patch
 
 # Mandriva Patches
-# git format-patch --start-number 500 mdv-0.9.16-history..mdv-0.9.16-patches
+# git format-patch --start-number 500 mdv-0.9.17-history..mdv-0.9.17-patches
 Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
