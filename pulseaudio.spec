@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.18
 %define git 0
-%define rel 1
+%define rel 2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -68,18 +68,12 @@ Source4: %{name}.svg
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.18..0.9.18-stable
+Patch100: 0100-tunnel-fix-parsing-of-sink-info-from-newer-servers.patch
+Patch101: 0101-tunnel-fix-parsing-of-source-info-from-newer-servers.patch
 
 # (cg) My History patches
 # git format-patch --start-number 200 0.9.18-stable..mdv-0.9.18-history
-Patch200: 0200-device-manager-Add-a-new-module-to-keep-track-of-the.patch
-Patch201: 0201-device-manager-Add-an-untested-protocol-extension.patch
-Patch202: 0202-device-manager-Fix-indentation.patch
-Patch203: 0203-device-manager-Export-device-manager-extension-funct.patch
-Patch204: 0204-device-manager-Link-native-protocol-library.patch
-Patch205: 0205-device-manager-Fix-tagstruct-description-extraction-.patch
-Patch206: 0206-device-restore-Fix-the-application-of-an-entry-to-al.patch
-Patch207: 0207-stream-restore-Preventative-initialistion-to-NULL.patch
-Patch208: 0208-device-manager-Only-store-and-save-details-for-non-m.patch
+Patch200: 0200-Module-Device-Manager-in-development.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 mdv-0.9.18-history..mdv-0.9.18-patches
