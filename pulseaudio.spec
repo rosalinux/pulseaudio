@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.18
 %define git 0
-%define rel 2
+%define rel 3
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -81,6 +81,7 @@ Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
+Patch504: 0504-Revert-svolume_mmx-optimize-some-more.patch
 
 Patch900: 0900-temp-debug.patch
 
