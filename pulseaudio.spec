@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.18
 %define git 0
-%define rel 4
+%define rel 5
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -185,6 +185,8 @@ to interface with a PulseAudio sound server.
 Summary: Client configuration for PulseAudio clients
 Group: System/Libraries
 Requires(post): ccp
+Requires(post): update-alternatives
+Requires(postun): update-alternatives
 Conflicts: %{name} < 0.9.16-0.20090816.1
 
 %description client-config
@@ -193,9 +195,9 @@ to interface with a PulseAudio sound server.
 
 
 %post client-config
-ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/client.conf --newfile %{_sysconfdir}/pulse/client.conf.rpmnew
 %{_sbindir}/update-alternatives \
   --install %{_sysconfdir}/sound/profiles/current %{alt_name} %{_sysconfdir}/sound/profiles/pulse %{alt_priority}
+ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/client.conf --newfile %{_sysconfdir}/pulse/client.conf.rpmnew
 
 %postun client-config
 if [ ! -f %{_sysconfdir}/sound/profiles/pulse/profile.conf ]; then
