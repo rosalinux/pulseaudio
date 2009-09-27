@@ -1,12 +1,16 @@
 %define name pulseaudio
 %define version 0.9.18
 %define git 0
-%define rel 5
+%define rel 6
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
 %define release %mkrel %rel
 %endif
+
+%define bootstrap 0
+%{?_without_bootstrap: %global bootstrap 0}
+%{?_with_bootstrap: %global bootstrap 1}
 
 # (cg) Lennart has introduced a circular dependancy in the libraries
 # libpulse requires libpulsecommon but libpulsecommon requires libpulse.
@@ -111,7 +115,9 @@ BuildRequires: libltdl-devel
 BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
 BuildRequires: lirc-devel
+%if !%bootstrap
 BuildRequires: bluez-devel
+%endif
 BuildRequires: tdb-devel
 BuildRequires: speex-devel
 # (cg) Needed for airtunes
@@ -262,6 +268,7 @@ Requires:  %{name} = %{version}-%{release}
 LIRC volume control module for the PulseAudio sound server.
 
 
+%if !%bootstrap
 %package module-bluetooth
 Summary:   Bluetooth support for the PulseAudio sound server
 Group:     Sound
@@ -270,6 +277,7 @@ Requires:  %{name} = %{version}-%{release}
 %description module-bluetooth
 Bluetooth modules for the PulseAudio sound server to provide support
 for headsets and proximity detection.
+%endif
 
 
 %package module-x11
@@ -515,6 +523,7 @@ rm -rf %{buildroot}
 %{_bindir}/esd
 %{_mandir}/man1/esdcompat.1.*
 
+%if !%bootstrap
 %files module-bluetooth
 %defattr(-,root,root)
 %{_libdir}/pulse-%{apiver}/modules/libbluetooth-ipc.so
@@ -524,6 +533,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-discover.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-proximity.so
 %{_libdir}/pulse/proximity-helper
+%endif
 
 
 %files module-lirc
