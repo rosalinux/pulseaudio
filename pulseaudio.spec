@@ -1,7 +1,7 @@
 %define name pulseaudio
-%define version 0.9.18
+%define version 0.9.19
 %define git 0
-%define rel 6
+%define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -54,38 +54,35 @@ Source4: %{name}.svg
 # (cg) Using git to manage patches
 # To recreate the structure
 # git clone git://git.0pointer.de/pulseaudio
-# git checkout v0.9.18
-# git checkout -b mdv-0.9.18-cherry-picks
+# git checkout v0.9.19
+# git checkout -b mdv-0.9.19-cherry-picks
 # git am 00*.patch
-# git checkout -b mdv-0.9.18-patches
+# git checkout -b mdv-0.9.19-patches
 # git am 05*.patch
 
 # To apply new custom patches
-# git checkout mdv-0.9.18-patches
+# git checkout mdv-0.9.19-patches
 # (do stuff)
 
 # To apply new cherry-picks
-# git checkout mdv-0.9.18-cherry-picks
+# git checkout mdv-0.9.19-cherry-picks
 # git cherry-pick <blah>
-# git checkout mdv-0.9.18-patches
-# git rebase mdv-0.9.18-cherry-picks
+# git checkout mdv-0.9.19-patches
+# git rebase mdv-0.9.19-cherry-picks
 
 # Stable Branch Patches
-# git format-patch --start-number 100 v0.9.18..0.9.18-stable
-Patch100: 0100-tunnel-fix-parsing-of-sink-info-from-newer-servers.patch
-Patch101: 0101-tunnel-fix-parsing-of-source-info-from-newer-servers.patch
+# git format-patch --start-number 100 v0.9.19..0.9.19-stable
 
 # (cg) My History patches
-# git format-patch --start-number 200 0.9.18-stable..mdv-0.9.18-history
+# git format-patch --start-number 200 0.9.19-stable..mdv-0.9.19-history
 Patch200: 0200-Module-Device-Manager-in-development.patch
 
 # Mandriva Patches
-# git format-patch --start-number 500 mdv-0.9.18-history..mdv-0.9.18-patches
+# git format-patch --start-number 500 mdv-0.9.19-history..mdv-0.9.19-patches
 Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
-Patch504: 0504-svolume-tweak-constraints-for-32-bits.patch
 
 Patch900: 0900-temp-debug.patch
 
