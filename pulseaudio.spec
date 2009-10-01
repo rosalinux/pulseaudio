@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.19
 %define git 0
-%define rel 1
+%define rel 2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -191,6 +191,11 @@ Requires(post): ccp
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
 Conflicts: %{name} < 0.9.16-0.20090816.1
+# (cg) Adding the obsoletes here as this package is almost always installed
+#      and doing it in task-pulseaudio would cause it to be installed when not needed.
+# Flash plugin support pulse natively and libflashsupport now causes more
+# problems than it fixes
+Obsoletes: libflashsupport
 
 %description client-config
 This package contains the client configuration files for any application that wishes
