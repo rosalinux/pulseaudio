@@ -83,6 +83,7 @@ Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
+Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
 
 Patch900: 0900-temp-debug.patch
 
@@ -548,12 +549,14 @@ rm -rf %{buildroot}
 %{_sysconfdir}/X11/xinit.d/50%{name}
 %{_bindir}/pax11publish
 %{_bindir}/start-pulseaudio-x11
+%{_bindir}/start-pulseaudio-kde
 %{_mandir}/man1/pax11publish.1.*
 %{_libdir}/pulse-%{apiver}/modules/module-x11-bell.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-cork-request.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-publish.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-xsmp.so
 %{_sysconfdir}/xdg/autostart/pulseaudio.desktop
+%{_sysconfdir}/xdg/autostart/pulseaudio-kde.desktop
 
 
 %files module-zeroconf
