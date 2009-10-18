@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.19
 %define git 0
-%define rel 4
+%define rel 5
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -387,6 +387,10 @@ echo "SOUNDPROFILE=pulse" >%{buildroot}%{_sysconfdir}/sound/profiles/pulse/profi
 # (cg) HAL support is no longer the default, and we don't officially support system wide, so
 # System Wide + HAL is pretty unlikely.
 rm -f %{buildroot}%{_sysconfdir}/dbus-1/system.d/%{name}-system.conf
+
+# (cg) Disable x11-cork-request... it should be ahndled in the apps as we cannot
+#      maintain state via this mechanism. Should be a patch, but I'm lazy.
+sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
 
 %find_lang %{name}
 
