@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.19
 %define git 0
-%define rel 6
+%define rel 7
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -84,8 +84,7 @@ Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
-
-Patch900: 0900-temp-debug.patch
+Patch505: 0505-mmx-Disable-pa_volume_func_init_mmx-for-now-as-it-se.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -176,6 +175,7 @@ ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %
 Summary: Libraries for PulseAudio clients
 Group: System/Libraries
 Requires: %{name}-client-config
+Suggests: %{mklibname alsa-plugins}-pulseaudio
 %ifarch x86_64
 # (cg) Suggest the 32 bit library on 64 bits to ensure compatibility
 #      with (typically closed source) 32 bit apps.
