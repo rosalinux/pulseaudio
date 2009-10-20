@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.19
 %define git 0
-%define rel 5
+%define rel 6
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -176,6 +176,11 @@ ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %
 Summary: Libraries for PulseAudio clients
 Group: System/Libraries
 Requires: %{name}-client-config
+%ifarch x86_64
+# (cg) Suggest the 32 bit library on 64 bits to ensure compatibility
+#      with (typically closed source) 32 bit apps.
+Suggests: lib%{name}%{major}
+%endif
 
 %description -n %{libname}
 This package contains the runtime libraries for any application that wishes
