@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.19
 %define git 0
-%define rel 7
+%define rel 8
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -72,6 +72,7 @@ Source4: %{name}.svg
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.19..0.9.19-stable
+Patch100: 0100-svolume-fix-MMX-error.patch
 
 # (cg) My History patches
 # git format-patch --start-number 200 0.9.19-stable..mdv-0.9.19-history
@@ -84,7 +85,6 @@ Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
-Patch505: 0505-mmx-Disable-pa_volume_func_init_mmx-for-now-as-it-se.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
