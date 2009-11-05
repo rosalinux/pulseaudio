@@ -120,7 +120,7 @@ BuildRequires: speex-devel
 # (cg) Needed for airtunes
 BuildRequires: openssl-devel
 BuildRequires: polkit-1-devel
-#BuildRequires: libasyncns-devel
+BuildRequires: libasyncns-devel
 BuildRequires: intltool
 BuildRequires: imagemagick
 
@@ -357,7 +357,7 @@ echo "clean:" > Makefile
 #%endif
 
 %build
-%configure2_5x --disable-asyncns
+%configure2_5x
 
 %make
 make doxygen
