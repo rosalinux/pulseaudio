@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.20
 %define git 0
-%define rel 1
+%define rel 2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -71,10 +71,12 @@ Source4: %{name}.svg
 # git rebase mdv-0.9.20-cherry-picks
 
 # Stable Branch Patches
-# git format-patch --start-number 100 v0.9.20..0.9.20-stable
+# git format-patch --start-number 100 v0.9.20..stable-0.9.20
+Patch100: 0100-build-sys-Make-sure-all-alsa-path-config-files-are-i.patch
+Patch101: 0101-build-sys-Fix-missing-trailing-slash-in-14eaf2.patch
 
 # (cg) My History patches
-# git format-patch --start-number 200 0.9.20-stable..mdv-0.9.20-history
+# git format-patch --start-number 200 stable-0.9.20..mdv-0.9.20-history
 Patch200: 0200-Module-Device-Manager-in-development.patch
 
 # Mandriva Patches
