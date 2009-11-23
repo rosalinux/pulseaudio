@@ -1,7 +1,7 @@
 %define name pulseaudio
-%define version 0.9.20
+%define version 0.9.21
 %define git 0
-%define rel 2
+%define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -15,7 +15,8 @@
 # (cg) Lennart has introduced a circular dependancy in the libraries
 # libpulse requires libpulsecommon but libpulsecommon requires libpulse.
 # This breaks no-undefined.
-# Further issues in some test apps (maybe more) require that as-needed is required.
+# Further issues in some test apps (maybe more) require that disabling
+# as-needed is also required.
 %define _disable_ld_no_undefined 1
 %define _disable_ld_as_needed 1
 %define _requires_exceptions devel(libpulsecommon
@@ -54,33 +55,27 @@ Source4: %{name}.svg
 # (cg) Using git to manage patches
 # To recreate the structure
 # git clone git://git.0pointer.de/pulseaudio
-# git checkout v0.9.20
-# git checkout -b mdv-0.9.20-cherry-picks
+# git checkout v0.9.21
+# git checkout -b mdv-0.9.21-cherry-picks
 # git am 00*.patch
-# git checkout -b mdv-0.9.20-patches
+# git checkout -b mdv-0.9.21-patches
 # git am 05*.patch
 
 # To apply new custom patches
-# git checkout mdv-0.9.20-patches
+# git checkout mdv-0.9.21-patches
 # (do stuff)
 
 # To apply new cherry-picks
-# git checkout mdv-0.9.20-cherry-picks
+# git checkout mdv-0.9.21-cherry-picks
 # git cherry-pick <blah>
-# git checkout mdv-0.9.20-patches
-# git rebase mdv-0.9.20-cherry-picks
+# git checkout mdv-0.9.21-patches
+# git rebase mdv-0.9.21-cherry-picks
 
 # Stable Branch Patches
-# git format-patch --start-number 100 v0.9.20..stable-0.9.20
-Patch100: 0100-build-sys-Make-sure-all-alsa-path-config-files-are-i.patch
-Patch101: 0101-build-sys-Fix-missing-trailing-slash-in-14eaf2.patch
-
-# (cg) My History patches
-# git format-patch --start-number 200 stable-0.9.20..mdv-0.9.20-history
-Patch200: 0200-Module-Device-Manager-in-development.patch
+# git format-patch --start-number 100 v0.9.21..0.9.21-stable
 
 # Mandriva Patches
-# git format-patch --start-number 500 mdv-0.9.20-history..mdv-0.9.20-patches
+# git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
 Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
