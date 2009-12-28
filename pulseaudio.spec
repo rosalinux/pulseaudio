@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 1
+%define rel 2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -73,6 +73,7 @@ Source4: %{name}.svg
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.21..0.9.21-stable
+Patch100: 0100-Mark-shared-variables-as-volatile.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
