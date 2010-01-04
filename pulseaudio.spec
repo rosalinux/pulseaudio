@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 2
+%define rel 3
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -82,6 +82,8 @@ Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
+Patch505: 0505-Mute-IEC958-Optical-Raw-for-AudigyX.patch
+Patch506: 0506-Fix-div-by-zero-in-mcalign-patch-from-Ubuntu.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
