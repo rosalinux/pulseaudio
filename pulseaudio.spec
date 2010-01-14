@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 3
+%define rel 4
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -72,8 +72,29 @@ Source4: %{name}.svg
 # git rebase mdv-0.9.21-cherry-picks
 
 # Stable Branch Patches
-# git format-patch --start-number 100 v0.9.21..0.9.21-stable
-Patch100: 0100-Mark-shared-variables-as-volatile.patch
+# git format-patch --start-number 100 v0.9.21..stable-queue
+Patch100: 0100-dbus-remove-filter-functions-only-if-they-were-actua.patch
+Patch101: 0101-native-fix-request-counter-miscalculations.patch
+Patch102: 0102-core-make-sure-we-always-return-a-valid-memblock-in-.patch
+Patch103: 0103-bluetooth-destruct-stream-only-if-it-is-not-already-.patch
+Patch104: 0104-bluetooth-don-t-hit-an-assert-if-latency-is-queried-.patch
+Patch105: 0105-client-detect-forking-in-sample-cache-API-too.patch
+Patch106: 0106-client-verify-connection-state-in-pa_stream_connect_.patch
+Patch107: 0107-udev-don-t-forget-to-unref-devices-we-are-not-intere.patch
+Patch108: 0108-once-make-once-related-variables-volatile.patch
+Patch109: 0109-bluetooth-fix-invalid-memory-access.patch
+Patch110: 0110-log-add-an-easy-way-to-disable-log-rate-limiting.patch
+Patch111: 0111-udev-make-sure-we-get-events-only-for-sound-devices.patch
+Patch112: 0112-alsa-ignore-volume-changes-from-the-hw-if-we-are-not.patch
+Patch113: 0113-cpu-check-for-CMOV-flag-before-using-this-intsructio.patch
+Patch114: 0114-alsa-cover-Input-Source-Int-Mic.patch
+Patch115: 0115-alsa-Cover-the-Int-Mic-Boost-element.patch
+Patch116: 0116-udev-handle-sound-cards-with-both-modem-and-audio-pr.patch
+Patch117: 0117-udev-rework-modem-detection-a-bit.patch
+Patch118: 0118-daemon-first-take-name-on-the-bus-then-return-in-sta.patch
+Patch119: 0119-alsa-cover-bass-boost-mixer-element.patch
+Patch120: 0120-Mark-shared-variables-as-volatile.patch
+Patch121: 0121-udev-use-ID_MODEL_ENC-instead-of-ID_MODEL-if-it-is-s.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
