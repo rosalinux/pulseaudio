@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 4
+%define rel 5
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -95,6 +95,16 @@ Patch118: 0118-daemon-first-take-name-on-the-bus-then-return-in-sta.patch
 Patch119: 0119-alsa-cover-bass-boost-mixer-element.patch
 Patch120: 0120-Mark-shared-variables-as-volatile.patch
 Patch121: 0121-udev-use-ID_MODEL_ENC-instead-of-ID_MODEL-if-it-is-s.patch
+Patch122: 0122-pacat-allow-configuration-of-latency-in-msec.patch
+Patch123: 0123-client-implement-PULSE_LATENCY_MSEC.patch
+Patch124: 0124-client-include-dolby-channel-names-in-comments.patch
+Patch125: 0125-alsa-add-profile-set-for-M-Audio-FastTrack-Pro-USB.patch
+Patch126: 0126-threaded-mainloop-Properly-initialise-m-n_waiting_fo.patch
+Patch127: 0127-udev-Use-SOUND_CLASS-instead-of-SOUND_FORM_FACTOR-wh.patch
+Patch128: 0128-More-src-pulsecore-cpu-arm.c-FTBFS-fixes.patch
+Patch129: 0129-Fix-the-following-warnings-which-now-cause-buildd-fa.patch
+Patch130: 0130-libpulse-Store-pa_stream-pointers-to-hashmaps-instea.patch
+Patch131: 0131-native-rework-handling-of-seeks-that-depend-on-varia.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
