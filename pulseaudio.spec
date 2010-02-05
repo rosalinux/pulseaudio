@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 8
+%define rel 9
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -116,7 +116,7 @@ Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
 Patch505: 0505-Mute-IEC958-Optical-Raw-for-AudigyX.patch
 Patch506: 0506-Fix-div-by-zero-in-mcalign-patch-from-Ubuntu.patch
 Patch507: 0507-augment-properties-Search-for-.desktop-files-in-subf.patch
-Patch508: 0508-stream-restore-Clear-the-save_sink-flag-on-apply_ent.patch
+Patch508: 0508-stream-restore-Clear-the-save_sink-save_source-flags.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
