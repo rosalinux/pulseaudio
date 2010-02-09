@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 9
+%define rel 10
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -105,6 +105,7 @@ Patch128: 0128-More-src-pulsecore-cpu-arm.c-FTBFS-fixes.patch
 Patch129: 0129-Fix-the-following-warnings-which-now-cause-buildd-fa.patch
 Patch130: 0130-libpulse-Store-pa_stream-pointers-to-hashmaps-instea.patch
 Patch131: 0131-native-rework-handling-of-seeks-that-depend-on-varia.patch
+Patch132: 0132-core-Fix-macro-typo-PA_SINK_IS_LINKED-PA_SINK_INPUT_.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
