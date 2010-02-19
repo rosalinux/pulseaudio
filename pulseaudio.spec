@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 11
+%define rel 12
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -106,6 +106,21 @@ Patch129: 0129-Fix-the-following-warnings-which-now-cause-buildd-fa.patch
 Patch130: 0130-libpulse-Store-pa_stream-pointers-to-hashmaps-instea.patch
 Patch131: 0131-native-rework-handling-of-seeks-that-depend-on-varia.patch
 Patch132: 0132-core-Fix-macro-typo-PA_SINK_IS_LINKED-PA_SINK_INPUT_.patch
+Patch133: 0133-alsa-cover-Desktop-Speaker-mixer-elements.patch
+Patch134: 0134-alsa-cover-Shared-Mic-Line-in-Analog-Source.patch
+Patch135: 0135-alsa-cover-Internal-Mic-elements.patch
+Patch136: 0136-alsa-use-default-output-port-names.patch
+Patch137: 0137-build-sys-add-gobject-to-build-dependencies.patch
+Patch138: 0138-padsp-emulate-dev-audio-too.patch
+Patch139: 0139-dbus-first-restart-timer-then-dispatch-it.patch
+Patch140: 0140-fdsem-be-more-verbose-when-reading-from-eventfd-fail.patch
+Patch141: 0141-pacat-always-fully-fulfill-write-requests.patch
+Patch142: 0142-pacmd-store-away-fd-type.patch
+Patch143: 0143-pacmd-don-t-enter-busy-loop-when-reading-from-stdin-.patch
+Patch144: 0144-shm-don-t-complain-about-missing-SHM-segments.patch
+Patch145: 0145-vala-fix-definition-of-INVALID_INDEX.patch
+Patch146: 0146-vala-fix-definition-of-the-GLib-mainloop-adapter.patch
+Patch147: 0147-Add-missing-profile-and-alsa-mixer-paths-to-src-Make.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
@@ -118,7 +133,6 @@ Patch505: 0505-Mute-IEC958-Optical-Raw-for-AudigyX.patch
 Patch506: 0506-Fix-div-by-zero-in-mcalign-patch-from-Ubuntu.patch
 Patch507: 0507-augment-properties-Search-for-.desktop-files-in-subf.patch
 Patch508: 0508-stream-restore-Clear-the-save_sink-save_source-flags.patch
-Patch509: 0509-pacat-Don-t-use-any-buffer-attr-if-we-don-t-set-any-.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
