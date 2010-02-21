@@ -309,6 +309,9 @@ Provides:  esound
 Obsoletes: esound < 0.2.38-5mdv
 Conflicts: esound-daemon
 %endif
+%if %{mdkversion} > 201000
+Obsoletes: esound-daemon
+%endif
 
 %description esound-compat
 A compatibility script that allows applications to call /usr/bin/esd
