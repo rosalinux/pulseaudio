@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 12
+%define rel 13
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -121,6 +121,13 @@ Patch144: 0144-shm-don-t-complain-about-missing-SHM-segments.patch
 Patch145: 0145-vala-fix-definition-of-INVALID_INDEX.patch
 Patch146: 0146-vala-fix-definition-of-the-GLib-mainloop-adapter.patch
 Patch147: 0147-Add-missing-profile-and-alsa-mixer-paths-to-src-Make.patch
+Patch148: 0148-channelmap-Use-Subwoofer-as-pretty-name-for-LFE.patch
+Patch149: 0149-vala-fix-wrapping-of-port-setting-calls.patch
+Patch150: 0150-proplist-explicitly-mention-a-role-test.patch
+Patch151: 0151-stream-restore-be-a-little-bit-more-verbose-why-we-d.patch
+Patch152: 0152-sample-cache-use-the-sample-name-as-unmodified-fallb.patch
+Patch153: 0153-scache-when-playing-a-sample-from-the-cache-make-sur.patch
+Patch154: 0154-pacat-pass-buffer_attr-to-recording-streams-too.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
