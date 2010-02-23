@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 13
+%define rel 14
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -128,6 +128,12 @@ Patch151: 0151-stream-restore-be-a-little-bit-more-verbose-why-we-d.patch
 Patch152: 0152-sample-cache-use-the-sample-name-as-unmodified-fallb.patch
 Patch153: 0153-scache-when-playing-a-sample-from-the-cache-make-sur.patch
 Patch154: 0154-pacat-pass-buffer_attr-to-recording-streams-too.patch
+Patch155: 0155-suspend-on-idle-resume-audio-device-even-for-initial.patch
+Patch156: 0156-native-improve-logging-for-buffer_attrs.patch
+Patch157: 0157-alsa-util-strip-spaces-from-ALSA-card-pcm-names.patch
+Patch158: 0158-alsa-reset-max_rewind-max_request-while-suspending.patch
+Patch159: 0159-core-util-introduce-generic-function-pa_strip.patch
+Patch160: 0160-esd-simple-use-pa_memblockq_pop_missing.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
