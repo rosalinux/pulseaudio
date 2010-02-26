@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 15
+%define rel 16
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -134,6 +134,7 @@ Patch157: 0157-alsa-util-strip-spaces-from-ALSA-card-pcm-names.patch
 Patch158: 0158-alsa-reset-max_rewind-max_request-while-suspending.patch
 Patch159: 0159-core-util-introduce-generic-function-pa_strip.patch
 Patch160: 0160-esd-simple-use-pa_memblockq_pop_missing.patch
+Patch161: 0161-core-rework-how-stream-volumes-affect-sink-volumes.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
