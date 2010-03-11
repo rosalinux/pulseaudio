@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 16
+%define rel 17
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -166,7 +166,9 @@ BuildRequires: libGConf2-devel
 BuildRequires: libwrap-devel
 BuildRequires: X11-devel
 BuildRequires: udev-devel
+%if %mdvver < 201010
 BuildRequires: hal-devel
+%endif
 #gw libtool dep:
 BuildRequires: dbus-glib-devel
 BuildRequires: doxygen
@@ -423,7 +425,11 @@ echo "clean:" > Makefile
 #%endif
 
 %build
-%configure2_5x
+%configure2_5x \
+%if %mdvver >= 201010
+  --disable-hal \
+%endif
+
 
 %make
 make doxygen
