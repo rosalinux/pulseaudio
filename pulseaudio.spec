@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 18
+%define rel 19
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -137,6 +137,7 @@ Patch160: 0160-esd-simple-use-pa_memblockq_pop_missing.patch
 Patch161: 0161-core-rework-how-stream-volumes-affect-sink-volumes.patch
 Patch162: 0162-core-util-ensure-that-we-chmod-only-the-dir-we-ourse.patch
 Patch163: 0163-Handle-Digital-Mic-as-an-Input-Source.patch
+Patch164: 0164-Fix-crash-on-jack-server-shutdown.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
