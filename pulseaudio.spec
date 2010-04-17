@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 21
+%define rel 22
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -139,6 +139,7 @@ Patch162: 0162-core-util-ensure-that-we-chmod-only-the-dir-we-ourse.patch
 Patch163: 0163-Handle-Digital-Mic-as-an-Input-Source.patch
 Patch164: 0164-Fix-crash-on-jack-server-shutdown.patch
 Patch165: 0165-intended-roles-Do-not-pick-monitor-sources-when-doin.patch
+Patch166: 0166-socket-client-properly-handle-asyncns-failures.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
