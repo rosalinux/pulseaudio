@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 22
+%define rel 23
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
