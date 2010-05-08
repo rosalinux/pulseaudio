@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 23
+%define rel 24
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -140,6 +140,10 @@ Patch163: 0163-Handle-Digital-Mic-as-an-Input-Source.patch
 Patch164: 0164-Fix-crash-on-jack-server-shutdown.patch
 Patch165: 0165-intended-roles-Do-not-pick-monitor-sources-when-doin.patch
 Patch166: 0166-socket-client-properly-handle-asyncns-failures.patch
+Patch167: 0167-Revert-Fix-crash-on-jack-server-shutdown.patch
+Patch168: 0168-thread-name-all-threads-so-that-the-names-appear-in-.patch
+Patch169: 0169-jack-Prevent-crash-on-jack-server-shutdown.patch
+Patch170: 0170-rtp-Fix-bracketing-in-pa_rtp_recv.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
