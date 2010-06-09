@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 27
+%define rel 26
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -243,8 +243,6 @@ provides pulseaudio has:
 
 %post
 ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %{_sysconfdir}/pulse/daemon.conf.rpmnew
-ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/default.pa --newfile %{_sysconfdir}/pulse/default.pa.rpmnew
-ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/sysconfig/pulseaudio --newfile %{_sysconfdir}/sysconfig/pulseaudio.rpmnew
 
 
 %package -n %{libname}
