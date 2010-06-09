@@ -244,6 +244,7 @@ provides pulseaudio has:
 %post
 ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %{_sysconfdir}/pulse/daemon.conf.rpmnew
 ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/default.pa --newfile %{_sysconfdir}/pulse/default.pa.rpmnew
+ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/sysconfig/pulseaudio --newfile %{_sysconfdir}/sysconfig/pulseaudio.rpmnew
 
 
 %package -n %{libname}
