@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 26
+%define rel 27
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -144,6 +144,8 @@ Patch167: 0167-Revert-Fix-crash-on-jack-server-shutdown.patch
 Patch168: 0168-thread-name-all-threads-so-that-the-names-appear-in-.patch
 Patch169: 0169-jack-Prevent-crash-on-jack-server-shutdown.patch
 Patch170: 0170-rtp-Fix-bracketing-in-pa_rtp_recv.patch
+Patch171: 0171-alsa-Fix-assertion-on-mmap_write-triggered-via-a52-p.patch
+Patch172: 0172-alsa-disable-rewinds-when-using-ALSA-plugins.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
@@ -157,6 +159,7 @@ Patch506: 0506-Fix-div-by-zero-in-mcalign-patch-from-Ubuntu.patch
 Patch507: 0507-augment-properties-Search-for-.desktop-files-in-subf.patch
 Patch508: 0508-stream-restore-Clear-the-save_sink-save_source-flags.patch
 Patch509: 0509-device-manager-Ensure-that-sinks-sources-populate-th.patch
+Patch510: 0510-x11-Partially-convert-to-XCB.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -174,6 +177,7 @@ BuildRequires: liboil-devel
 BuildRequires: libGConf2-devel
 BuildRequires: libwrap-devel
 BuildRequires: X11-devel
+BuildRequires: xcb-util-devel
 BuildRequires: udev-devel
 %if %mdvver < 201010
 BuildRequires: hal-devel
