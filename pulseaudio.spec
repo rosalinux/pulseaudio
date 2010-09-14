@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 29
+%define rel 30
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -149,6 +149,18 @@ Patch172: 0172-alsa-disable-rewinds-when-using-ALSA-plugins.patch
 Patch173: 0173-udev-fix-hex-decoding.patch
 Patch174: 0174-x11-Partially-convert-to-XCB.patch
 Patch175: 0175-alsa-resume-smoother-after-unsuspend.patch
+Patch176: 0176-alsa-increase-the-smoother-window.patch
+Patch177: 0177-alsa-don-t-make-use-of-tsched-related-variables-when.patch
+Patch178: 0178-add-rewind-safeguard-parameter.patch
+Patch179: 0179-alsa-sink-Get-rid-of-a-compiler-warning-regarding-re.patch
+Patch180: 0180-alsa-Set-the-rewind-safeguard-proportionally-to-samp.patch
+Patch181: 0181-smoother-avoid-losing-precision.patch
+Patch182: 0182-alsa-source-refactor-smoother-and-device-start.patch
+Patch183: 0183-alsa-time-test-make-test-usable-for-capture-too.patch
+Patch184: 0184-alsa-work-around-slightly-broken-_delay-implementati.patch
+Patch185: 0185-alsa-make-defines-for-smoother-configuration.patch
+Patch186: 0186-alsa-mixer-add-profile-for-Traktor-Kontrol-S4.patch
+Patch187: 0187-alsa-Only-set-the-first-flag-to-false-when-we-actual.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
