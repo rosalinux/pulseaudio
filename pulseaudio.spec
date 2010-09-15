@@ -187,7 +187,6 @@ BuildRequires: libsamplerate-devel
 BuildRequires: libalsa-devel
 BuildRequires: libjack-devel
 BuildRequires: libavahi-client-devel
-BuildRequires: liboil-devel
 BuildRequires: libGConf2-devel
 BuildRequires: libwrap-devel
 BuildRequires: X11-devel
