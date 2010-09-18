@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 31
+%define rel 32
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -161,6 +161,9 @@ Patch184: 0184-alsa-work-around-slightly-broken-_delay-implementati.patch
 Patch185: 0185-alsa-make-defines-for-smoother-configuration.patch
 Patch186: 0186-alsa-mixer-add-profile-for-Traktor-Kontrol-S4.patch
 Patch187: 0187-alsa-Only-set-the-first-flag-to-false-when-we-actual.patch
+Patch188: 0188-xcb-Ensure-the-XCB-connection-is-valid-before-using-.patch
+Patch189: 0189-xcb-xcb_get_setup-can-return-0-so-make-sure-we-check.patch
+Patch190: 0190-x11-Use-the-default-screen-for-X11-properties.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
