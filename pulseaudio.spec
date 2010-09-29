@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 32
+%define rel 33
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -164,6 +164,10 @@ Patch187: 0187-alsa-Only-set-the-first-flag-to-false-when-we-actual.patch
 Patch188: 0188-xcb-Ensure-the-XCB-connection-is-valid-before-using-.patch
 Patch189: 0189-xcb-xcb_get_setup-can-return-0-so-make-sure-we-check.patch
 Patch190: 0190-x11-Use-the-default-screen-for-X11-properties.patch
+Patch191: 0191-Add-a-configure-option-to-change-udevrulesdir.patch
+Patch192: 0192-stream-restore-Clear-the-save_sink-save_source-flags.patch
+Patch193: 0193-augment-properties-Search-for-.desktop-files-in-subf.patch
+Patch194: 0194-device-manager-Ensure-that-sinks-sources-populate-th.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
@@ -173,9 +177,6 @@ Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
 Patch505: 0505-Mute-IEC958-Optical-Raw-for-AudigyX.patch
-Patch507: 0507-augment-properties-Search-for-.desktop-files-in-subf.patch
-Patch508: 0508-stream-restore-Clear-the-save_sink-save_source-flags.patch
-Patch509: 0509-device-manager-Ensure-that-sinks-sources-populate-th.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
