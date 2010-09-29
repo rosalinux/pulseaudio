@@ -173,7 +173,6 @@ Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
 Patch505: 0505-Mute-IEC958-Optical-Raw-for-AudigyX.patch
-Patch506: 0506-Fix-div-by-zero-in-mcalign-patch-from-Ubuntu.patch
 Patch507: 0507-augment-properties-Search-for-.desktop-files-in-subf.patch
 Patch508: 0508-stream-restore-Clear-the-save_sink-save_source-flags.patch
 Patch509: 0509-device-manager-Ensure-that-sinks-sources-populate-th.patch
