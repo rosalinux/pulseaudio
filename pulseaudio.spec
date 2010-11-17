@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.21
 %define git 0
-%define rel 33
+%define rel 34
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -168,6 +168,20 @@ Patch191: 0191-Add-a-configure-option-to-change-udevrulesdir.patch
 Patch192: 0192-stream-restore-Clear-the-save_sink-save_source-flags.patch
 Patch193: 0193-augment-properties-Search-for-.desktop-files-in-subf.patch
 Patch194: 0194-device-manager-Ensure-that-sinks-sources-populate-th.patch
+Patch195: 0195-suspend-Do-not-assert-when-checking-for-device-suspe.patch
+Patch196: 0196-augment-properties-Fix-debug-messages-and-statement-.patch
+Patch197: 0197-SSE-MMX-ARM-Fix-high-frequency-noise-with-unusual-nu.patch
+Patch198: 0198-alsa-mixer-add-profile-for-Native-Instruments-Koreco.patch
+Patch199: 0199-intended-roles-Mark-devices-with-a-form-factor-of-he.patch
+Patch200: 0200-sink-input-Fix-comment.patch
+Patch201: 0201-doxygen-Fix-documentation-typos.patch
+Patch202: 0202-doxygen-Fix-the-all-comments-regarding-volume-helper.patch
+Patch203: 0203-doxygen-Documentation-improvements.patch
+Patch204: 0204-doxygen-Add-See-also-linking-to-the-overview-page.patch
+Patch205: 0205-alsa-remove-redundant-call-to-snd_pcm_nonblock.patch
+Patch206: 0206-combine-Handle-reappearing-slave-sinks-in-non-automa.patch
+Patch207: 0207-combine-Only-check-if-the-sink-is-h-w-etc.-in-automa.patch
+#Patch208: 0208-upnp-Implement-the-MediaServer2-D-Bus-interface.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
