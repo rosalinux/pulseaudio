@@ -1,7 +1,7 @@
 %define name pulseaudio
-%define version 0.9.21
+%define version 0.9.22
 %define git 0
-%define rel 34
+%define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -55,136 +55,27 @@ Source4: %{name}.svg
 # (cg) Using git to manage patches
 # To recreate the structure
 # git clone git://git.0pointer.de/pulseaudio
-# git checkout v0.9.21
-# git checkout -b mdv-0.9.21-cherry-picks
+# git checkout v0.9.22
+# git checkout -b mdv-0.9.22-cherry-picks
 # git am 00*.patch
-# git checkout -b mdv-0.9.21-patches
+# git checkout -b mdv-0.9.22-patches
 # git am 05*.patch
 
 # To apply new custom patches
-# git checkout mdv-0.9.21-patches
+# git checkout mdv-0.9.22-patches
 # (do stuff)
 
 # To apply new cherry-picks
-# git checkout mdv-0.9.21-cherry-picks
+# git checkout mdv-0.9.22-cherry-picks
 # git cherry-pick <blah>
-# git checkout mdv-0.9.21-patches
-# git rebase mdv-0.9.21-cherry-picks
+# git checkout mdv-0.9.22-patches
+# git rebase mdv-0.9.22-cherry-picks
 
 # Stable Branch Patches
-# git format-patch --start-number 100 v0.9.21..stable-queue
-Patch100: 0100-dbus-remove-filter-functions-only-if-they-were-actua.patch
-Patch101: 0101-native-fix-request-counter-miscalculations.patch
-Patch102: 0102-core-make-sure-we-always-return-a-valid-memblock-in-.patch
-Patch103: 0103-bluetooth-destruct-stream-only-if-it-is-not-already-.patch
-Patch104: 0104-bluetooth-don-t-hit-an-assert-if-latency-is-queried-.patch
-Patch105: 0105-client-detect-forking-in-sample-cache-API-too.patch
-Patch106: 0106-client-verify-connection-state-in-pa_stream_connect_.patch
-Patch107: 0107-udev-don-t-forget-to-unref-devices-we-are-not-intere.patch
-Patch108: 0108-once-make-once-related-variables-volatile.patch
-Patch109: 0109-bluetooth-fix-invalid-memory-access.patch
-Patch110: 0110-log-add-an-easy-way-to-disable-log-rate-limiting.patch
-Patch111: 0111-udev-make-sure-we-get-events-only-for-sound-devices.patch
-Patch112: 0112-alsa-ignore-volume-changes-from-the-hw-if-we-are-not.patch
-Patch113: 0113-cpu-check-for-CMOV-flag-before-using-this-intsructio.patch
-Patch114: 0114-alsa-cover-Input-Source-Int-Mic.patch
-Patch115: 0115-alsa-Cover-the-Int-Mic-Boost-element.patch
-Patch116: 0116-udev-handle-sound-cards-with-both-modem-and-audio-pr.patch
-Patch117: 0117-udev-rework-modem-detection-a-bit.patch
-Patch118: 0118-daemon-first-take-name-on-the-bus-then-return-in-sta.patch
-Patch119: 0119-alsa-cover-bass-boost-mixer-element.patch
-Patch120: 0120-Mark-shared-variables-as-volatile.patch
-Patch121: 0121-udev-use-ID_MODEL_ENC-instead-of-ID_MODEL-if-it-is-s.patch
-Patch122: 0122-pacat-allow-configuration-of-latency-in-msec.patch
-Patch123: 0123-client-implement-PULSE_LATENCY_MSEC.patch
-Patch124: 0124-client-include-dolby-channel-names-in-comments.patch
-Patch125: 0125-alsa-add-profile-set-for-M-Audio-FastTrack-Pro-USB.patch
-Patch126: 0126-threaded-mainloop-Properly-initialise-m-n_waiting_fo.patch
-Patch127: 0127-udev-Use-SOUND_CLASS-instead-of-SOUND_FORM_FACTOR-wh.patch
-Patch128: 0128-More-src-pulsecore-cpu-arm.c-FTBFS-fixes.patch
-Patch129: 0129-Fix-the-following-warnings-which-now-cause-buildd-fa.patch
-Patch130: 0130-libpulse-Store-pa_stream-pointers-to-hashmaps-instea.patch
-Patch131: 0131-native-rework-handling-of-seeks-that-depend-on-varia.patch
-Patch132: 0132-core-Fix-macro-typo-PA_SINK_IS_LINKED-PA_SINK_INPUT_.patch
-Patch133: 0133-alsa-cover-Desktop-Speaker-mixer-elements.patch
-Patch134: 0134-alsa-cover-Shared-Mic-Line-in-Analog-Source.patch
-Patch135: 0135-alsa-cover-Internal-Mic-elements.patch
-Patch136: 0136-alsa-use-default-output-port-names.patch
-Patch137: 0137-build-sys-add-gobject-to-build-dependencies.patch
-Patch138: 0138-padsp-emulate-dev-audio-too.patch
-Patch139: 0139-dbus-first-restart-timer-then-dispatch-it.patch
-Patch140: 0140-fdsem-be-more-verbose-when-reading-from-eventfd-fail.patch
-Patch141: 0141-pacat-always-fully-fulfill-write-requests.patch
-Patch142: 0142-pacmd-store-away-fd-type.patch
-Patch143: 0143-pacmd-don-t-enter-busy-loop-when-reading-from-stdin-.patch
-Patch144: 0144-shm-don-t-complain-about-missing-SHM-segments.patch
-Patch145: 0145-vala-fix-definition-of-INVALID_INDEX.patch
-Patch146: 0146-vala-fix-definition-of-the-GLib-mainloop-adapter.patch
-Patch147: 0147-Add-missing-profile-and-alsa-mixer-paths-to-src-Make.patch
-Patch148: 0148-channelmap-Use-Subwoofer-as-pretty-name-for-LFE.patch
-Patch149: 0149-vala-fix-wrapping-of-port-setting-calls.patch
-Patch150: 0150-proplist-explicitly-mention-a-role-test.patch
-Patch151: 0151-stream-restore-be-a-little-bit-more-verbose-why-we-d.patch
-Patch152: 0152-sample-cache-use-the-sample-name-as-unmodified-fallb.patch
-Patch153: 0153-scache-when-playing-a-sample-from-the-cache-make-sur.patch
-Patch154: 0154-pacat-pass-buffer_attr-to-recording-streams-too.patch
-Patch155: 0155-suspend-on-idle-resume-audio-device-even-for-initial.patch
-Patch156: 0156-native-improve-logging-for-buffer_attrs.patch
-Patch157: 0157-alsa-util-strip-spaces-from-ALSA-card-pcm-names.patch
-Patch158: 0158-alsa-reset-max_rewind-max_request-while-suspending.patch
-Patch159: 0159-core-util-introduce-generic-function-pa_strip.patch
-Patch160: 0160-esd-simple-use-pa_memblockq_pop_missing.patch
-Patch161: 0161-core-rework-how-stream-volumes-affect-sink-volumes.patch
-Patch162: 0162-core-util-ensure-that-we-chmod-only-the-dir-we-ourse.patch
-Patch163: 0163-Handle-Digital-Mic-as-an-Input-Source.patch
-Patch164: 0164-Fix-crash-on-jack-server-shutdown.patch
-Patch165: 0165-intended-roles-Do-not-pick-monitor-sources-when-doin.patch
-Patch166: 0166-socket-client-properly-handle-asyncns-failures.patch
-Patch167: 0167-Revert-Fix-crash-on-jack-server-shutdown.patch
-Patch168: 0168-thread-name-all-threads-so-that-the-names-appear-in-.patch
-Patch169: 0169-jack-Prevent-crash-on-jack-server-shutdown.patch
-Patch170: 0170-rtp-Fix-bracketing-in-pa_rtp_recv.patch
-Patch171: 0171-alsa-Fix-assertion-on-mmap_write-triggered-via-a52-p.patch
-Patch172: 0172-alsa-disable-rewinds-when-using-ALSA-plugins.patch
-Patch173: 0173-udev-fix-hex-decoding.patch
-Patch174: 0174-x11-Partially-convert-to-XCB.patch
-Patch175: 0175-alsa-resume-smoother-after-unsuspend.patch
-Patch176: 0176-alsa-increase-the-smoother-window.patch
-Patch177: 0177-alsa-don-t-make-use-of-tsched-related-variables-when.patch
-Patch178: 0178-add-rewind-safeguard-parameter.patch
-Patch179: 0179-alsa-sink-Get-rid-of-a-compiler-warning-regarding-re.patch
-Patch180: 0180-alsa-Set-the-rewind-safeguard-proportionally-to-samp.patch
-Patch181: 0181-smoother-avoid-losing-precision.patch
-Patch182: 0182-alsa-source-refactor-smoother-and-device-start.patch
-Patch183: 0183-alsa-time-test-make-test-usable-for-capture-too.patch
-Patch184: 0184-alsa-work-around-slightly-broken-_delay-implementati.patch
-Patch185: 0185-alsa-make-defines-for-smoother-configuration.patch
-Patch186: 0186-alsa-mixer-add-profile-for-Traktor-Kontrol-S4.patch
-Patch187: 0187-alsa-Only-set-the-first-flag-to-false-when-we-actual.patch
-Patch188: 0188-xcb-Ensure-the-XCB-connection-is-valid-before-using-.patch
-Patch189: 0189-xcb-xcb_get_setup-can-return-0-so-make-sure-we-check.patch
-Patch190: 0190-x11-Use-the-default-screen-for-X11-properties.patch
-Patch191: 0191-Add-a-configure-option-to-change-udevrulesdir.patch
-Patch192: 0192-stream-restore-Clear-the-save_sink-save_source-flags.patch
-Patch193: 0193-augment-properties-Search-for-.desktop-files-in-subf.patch
-Patch194: 0194-device-manager-Ensure-that-sinks-sources-populate-th.patch
-Patch195: 0195-suspend-Do-not-assert-when-checking-for-device-suspe.patch
-Patch196: 0196-augment-properties-Fix-debug-messages-and-statement-.patch
-Patch197: 0197-SSE-MMX-ARM-Fix-high-frequency-noise-with-unusual-nu.patch
-Patch198: 0198-alsa-mixer-add-profile-for-Native-Instruments-Koreco.patch
-Patch199: 0199-intended-roles-Mark-devices-with-a-form-factor-of-he.patch
-Patch200: 0200-sink-input-Fix-comment.patch
-Patch201: 0201-doxygen-Fix-documentation-typos.patch
-Patch202: 0202-doxygen-Fix-the-all-comments-regarding-volume-helper.patch
-Patch203: 0203-doxygen-Documentation-improvements.patch
-Patch204: 0204-doxygen-Add-See-also-linking-to-the-overview-page.patch
-Patch205: 0205-alsa-remove-redundant-call-to-snd_pcm_nonblock.patch
-Patch206: 0206-combine-Handle-reappearing-slave-sinks-in-non-automa.patch
-Patch207: 0207-combine-Only-check-if-the-sink-is-h-w-etc.-in-automa.patch
-#Patch208: 0208-upnp-Implement-the-MediaServer2-D-Bus-interface.patch
+# git format-patch --start-number 100 v0.9.22..stable-queue
 
 # Mandriva Patches
-# git format-patch --start-number 500 0.9.21-stable..mdv-0.9.21-patches
+# git format-patch --start-number 500 0.9.22-stable..mdv-0.9.22-patches
 Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
