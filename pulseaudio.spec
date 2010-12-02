@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.22
 %define git 0
-%define rel 1
+%define rel 2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -97,7 +97,10 @@ BuildRequires: libjack-devel
 BuildRequires: libavahi-client-devel
 BuildRequires: libGConf2-devel
 BuildRequires: libwrap-devel
-BuildRequires: X11-devel
+BuildRequires: libx11-devel
+BuildRequires: libice-devel
+BuildRequires: libsm-devel
+BuildRequires: libxtst-devel
 BuildRequires: xcb-util-devel
 BuildRequires: udev-devel
 %if %mdvver < 201010
