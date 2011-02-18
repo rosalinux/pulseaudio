@@ -45,7 +45,6 @@ Source0: %{name}-%{git}.tar.lzma
 Source0: %{name}-%{version}.tar.gz
 %endif
 Source1: %{name}.sysconfig
-Source2: %{name}.xinit
 # (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
 # libesound from.... you guessed it... auto spawning.
 Source3: esd.conf
