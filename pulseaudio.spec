@@ -1,7 +1,7 @@
 %define name pulseaudio
 %define version 0.9.22
 %define git 0
-%define rel 2
+%define rel 3
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -376,7 +376,6 @@ rm -rf %{buildroot}
 %makeinstall_std
 
 install -D -m 0644 %{_sourcedir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -D -m 0755 %{_sourcedir}/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
 install -D -m 0755 %{_sourcedir}/esd.conf %{buildroot}%{_sysconfdir}/
 
 install -D -m 0644 %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
@@ -564,7 +563,6 @@ rm -rf %{buildroot}
 
 %files module-x11
 %defattr(-,root,root)
-%{_sysconfdir}/X11/xinit.d/50%{name}
 %{_bindir}/pax11publish
 %{_bindir}/start-pulseaudio-x11
 %{_bindir}/start-pulseaudio-kde
