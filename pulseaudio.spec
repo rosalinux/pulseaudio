@@ -1,7 +1,7 @@
 %define name pulseaudio
-%define version 0.9.22
+%define version 0.9.23
 %define git 0
-%define rel 4
+%define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -257,12 +257,10 @@ a PulseAudio sound server.
 Summary:   PulseAudio EsounD daemon compatibility script
 Group:     Sound
 Requires:  %{name} = %{version}-%{release}
-%if %{mdkversion} > 200800
 Provides:  esound
 Obsoletes: esound < 0.2.38-5mdv
 Conflicts: esound-daemon
-%endif
-%if %{mdkversion} > 201000
+%if %{mdvver} > 201000
 Obsoletes: esound-daemon
 %endif
 
@@ -354,11 +352,10 @@ echo -n %{version}-%{release}
 EOF
 chmod a+x git-version-gen
 
-# (cg) Always needed for history patches
-#%if %{git}
+%if %{git}
 echo "clean:" > Makefile
 ./bootstrap.sh -V
-#%endif
+%endif
 
 %build
 %configure2_5x \
@@ -453,6 +450,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-device-manager.so
 %{_libdir}/pulse-%{apiver}/modules/module-device-restore.so
+%{_libdir}/pulse-%{apiver}/modules/module-echo-cancel.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-compat-spawnfd.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-compat-spawnpid.so
 %{_libdir}/pulse-%{apiver}/modules/module-esound-protocol-tcp.so
@@ -532,7 +530,10 @@ rm -rf %{buildroot}
 %dir %{_includedir}/pulse
 %{_includedir}/pulse/*.h
 %{_libdir}/pkgconfig/*.pc
+%{_datadir}/vala/vapi/libpulse.deps
 %{_datadir}/vala/vapi/libpulse.vapi
+%{_datadir}/vala/vapi/libpulse-mainloop-glib.deps
+%{_datadir}/vala/vapi/libpulse-mainloop-glib.vapi
 
 
 %files esound-compat
@@ -588,6 +589,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_libdir}/pulse-%{apiver}/modules/module-jack-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-jack-source.so
+%{_libdir}/pulse-%{apiver}/modules/module-jackdbus-detect.so
 
 
 %files module-gconf
