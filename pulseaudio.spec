@@ -82,6 +82,9 @@ Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
 Patch505: 0505-Mute-IEC958-Optical-Raw-for-AudigyX.patch
 
+# http://pulseaudio.org/ticket/914
+Patch506: arm_volume.patch
+
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
 Group: Sound
