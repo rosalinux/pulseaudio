@@ -121,7 +121,7 @@ BuildRequires: polkit-1-devel
 BuildRequires: libasyncns-devel
 BuildRequires: intltool
 BuildRequires: imagemagick
-BuildRequires: libjson-devel
+BuildRequires: json-c-devel
 BuildRequires: liborc-devel
 BuildRequires: libfftw-devel
 
