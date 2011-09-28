@@ -1,7 +1,8 @@
 %define name pulseaudio
-%define version 0.9.23
+%define version 1.0
+%define fullgit dev-453-gcf0bf
 %define git 0
-%define rel 2
+%define rel 1
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -25,13 +26,12 @@
 %define major 0
 %define zeroconfmajor 0
 %define glib2major 0
-%define apiver %{version}
+%define apiver 1.0
 
 # Library names
 %define libname %mklibname %{name} %{major}
 %define libname_devel %mklibname -d %{name}
 
-%define zeroconflibname %mklibname pulsezeroconf %{zeroconfmajor}
 %define glib2libname %mklibname pulseglib2 %{glib2major}
 
 
@@ -40,11 +40,12 @@ Name: %{name}
 Version: %{version}
 Release: %{release}
 %if %{git}
-Source0: %{name}-%{git}.tar.lzma
+Source0: %{name}-%{version}-%{fullgit}.tar.xz
 %else
-Source0: %{name}-%{version}.tar.gz
+Source0: %{name}-%{version}.tar.xz
 %endif
 Source1: %{name}.sysconfig
+Source2: %{name}.xinit
 # (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
 # libesound from.... you guessed it... auto spawning.
 Source3: esd.conf
@@ -80,10 +81,6 @@ Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
-Patch505: 0505-Mute-IEC958-Optical-Raw-for-AudigyX.patch
-
-# http://pulseaudio.org/ticket/914
-Patch506: arm_volume.patch
 
 # Airtunes links to OpenSSL which is BSD-like and should be reflected here
 License: LGPL and BSD-like
@@ -95,7 +92,6 @@ BuildRequires: libcap-devel
 BuildRequires: libsndfile-devel
 BuildRequires: libsamplerate-devel
 BuildRequires: libalsa-devel
-BuildRequires: libjack-devel
 BuildRequires: libavahi-client-devel
 BuildRequires: libGConf2-devel
 BuildRequires: libwrap-devel
@@ -105,9 +101,6 @@ BuildRequires: libsm-devel
 BuildRequires: libxtst-devel
 BuildRequires: xcb-util-devel
 BuildRequires: udev-devel
-%if %mdvver < 201010
-BuildRequires: hal-devel
-%endif
 #gw libtool dep:
 BuildRequires: dbus-glib-devel
 BuildRequires: doxygen
@@ -115,6 +108,7 @@ BuildRequires: automake1.8
 BuildRequires: libltdl-devel
 BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
+BuildRequires: libjack-devel
 BuildRequires: lirc-devel
 %if !%bootstrap
 BuildRequires: bluez-devel
@@ -127,9 +121,12 @@ BuildRequires: polkit-1-devel
 BuildRequires: libasyncns-devel
 BuildRequires: intltool
 BuildRequires: imagemagick
+BuildRequires: libjson-devel
+BuildRequires: liborc-devel
+BuildRequires: libfftw-devel
 
 Provides: polypaudio
-Obsoletes: polypaudio
+Obsoletes: polypaudio < %{version}
 # (cg) This is for the backport of 0.9.7 to 2008
 #      pulseaudio fails when using older versions of libtool
 Requires: libltdl >= 1.5.24
@@ -139,6 +136,7 @@ Requires: rtkit
 Requires(post): ccp
 # (cg) When upgrading from pa < 0.9.7-1 things break due to spec restructure
 Conflicts: %{libname} < 0.9.7-2
+Obsoletes: %{mklibname pulsezeroconf 0} < 1.0
 # (cg) libpulsecore has been moved to a dlopen'ed system.
 Obsoletes: %mklibname pulsecore 1
 Obsoletes: %mklibname pulsecore 2
@@ -223,15 +221,6 @@ if [ ! -f %{_sysconfdir}/sound/profiles/pulse/profile.conf ]; then
 fi
 
 
-%package -n %{zeroconflibname}
-Summary:    Zeroconf support for PulseAudio clients
-Group:      System/Libraries
-
-%description -n %{zeroconflibname}
-This package contains the runtime libraries and tools that allow PulseAudio
-clients to automatically detect PulseAudio servers using Zeroconf.
-
-
 %package -n %{glib2libname}
 Summary:  GLIB 2.x bindings for PulseAudio clients
 Group:    System/Libraries
@@ -245,7 +234,6 @@ a GLIB 2.x based application.
 Summary: Headers and libraries for PulseAudio client development
 Group: Development/C
 Requires: %{libname} = %{version}-%{release}
-Requires: %{zeroconflibname} = %{version}-%{release}
 Requires: %{glib2libname} = %{version}-%{release}
 Provides: lib%{name}-devel = %{version}-%{release}
 Provides: %{name}-devel = %{version}-%{release}
@@ -263,9 +251,7 @@ Requires:  %{name} = %{version}-%{release}
 Provides:  esound
 Obsoletes: esound < 0.2.38-5mdv
 Conflicts: esound-daemon
-%if %{mdvver} > 201000
 Obsoletes: esound-daemon
-%endif
 
 %description esound-compat
 A compatibility script that allows applications to call /usr/bin/esd
@@ -310,7 +296,6 @@ Requires:  %{name} = %{version}-%{release}
 %description module-zeroconf
 Zeroconf publishing module for the PulseAudio sound server.
 
-
 %package module-jack
 Summary:   JACK support for the PulseAudio sound server
 Group:     Sound
@@ -318,7 +303,6 @@ Requires:  %{name} = %{version}-%{release}
 
 %description module-jack
 JACK sink and source modules for the PulseAudio sound server.
-
 
 %package module-gconf
 Summary:   GConf support for the PulseAudio sound server
@@ -328,6 +312,13 @@ Requires:  %{name} = %{version}-%{release}
 %description module-gconf
 GConf configuration backend for the PulseAudio sound server.
 
+%package module-equalizer
+Summary:   Equalizer support for the PulseAudio sound server
+Group:     Sound
+Requires:  %{name} = %{version}-%{release}
+
+%description module-equalizer
+Equalizer support and GUI for the PulseAudio sound server.
 
 %package utils
 Summary:  PulseAudio sound server utilities
@@ -341,7 +332,7 @@ This package contains command line utilities for the PulseAudio sound server.
 
 %prep
 %if %{git}
-%setup -q -n %{name}-%{git}
+%setup -q -n %{name}-%{version}-%{fullgit}
 %else
 %setup -q -n %{name}-%{version}
 %endif
@@ -351,7 +342,7 @@ This package contains command line utilities for the PulseAudio sound server.
 # (cg) If autoconf is retriggered (which can happen automatically) we need this file.
 cat >git-version-gen <<EOF
 #!/bin/bash
-echo -n %{version}-%{release}
+echo -n %{version}.0-%{release}
 EOF
 chmod a+x git-version-gen
 
@@ -362,9 +353,9 @@ echo "clean:" > Makefile
 
 %build
 %configure2_5x \
-%if %mdvver >= 201010
   --disable-hal \
-%endif
+  --disable-rpath \
+  --enable-orc
 
 
 %make
@@ -375,6 +366,7 @@ rm -rf %{buildroot}
 %makeinstall_std
 
 install -D -m 0644 %{_sourcedir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -D -m 0755 %{_sourcedir}/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
 install -D -m 0755 %{_sourcedir}/esd.conf %{buildroot}%{_sysconfdir}/
 
 install -D -m 0644 %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
@@ -448,8 +440,10 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-cli-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-cli.so
 %{_libdir}/pulse-%{apiver}/modules/module-combine.so
+%{_libdir}/pulse-%{apiver}/modules/module-combine-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-cork-music-on-phone.so
 %{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
+%{_libdir}/pulse-%{apiver}/modules/module-dbus-protocol.so
 %{_libdir}/pulse-%{apiver}/modules/module-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-device-manager.so
 %{_libdir}/pulse-%{apiver}/modules/module-device-restore.so
@@ -470,6 +464,7 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-native-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-native-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-null-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-null-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-oss.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-source.so
@@ -487,11 +482,16 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-tunnel-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-udev-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-volume-restore.so
+%{_libdir}/pulse-%{apiver}/modules/module-virtual-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-virtual-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-stream-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-suspend-on-idle.so
 %{_libdir}/pulse-%{apiver}/modules/module-default-device-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-ladspa-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-remap-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-switch-on-connect.so
+%{_libdir}/pulse-%{apiver}/modules/module-filter-apply.so
+%{_libdir}/pulse-%{apiver}/modules/module-filter-heuristics.so
 
 
 %files -n %{libname}
@@ -514,11 +514,6 @@ rm -rf %{buildroot}
 %{_sysconfdir}/sound/profiles/pulse/profile.conf
 
 
-%files -n %{zeroconflibname}
-%defattr(-,root,root)
-%{_libdir}/libpulse-browse.so.%{zeroconfmajor}*
-
-
 %files -n %{glib2libname}
 %defattr(-,root,root)
 %{_libdir}/libpulse-mainloop-glib.so.%{glib2major}*
@@ -527,7 +522,6 @@ rm -rf %{buildroot}
 %doc doxygen/html
 %defattr(-,root,root)
 %{_libdir}/libpulse.so
-%{_libdir}/libpulse-browse.so
 %{_libdir}/libpulse-mainloop-glib.so
 %{_libdir}/libpulse-simple.so
 %dir %{_includedir}/pulse
@@ -566,10 +560,13 @@ rm -rf %{buildroot}
 
 %files module-x11
 %defattr(-,root,root)
+%{_sysconfdir}/X11/xinit.d/50%{name}
 %{_bindir}/pax11publish
 %{_bindir}/start-pulseaudio-x11
 %{_bindir}/start-pulseaudio-kde
 %{_mandir}/man1/pax11publish.1.*
+%{_mandir}/man1/start-pulseaudio-x11.1.*
+%{_mandir}/man1/start-pulseaudio-kde.1.*
 %{_libdir}/pulse-%{apiver}/modules/module-x11-bell.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-cork-request.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-publish.so
@@ -580,13 +577,10 @@ rm -rf %{buildroot}
 
 %files module-zeroconf
 %defattr(-,root,root)
-%{_bindir}/pabrowse
-%{_mandir}/man1/pabrowse.1.*
 %{_libdir}/pulse-%{apiver}/modules/libavahi-wrap.so
 %{_libdir}/pulse-%{apiver}/modules/module-zeroconf-discover.so
 %{_libdir}/pulse-%{apiver}/modules/module-zeroconf-publish.so
 %{_libdir}/pulse-%{apiver}/modules/module-raop-discover.so
-
 
 %files module-jack
 %defattr(-,root,root)
@@ -594,13 +588,16 @@ rm -rf %{buildroot}
 %{_libdir}/pulse-%{apiver}/modules/module-jack-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-jackdbus-detect.so
 
-
 %files module-gconf
 %defattr(-,root,root)
 %{_libdir}/pulse-%{apiver}/modules/module-gconf.so
 %dir %{_libdir}/pulse/
 %{_libdir}/pulse/gconf-helper
 
+%files module-equalizer
+%defattr(-,root,root)
+%{_bindir}/qpaeq
+%{_libdir}/pulse-%{apiver}/modules/module-equalizer-sink.so
 
 %files utils
 %defattr(-,root,root)
