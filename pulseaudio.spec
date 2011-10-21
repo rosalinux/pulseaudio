@@ -1,5 +1,5 @@
 %define name pulseaudio
-%define version 1.0
+%define version 1.1
 %define fullgit dev-453-gcf0bf
 %define git 0
 %define rel 1
@@ -26,7 +26,7 @@
 %define major 0
 %define zeroconfmajor 0
 %define glib2major 0
-%define apiver 1.0
+%define apiver 1.1
 
 # Library names
 %define libname %mklibname %{name} %{major}
