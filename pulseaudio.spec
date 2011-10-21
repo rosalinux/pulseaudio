@@ -525,6 +525,7 @@ rm -rf %{buildroot}
 %{_libdir}/libpulse-mainloop-glib.so
 %{_libdir}/libpulse-simple.so
 %dir %{_includedir}/pulse
+%{_libdir}/cmake/PulseAudio
 %{_includedir}/pulse/*.h
 %{_libdir}/pkgconfig/*.pc
 %{_datadir}/vala/vapi/libpulse.deps
