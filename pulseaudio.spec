@@ -352,6 +352,12 @@ echo "clean:" > Makefile
 ./bootstrap.sh -V
 %endif
 
+mkdir -p Mandriva
+cp %{SOURCE1} Mandriva/%{name}.sysconfig
+cp %{SOURCE2} Mandriva/%{name}.xinit
+cp %{SOURCE3} Mandriva/esd.conf
+cp %{SOURCE4} Mandriva/%{name}.svg
+
 %build
 %configure2_5x \
   --disable-hal \
@@ -366,16 +372,16 @@ make doxygen
 rm -rf %{buildroot}
 %makeinstall_std
 
-install -D -m 0644 %{_sourcedir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -D -m 0755 %{_sourcedir}/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
-install -D -m 0755 %{_sourcedir}/esd.conf %{buildroot}%{_sysconfdir}/
+install -D -m 0644 Mandriva/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -D -m 0755 Mandriva/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
+install -D -m 0755 Mandriva/esd.conf %{buildroot}%{_sysconfdir}/
+install -D -m 0644 Mandriva/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
-install -D -m 0644 %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/devices
 ln -s ../apps/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/devices/audio-backend-pulseaudio.svg
 for size in 16 22 32 48 64 128; do
   mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/{apps,devices}
-  convert -geometry ${size}x${size} %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
+  convert -geometry ${size}x${size} Mandriva/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
   ln -s ../apps/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/devices/audio-backend-pulseaudio.png
 done
 
