@@ -2,7 +2,7 @@
 %define version 1.1
 %define fullgit dev-453-gcf0bf
 %define git 0
-%define rel 1
+%define rel 2
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
