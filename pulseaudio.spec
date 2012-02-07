@@ -93,9 +93,9 @@ BuildRequires: libsndfile-devel
 BuildRequires: libsamplerate-devel
 BuildRequires: libalsa-devel
 BuildRequires: libavahi-client-devel
-BuildRequires: libGConf2-devel
+BuildRequires: pkgconfig(gconf-2.0)
 BuildRequires: libwrap-devel
-BuildRequires: libx11-devel
+BuildRequires: pkgconfig(x11)
 BuildRequires: libice-devel
 BuildRequires: libsm-devel
 BuildRequires: libxtst-devel
@@ -105,7 +105,7 @@ BuildRequires: udev-devel
 BuildRequires: dbus-glib-devel
 BuildRequires: doxygen
 BuildRequires: autoconf automake libtool
-BuildRequires: libltdl-devel
+BuildRequires: libtool-devel
 BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
 BuildRequires: pkgconfig(jack)
