@@ -207,8 +207,8 @@ Conflicts: %{name} < 0.9.16-0.20090816.1
 Obsoletes: libflashsupport
 
 %description client-config
-This package contains the client configuration files for any application that wishes
-to interface with a PulseAudio sound server.
+This package contains the client configuration files for any application that
+wishes to interface with a PulseAudio sound server.
 
 
 %post client-config
