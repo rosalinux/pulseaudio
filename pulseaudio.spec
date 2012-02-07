@@ -1,3 +1,6 @@
+%define _build_pkgcheck_set %{nil}
+%define _build_pkgcheck_srpm %{nil}
+
 %define name pulseaudio
 %define version 1.1
 %define fullgit dev-453-gcf0bf
