@@ -104,11 +104,11 @@ BuildRequires: udev-devel
 #gw libtool dep:
 BuildRequires: dbus-glib-devel
 BuildRequires: doxygen
-BuildRequires: automake1.8
+BuildRequires: autoconf automake libtool
 BuildRequires: libltdl-devel
 BuildRequires: libatomic_ops-devel
 BuildRequires: gettext-devel
-BuildRequires: libjack-devel
+BuildRequires: pkgconfig(jack)
 BuildRequires: lirc-devel
 %if !%bootstrap
 BuildRequires: bluez-devel
@@ -124,6 +124,7 @@ BuildRequires: imagemagick
 BuildRequires: json-c-devel
 BuildRequires: liborc-devel
 BuildRequires: libfftw-devel
+BuildRequires: pkgconfig(xi)
 
 Provides: polypaudio
 Obsoletes: polypaudio < %{version}
