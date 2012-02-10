@@ -373,7 +373,7 @@ rm -rf %{buildroot}
 
 install -D -m 0644 Mandriva/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -D -m 0755 Mandriva/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
-install -D -m 0755 Mandriva/esd.conf %{buildroot}%{_sysconfdir}/
+install -D -m 0644 Mandriva/esd.conf %{buildroot}%{_sysconfdir}/
 install -D -m 0644 Mandriva/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/devices
