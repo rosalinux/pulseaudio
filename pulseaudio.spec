@@ -1,6 +1,3 @@
-%define _build_pkgcheck_set %{nil}
-%define _build_pkgcheck_srpm %{nil}
-
 %define name pulseaudio
 %define version 1.1
 %define fullgit dev-453-gcf0bf
@@ -85,8 +82,7 @@ Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
 
-# Airtunes links to OpenSSL which is BSD-like and should be reflected here
-License: LGPL and BSD-like
+License: LGPLv2+
 Group: Sound
 Url: http://pulseaudio.org/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
