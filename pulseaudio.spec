@@ -107,8 +107,7 @@ BuildRequires:	pkgconfig(orc-0.4)
 BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(xi)
 
-Provides:	polypaudio
-Obsoletes:	polypaudio < %{version}
+%rename		polypaudio
 # (cg) Just incase people backport, require specific udev
 Requires:	udev >= 143
 Requires:	rtkit
@@ -207,10 +206,8 @@ a PulseAudio sound server.
 Summary:	PulseAudio EsounD daemon compatibility script
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
-Provides:	esound
-Obsoletes:	esound < 0.2.38-5mdv
-Conflicts:	esound-daemon
-Obsoletes:	esound-daemon
+%rename		esound
+%rename		esound-daemon
 
 %description	esound-compat
 A compatibility script that allows applications to call /usr/bin/esd
