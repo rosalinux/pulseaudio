@@ -1,4 +1,4 @@
-%bcond_without	bootstrap
+%bcond_with	bootstrap
 
 # (cg) Lennart has introduced a circular dependancy in the libraries
 # libpulse requires libpulsecommon but libpulsecommon requires libpulse.
