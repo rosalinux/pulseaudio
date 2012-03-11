@@ -318,7 +318,7 @@ mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/devices
 ln -s ../apps/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/devices/audio-backend-pulseaudio.svg
 for size in 16 22 32 48 64 128; do
   mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/{apps,devices}
-  convert -geometry ${size}x${size} Mandriva/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
+  convert -geometry ${size}x${size} %{SOURCE4} %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
   ln -s ../apps/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/devices/audio-backend-pulseaudio.png
 done
 
