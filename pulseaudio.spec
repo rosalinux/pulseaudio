@@ -310,7 +310,7 @@ make doxygen
 %makeinstall_std
 
 install -m644 %{SOURCE1} -D %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -m755 %{SOURCE2} -D {buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
+install -m755 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
 install -m644 %{SOURCE3} -D %{buildroot}%{_sysconfdir}/esd.conf
 install -m644 %{SOURCE4} -D %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
