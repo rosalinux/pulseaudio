@@ -99,7 +99,7 @@ BuildRequires:	pkgconfig(speex)
 # (cg) Needed for airtunes
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	pkgconfig(polkit-backend-1)
-BuildRequires:	pkgconfig(asyncns)
+BuildRequires:	pkgconfig(libasyncns)
 BuildRequires:	intltool
 BuildRequires:	imagemagick
 BuildRequires:	pkgconfig(json)
