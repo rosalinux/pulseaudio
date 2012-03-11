@@ -68,7 +68,7 @@ Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
-BuildRequires: 	pkgconfig(gio-2.0)
+BuildRequires:	pkgconfig(gio-2.0)
 BuildRequires:	cap-devel
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(samplerate)
