@@ -7,7 +7,7 @@
 # as-needed is also required.
 %define _disable_ld_no_undefined 1
 %define _disable_ld_as_needed 1
-%define _requires_exceptions devel(libpulsecommon
+%define __noautoreq 'devel\\(libpulsecommon'
 
 # Majors
 %define	major	0
