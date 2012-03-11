@@ -292,7 +292,7 @@ echo -n %{version}.0-%{release}
 EOF
 chmod a+x git-version-gen
 
-%if %{?git}
+%if %{?git}0
 echo "clean:" > Makefile
 ./bootstrap.sh -V
 %endif
