@@ -465,7 +465,6 @@ fi
 
 %files -n %{devname}
 %doc doxygen/html
-%defattr(-,root,root)
 %{_libdir}/libpulse.so
 %{_libdir}/libpulse-mainloop-glib.so
 %{_libdir}/libpulse-simple.so
