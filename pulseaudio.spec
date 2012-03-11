@@ -25,7 +25,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	1.1
-Release:	%{?git:0.%{git}.}5
+Release:	%{?git:0.%{git}.}4
 Source0:	%{name}-%{version}%{?git:-%{git}}.tar.xz
 Source1:	%{name}.sysconfig
 Source2:	%{name}.xinit
@@ -302,7 +302,6 @@ echo "clean:" > Makefile
   --disable-hal \
   --disable-rpath \
   --enable-orc
-
 
 %make
 make doxygen
