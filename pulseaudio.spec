@@ -2,7 +2,7 @@
 %define version 1.1
 %define fullgit dev-453-gcf0bf
 %define git 0
-%define rel 4
+%define rel 5
 %if %{git}
 %define release %mkrel 0.%{git}.%rel
 %else
@@ -127,9 +127,6 @@ BuildRequires: pkgconfig(xi)
 
 Provides: polypaudio
 Obsoletes: polypaudio < %{version}
-# (cg) This is for the backport of 0.9.7 to 2008
-#      pulseaudio fails when using older versions of libtool
-Requires: libltdl >= 1.5.24
 # (cg) Just incase people backport, require specific udev
 Requires: udev >= 143
 Requires: rtkit
