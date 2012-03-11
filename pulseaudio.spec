@@ -68,43 +68,43 @@ Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
-BuildRequires: 	glib2-devel
-BuildRequires:	libcap-devel
-BuildRequires:	libsndfile-devel
-BuildRequires:	libsamplerate-devel
-BuildRequires:	libalsa-devel
-BuildRequires:	libavahi-client-devel
+BuildRequires: 	pkgconfig(gio-2.0)
+BuildRequires:	cap-devel
+BuildRequires:	pkgconfig(sndfile)
+BuildRequires:	pkgconfig(samplerate)
+BuildRequires:	pkgconfig(alsa)
+BuildRequires:	pkgconfig(avahi-client)
 BuildRequires:	pkgconfig(gconf-2.0)
-BuildRequires:	libwrap-devel
+BuildRequires:	wrap-devel
 BuildRequires:	pkgconfig(x11)
-BuildRequires:	libice-devel
-BuildRequires:	libsm-devel
-BuildRequires:	libxtst-devel
-BuildRequires:	xcb-util-devel
-BuildRequires:	udev-devel
+BuildRequires:	pkgconfig(ice)
+BuildRequires:	pkgconfig(sm)
+BuildRequires:	pkgconfig(xtst)
+BuildRequires:	pkgconfig(xcb-util)
+BuildRequires:	pkgconfig(libudev)
 #gw libtool dep:
-BuildRequires:	dbus-glib-devel
+BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	doxygen
 BuildRequires:	autoconf automake libtool
 BuildRequires:	libtool-devel
 BuildRequires:	libatomic_ops-devel
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(jack)
-BuildRequires:	lirc-devel
-%if !%bootstrap
-BuildRequires:	bluez-devel
+BuildRequires:	pkgconfig(liblircclient0)
+%if !%{with bootstrap}
+BuildRequires:	pkgconfig(bluez)
 %endif
-BuildRequires:	tdb-devel
-BuildRequires:	speex-devel
+BuildRequires:	pkgconfig(tdb)
+BuildRequires:	pkgconfig(speex)
 # (cg) Needed for airtunes
-BuildRequires:	openssl-devel
-BuildRequires:	polkit-1-devel
-BuildRequires:	libasyncns-devel
+BuildRequires:	pkgconfig(libssl)
+BuildRequires:	pkgconfig(polkit-backend-1)
+BuildRequires:	pkgconfig(asyncns)
 BuildRequires:	intltool
 BuildRequires:	imagemagick
-BuildRequires:	json-c-devel
-BuildRequires:	liborc-devel
-BuildRequires:	libfftw-devel
+BuildRequires:	pkgconfig(json)
+BuildRequires:	pkgconfig(orc-0.4)
+BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(xi)
 
 Provides:	polypaudio
