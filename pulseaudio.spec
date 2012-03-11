@@ -156,7 +156,7 @@ Suggests:	%{mklibname alsa-plugins}-pulseaudio
 %ifarch x86_64
 # (cg) Suggest the 32 bit library on 64 bits to ensure compatibility
 #      with (typically closed source) 32 bit apps.
-Suggests:	lib%{name}%{major}
+Suggests:	libpulse.so.0
 %endif
 
 %description -n	%{libname}
