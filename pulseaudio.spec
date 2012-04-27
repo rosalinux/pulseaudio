@@ -11,7 +11,6 @@
 
 # Majors
 %define	major	0
-%define	zeroconfmajor 0
 %define	glib2major 0
 %define	apiver	1.1
 
@@ -21,11 +20,13 @@
 
 %define glib2libname %mklibname pulseglib2 %{glib2major}
 
-
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	1.1
 Release:	%{?git:0.%{git}.}4
+License:	LGPLv2+
+Group:		Sound
+Url:		http://pulseaudio.org/
 Source0:	%{name}-%{version}%{?git:-%{git}}.tar.xz
 Source1:	%{name}.sysconfig
 Source2:	%{name}.xinit
@@ -33,7 +34,6 @@ Source2:	%{name}.xinit
 # libesound from.... you guessed it... auto spawning.
 Source3:	esd.conf
 Source4:	%{name}.svg
-
 
 # (cg) Using git to manage patches
 # To recreate the structure
@@ -65,47 +65,43 @@ Patch502:	0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
 
-License:	LGPLv2+
-Group:		Sound
-Url:		http://pulseaudio.org/
-BuildRequires:	pkgconfig(gio-2.0)
+BuildRequires:	doxygen
+BuildRequires:	intltool
+BuildRequires:	imagemagick
+BuildRequires:	libtool
 BuildRequires:	cap-devel
-BuildRequires:	pkgconfig(sndfile)
-BuildRequires:	pkgconfig(samplerate)
+BuildRequires:	gettext-devel
+BuildRequires:	libatomic_ops-devel
+BuildRequires:	libtool-devel
+BuildRequires:	wrap-devel
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(avahi-client)
+BuildRequires:	pkgconfig(dbus-glib-1)
+BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(gconf-2.0)
-BuildRequires:	wrap-devel
-BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(gio-2.0)
 BuildRequires:	pkgconfig(ice)
+BuildRequires:	pkgconfig(jack)
+BuildRequires:	pkgconfig(json)
+BuildRequires:	pkgconfig(libasyncns)
+BuildRequires:	pkgconfig(liblircclient0)
+# (cg) Needed for airtunes
+BuildRequires:	pkgconfig(libssl)
+BuildRequires:	pkgconfig(libudev)
+BuildRequires:	pkgconfig(orc-0.4)
+BuildRequires:	pkgconfig(polkit-backend-1)
+BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sm)
+BuildRequires:	pkgconfig(sndfile)
+BuildRequires:	pkgconfig(speex)
+BuildRequires:	pkgconfig(tdb)
+BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xtst)
 BuildRequires:	pkgconfig(xcb-util)
-BuildRequires:	pkgconfig(libudev)
-#gw libtool dep:
-BuildRequires:	pkgconfig(dbus-glib-1)
-BuildRequires:	doxygen
-BuildRequires:	autoconf automake libtool
-BuildRequires:	libtool-devel
-BuildRequires:	libatomic_ops-devel
-BuildRequires:	gettext-devel
-BuildRequires:	pkgconfig(jack)
-BuildRequires:	pkgconfig(liblircclient0)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
 %endif
-BuildRequires:	pkgconfig(tdb)
-BuildRequires:	pkgconfig(speex)
-# (cg) Needed for airtunes
-BuildRequires:	pkgconfig(libssl)
-BuildRequires:	pkgconfig(polkit-backend-1)
-BuildRequires:	pkgconfig(libasyncns)
-BuildRequires:	intltool
-BuildRequires:	imagemagick
-BuildRequires:	pkgconfig(json)
-BuildRequires:	pkgconfig(orc-0.4)
-BuildRequires:	pkgconfig(fftw3)
-BuildRequires:	pkgconfig(xi)
 
 %rename		polypaudio
 # (cg) Just incase people backport, require specific udev
@@ -282,7 +278,6 @@ This package contains command line utilities for the PulseAudio sound server.
 
 %prep
 %setup -q -n %{name}-%{version}%{?git:-%{git}}
-
 %apply_patches
 
 # (cg) If autoconf is retriggered (which can happen automatically) we need this file.
