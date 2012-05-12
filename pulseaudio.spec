@@ -395,7 +395,6 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-role-cork.so
 %{_libdir}/pulse-%{apiver}/modules/module-switch-on-port-available.so
 %{_libdir}/pulse-%{apiver}/modules/module-virtual-surround-sink.so
-%{_libdir}/pulse-%{apiver}/modules/module-xenpv-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-dbus-protocol.so
 %{_libdir}/pulse-%{apiver}/modules/module-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-device-manager.so
