@@ -12,7 +12,7 @@
 # Majors
 %define	major	0
 %define	glib2major 0
-%define	apiver	1.1
+%define	apiver	2.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -22,12 +22,14 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	1.1
-Release:	%{?git:0.%{git}.}4
+Version:	2.0
+#Release:	%{?git:0.%{git}.}1
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
-Source0:	%{name}-%{version}%{?git:-%{git}}.tar.xz
+#Source0:	%{name}-%{version}%{?git:-%{git}}.tar.xz
+Source0:	http://freedesktop.org/software/pulseaudio/releases/%{name}-%{version}.tar.xz
 Source1:	%{name}.sysconfig
 Source2:	%{name}.xinit
 # (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
@@ -362,6 +364,7 @@ fi
 %{_mandir}/man5/pulse-client.conf.5.*
 %{_mandir}/man5/pulse-daemon.conf.5.*
 %{_mandir}/man5/default.pa.5.*
+%{_mandir}/man5/pulse-cli-syntax.5.*
 %{_datadir}/icons/hicolor/*
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
@@ -388,8 +391,11 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-cli.so
 %{_libdir}/pulse-%{apiver}/modules/module-combine.so
 %{_libdir}/pulse-%{apiver}/modules/module-combine-sink.so
-%{_libdir}/pulse-%{apiver}/modules/module-cork-music-on-phone.so
 %{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
+%{_libdir}/pulse-%{apiver}/modules/module-role-cork.so
+%{_libdir}/pulse-%{apiver}/modules/module-switch-on-port-available.so
+%{_libdir}/pulse-%{apiver}/modules/module-virtual-surround-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-xenpv-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-dbus-protocol.so
 %{_libdir}/pulse-%{apiver}/modules/module-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-device-manager.so
@@ -443,12 +449,12 @@ fi
 %files -n %{libname}
 %{_libdir}/libpulse.so.%{major}*
 %{_libdir}/libpulse-simple.so.%{major}*
-%{_libdir}/libpulsecommon-%{apiver}.so
+%{_libdir}/pulseaudio/libpulsecommon-%{apiver}.so
+%{_libdir}/pulseaudio/libpulsedsp.so
 %{_libdir}/libpulsecore-%{apiver}.so
 # (cg) Although the following is not a shared library, putting this file here
 # will allow padsp to work on dual arch machines... (e.g. using padsp to start
 # a 32-bit app).
-%{_libdir}/libpulsedsp.so
 
 %files client-config
 %config(noreplace) %{_sysconfdir}/pulse/client.conf
