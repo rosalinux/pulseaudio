@@ -24,7 +24,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	2.0
 #Release:	%{?git:0.%{git}.}1
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -92,7 +92,12 @@ BuildRequires:	pkgconfig(libasyncns)
 BuildRequires:	pkgconfig(liblircclient0)
 # (cg) Needed for airtunes
 BuildRequires:	pkgconfig(libssl)
-BuildRequires:	pkgconfig(libudev)
+BuildRequires:	pkgconfig(systemd)
+%if %mdvver >= 201200
+BuildRequires:  pkgconfig(udev) >= 186
+%else
+BuildRequires:  pkgconfig(udev)
+%endif
 BuildRequires:	pkgconfig(orc-0.4)
 BuildRequires:	pkgconfig(polkit-backend-1)
 BuildRequires:	pkgconfig(samplerate)
@@ -299,9 +304,11 @@ echo "clean:" > Makefile
 
 %build
 %configure2_5x \
-  --disable-hal \
-  --disable-rpath \
-  --enable-orc
+    --disable-static \
+    --disable-hal \
+    --disable-rpath \
+    --enable-orc \
+    --enable-systemd
 
 %make
 make doxygen
