@@ -430,6 +430,7 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-oss.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-source.so
+%{_libdir}/pulse-%{apiver}/modules/module-systemd-login.so
 %{_libdir}/pulse-%{apiver}/modules/module-raop-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-rygel-media-server.so
 %{_libdir}/pulse-%{apiver}/modules/module-position-event-sounds.so
