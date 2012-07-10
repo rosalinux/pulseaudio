@@ -24,7 +24,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	2.0
 #Release:	%{?git:0.%{git}.}1
-Release:	3
+Release:	4
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -68,7 +68,7 @@ Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
 
 # Fix build with >= libudev.so.1
-Patch600:	pulseaudio-2.0-udev-1.patch
+Patch600:	0001-Remove-usage-of-deprecated-udev_get_-_path.patch
 
 BuildRequires:	doxygen
 BuildRequires:	intltool
