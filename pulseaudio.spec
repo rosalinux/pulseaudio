@@ -22,9 +22,9 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	2.0
+Version:	2.1
 #Release:	%{?git:0.%{git}.}1
-Release:	4
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -68,7 +68,7 @@ Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
 
 # Fix build with >= libudev.so.1
-Patch600:	0001-Remove-usage-of-deprecated-udev_get_-_path.patch
+#Patch600:	0001-Remove-usage-of-deprecated-udev_get_-_path.patch
 
 BuildRequires:	doxygen
 BuildRequires:	intltool
@@ -89,6 +89,7 @@ BuildRequires:	pkgconfig(ice)
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(json)
 BuildRequires:	pkgconfig(libasyncns)
+BuildRequires:	pkgconfig(webrtc-audio-processing)
 BuildRequires:	pkgconfig(liblircclient0)
 # (cg) Needed for airtunes
 BuildRequires:	pkgconfig(libssl)
@@ -305,6 +306,14 @@ echo "clean:" > Makefile
 %build
 %configure2_5x \
     --disable-static \
+    --disable-solaris \
+    --disable-adrian-aec \
+    --enable-largefile \
+    --enable-asyncns \
+    --enable-alsa \
+    --enable-ipv6 \
+    --enable-openssl \
+    --enable-webrtc-aec \
     --disable-hal \
     --disable-rpath \
     --enable-orc \
