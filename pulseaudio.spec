@@ -101,7 +101,7 @@ BuildRequires:  pkgconfig(udev) >= 186
 BuildRequires:  pkgconfig(udev)
 %endif
 BuildRequires:	pkgconfig(orc-0.4)
-BuildRequires:	pkgconfig(polkit-backend-1)
+BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sm)
 BuildRequires:	pkgconfig(sndfile)
