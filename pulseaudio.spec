@@ -7,12 +7,13 @@
 # as-needed is also required.
 %define _disable_ld_no_undefined 1
 %define _disable_ld_as_needed 1
-%define __noautoreq 'devel\\(libpulsecommon'
+%define __noautoreq 'devel\\(libpulsecommon
+
 
 # Majors
 %define	major	0
 %define	glib2major 0
-%define	apiver	2.0
+%define	apiver	2.1
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
