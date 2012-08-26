@@ -155,7 +155,7 @@ provides pulseaudio has:
        rate adjustment)
      * Client side latency interpolation
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	Libraries for PulseAudio clients
 Group:		System/Libraries
 Requires:	%{name}-client-config
@@ -173,24 +173,24 @@ to interface with a PulseAudio sound server.
 %define alt_name soundprofile
 %define alt_priority 20
 
-%package	client-config
+%package client-config
 Summary:	Client configuration for PulseAudio clients
 Group:		System/Libraries
 Requires(post):	ccp
 Requires(post):	update-alternatives
-Requires(postun):update-alternatives
-Conflicts: %{name} < 0.9.16-0.20090816.1
+Requires(postun):	update-alternatives
+Conflicts:	%{name} < 0.9.16-0.20090816.1
 # (cg) Adding the obsoletes here as this package is almost always installed
 #      and doing it in task-pulseaudio would cause it to be installed when not needed.
 # Flash plugin support pulse natively and libflashsupport now causes more
 # problems than it fixes
 Obsoletes:	libflashsupport
 
-%description	client-config
+%description client-config
 This package contains the client configuration files for any application that
 wishes to interface with a PulseAudio sound server.
 
-%package -n	%{glib2libname}
+%package -n %{glib2libname}
 Summary:	GLIB 2.x bindings for PulseAudio clients
 Group:		System/Libraries
 
@@ -198,7 +198,7 @@ Group:		System/Libraries
 This package contains bindings to integrate the PulseAudio client library with
 a GLIB 2.x based application.
 
-%package -n	%{devname}
+%package -n %{devname}
 Summary:	Headers and libraries for PulseAudio client development
 Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
@@ -210,37 +210,37 @@ Obsoletes:	%mklibname -d %{name} %{major}
 Headers and libraries for developing applications that can communicate with
 a PulseAudio sound server.
 
-%package	esound-compat
+%package esound-compat
 Summary:	PulseAudio EsounD daemon compatibility script
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
 %rename		esound
 %rename		esound-daemon
 
-%description	esound-compat
+%description esound-compat
 A compatibility script that allows applications to call /usr/bin/esd
 and start PulseAudio with EsounD protocol modules.
 
-%package	module-lirc
+%package module-lirc
 Summary:	LIRC support for the PulseAudio sound server
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
 
-%description	module-lirc
+%description module-lirc
 LIRC volume control module for the PulseAudio sound server.
 
 %if !%{with bootstrap}
-%package	module-bluetooth
+%package module-bluetooth
 Summary:	Bluetooth support for the PulseAudio sound server
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
 
-%description	module-bluetooth
+%description module-bluetooth
 Bluetooth modules for the PulseAudio sound server to provide support
 for headsets and proximity detection.
 %endif
 
-%package	module-x11
+%package module-x11
 Summary:	X11 support for the PulseAudio sound server
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
@@ -248,44 +248,43 @@ Requires:	%{name} = %{version}-%{release}
 %description module-x11
 X11 bell and security modules for the PulseAudio sound server.
 
-
-%package	module-zeroconf
+%package module-zeroconf
 Summary:	Zeroconf support for the PulseAudio sound server
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
 
-%description	module-zeroconf
+%description module-zeroconf
 Zeroconf publishing module for the PulseAudio sound server.
 
-%package	module-jack
+%package module-jack
 Summary:	JACK support for the PulseAudio sound server
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
 
-%description	module-jack
+%description module-jack
 JACK sink and source modules for the PulseAudio sound server.
 
-%package	module-gconf
+%package module-gconf
 Summary:	GConf support for the PulseAudio sound server
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
 
-%description	module-gconf
+%description module-gconf
 GConf configuration backend for the PulseAudio sound server.
 
-%package	module-equalizer
+%package module-equalizer
 Summary:	Equalizer support for the PulseAudio sound server
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
 
-%description	module-equalizer
+%description module-equalizer
 Equalizer support and GUI for the PulseAudio sound server.
 
-%package	utils
+%package utils
 Summary:	PulseAudio sound server utilities
 Group:		Sound
 
-%description	utils
+%description utils
 This package contains command line utilities for the PulseAudio sound server.
 
 %prep
@@ -357,6 +356,9 @@ rm -f %{buildroot}%{_sysconfdir}/dbus-1/system.d/%{name}-system.conf
 #      maintain state via this mechanism. Should be a patch, but I'm lazy.
 sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
 
+# (tpg) consolekit support is useless when systemd is enabled
+rm -f %{buildroot}%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
+
 %find_lang %{name}
 
 %post
@@ -411,7 +413,7 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-cli.so
 %{_libdir}/pulse-%{apiver}/modules/module-combine.so
 %{_libdir}/pulse-%{apiver}/modules/module-combine-sink.so
-%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
+%{_libdir}/pulse-%{apiver}/modules/module-systemd-login.so
 %{_libdir}/pulse-%{apiver}/modules/module-role-cork.so
 %{_libdir}/pulse-%{apiver}/modules/module-switch-on-port-available.so
 %{_libdir}/pulse-%{apiver}/modules/module-virtual-surround-sink.so
