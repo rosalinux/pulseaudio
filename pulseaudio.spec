@@ -306,14 +306,14 @@ echo "clean:" > Makefile
 %build
 %configure2_5x \
     --disable-static \
-    --disable-solaris \
     --disable-adrian-aec \
+    --disable-solaris \
     --enable-largefile \
     --enable-asyncns \
     --enable-alsa \
     --enable-ipv6 \
     --enable-openssl \
-    --enable-webrtc-aec \
+    --disable-webrtc-aec \
     --disable-hal \
     --disable-rpath \
     --enable-orc \
@@ -413,7 +413,6 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-cli.so
 %{_libdir}/pulse-%{apiver}/modules/module-combine.so
 %{_libdir}/pulse-%{apiver}/modules/module-combine-sink.so
-%{_libdir}/pulse-%{apiver}/modules/module-systemd-login.so
 %{_libdir}/pulse-%{apiver}/modules/module-role-cork.so
 %{_libdir}/pulse-%{apiver}/modules/module-switch-on-port-available.so
 %{_libdir}/pulse-%{apiver}/modules/module-virtual-surround-sink.so
