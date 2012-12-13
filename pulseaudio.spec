@@ -13,7 +13,7 @@
 # Majors
 %define	major	0
 %define	glib2major 0
-%define	apiver	2.1
+%define	apiver	2.99
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -55,17 +55,19 @@ Source4:	%{name}.svg
 # git checkout mdv-0.9.22-cherry-picks
 # git cherry-pick <blah>
 # git checkout mdv-0.9.22-patches
-# git rebase mdv-0.9.22-cherry-picks
+Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
+Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
+Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
+#Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
+Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
+Patch505: 0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git rebase mdv-0.9.22-cherry-picks
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.22..stable-queue
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.22-stable..mdv-0.9.22-patches
-Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
-Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-Patch502:	0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
-Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
+
 
 # Fix build with >= libudev.so.1
 #Patch600:	0001-Remove-usage-of-deprecated-udev_get_-_path.patch
@@ -90,15 +92,12 @@ BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(json)
 BuildRequires:	pkgconfig(libasyncns)
 BuildRequires:	pkgconfig(webrtc-audio-processing)
+BuildRequires:	pkgconfig(sbc)
 BuildRequires:	pkgconfig(liblircclient0)
 # (cg) Needed for airtunes
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	pkgconfig(systemd)
-%if %mdvver >= 201200
 BuildRequires:  pkgconfig(udev) >= 186
-%else
-BuildRequires:  pkgconfig(udev)
-%endif
 BuildRequires:	pkgconfig(orc-0.4)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(samplerate)
@@ -112,6 +111,10 @@ BuildRequires:	pkgconfig(xtst)
 BuildRequires:	pkgconfig(xcb-util)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
+%endif
+
+%ifarch %{ix86} x86_64 ia64
+BuildRequires:	xen-devel
 %endif
 
 %rename		polypaudio
@@ -263,6 +266,16 @@ Requires:	%{name} = %{version}-%{release}
 %description module-jack
 JACK sink and source modules for the PulseAudio sound server.
 
+%ifarch %{ix86} x86_64 ia64
+%package module-xen
+Summary:   Xen guest support for the PulseAudio sound server
+Group:     Sound/Mixers
+Requires:  %{name} = %{version}-%{release}
+
+%description module-xen
+Xen guest support for the PulseAudio sound server.
+%endif
+
 %package module-gconf
 Summary:	GConf support for the PulseAudio sound server
 Group:		Sound
@@ -303,20 +316,7 @@ echo "clean:" > Makefile
 %endif
 
 %build
-%configure2_5x \
-    --disable-static \
-    --disable-adrian-aec \
-    --disable-solaris \
-    --enable-largefile \
-    --enable-asyncns \
-    --enable-alsa \
-    --enable-ipv6 \
-    --enable-openssl \
-    --disable-webrtc-aec \
-    --disable-hal \
-    --disable-rpath \
-    --enable-orc \
-    --enable-systemd
+%configure2_5x
 
 %make
 make doxygen
@@ -324,18 +324,20 @@ make doxygen
 %install
 %makeinstall_std
 
-install -m644 %{SOURCE1} -D %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -m755 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
-install -m644 %{SOURCE3} -D %{buildroot}%{_sysconfdir}/esd.conf
-install -m644 %{SOURCE4} -D %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
-ldroot}%{_datadir}/icons/hicolor/scalable/devices
+install -D -m 0644 %{_sourcedir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -D -m 0755 %{_sourcedir}/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
+install -D -m 0755 %{_sourcedir}/esd.conf %{buildroot}%{_sysconfdir}/
+install -D -m 0644 %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/devices
 ln -s ../apps/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/devices/audio-backend-pulseaudio.svg
 for size in 16 22 32 48 64 128; do
   mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/{apps,devices}
   convert -geometry ${size}x${size} %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
   ln -s ../apps/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/devices/audio-backend-pulseaudio.png
 done
+
 # Remove static and metalink libraries
 find %{buildroot} \( -name *.a -o -name *.la \) -exec rm {} \;
 
@@ -350,12 +352,12 @@ echo "SOUNDPROFILE=pulse" >%{buildroot}%{_sysconfdir}/sound/profiles/pulse/profi
 # System Wide + HAL is pretty unlikely.
 rm -f %{buildroot}%{_sysconfdir}/dbus-1/system.d/%{name}-system.conf
 
+# (cg) We require systemd now, so no point in using CK
+rm -f %{buildroot}%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
+
 # (cg) Disable x11-cork-request... it should be ahndled in the apps as we cannot
 #      maintain state via this mechanism. Should be a patch, but I'm lazy.
 sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
-
-# (tpg) consolekit support is useless when systemd is enabled
-rm -f %{buildroot}%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
 
 %find_lang %{name}
 
@@ -400,6 +402,7 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-simple.so
 %{_libdir}/pulse-%{apiver}/modules/libraop.so
 %{_libdir}/pulse-%{apiver}/modules/librtp.so
+%{_libdir}/pulse-%{apiver}/modules/libwebrtc-util.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-card.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-source.so
@@ -505,12 +508,11 @@ fi
 
 %if !%{with bootstrap}
 %files module-bluetooth
-%{_libdir}/pulse-%{apiver}/modules/libbluetooth-ipc.so
-%{_libdir}/pulse-%{apiver}/modules/libbluetooth-sbc.so
 %{_libdir}/pulse-%{apiver}/modules/libbluetooth-util.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-device.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-discover.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-proximity.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-policy.so
 %{_libdir}/pulse/proximity-helper
 %endif
 
@@ -551,6 +553,11 @@ fi
 %files module-equalizer
 %{_bindir}/qpaeq
 %{_libdir}/pulse-%{apiver}/modules/module-equalizer-sink.so
+
+%ifarch %{ix86} x86_64 ia64
+%defattr(-,root,root)
+%{_libdir}/pulse-%{apiver}/modules/module-xenpv-sink.so
+%endif
 
 %files utils
 %{_bindir}/pacat
