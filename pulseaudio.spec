@@ -325,10 +325,10 @@ make doxygen
 %makeinstall_std
 
 
-install -D -m 0644 %{_sourcedir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -D -m 0755 %{_sourcedir}/%{name}.xinit %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
-install -D -m 0755 %{_sourcedir}/esd.conf %{buildroot}%{_sysconfdir}/
-install -D -m 0644 %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+install -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -D -m 0755 %{SOURCE2} %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
+install -D -m 0755 %{SOURCE3} %{buildroot}%{_sysconfdir}/
+install -D -m 0644 %{SOURCE4} %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/devices
 ln -s ../apps/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/devices/audio-backend-pulseaudio.svg
