@@ -1,6 +1,6 @@
 sources:
-  "esd.conf:"	e1b299b5ea7b965270d9d70b43903858f4aaace9
-  "pulseaudio.svg:"	5e32c3d5cd8da5eb88130c3bd55175059bf27704
-  "pulseaudio.sysconfig:"	a97c1de853222efa442054255d23da92060fc3cc
-  "pulseaudio.xinit:"	c4d9bd5c632fe8dfcadd69e52fdc04b30d344067
-  "pulseaudio-2.99.3.tar.xz:"   96ec4143f96a382eeec649ca0b0967e1df7f36fa
+  esd.conf:	e1b299b5ea7b965270d9d70b43903858f4aaace9
+  pulseaudio.svg:	5e32c3d5cd8da5eb88130c3bd55175059bf27704
+  pulseaudio.sysconfig:	a97c1de853222efa442054255d23da92060fc3cc
+  pulseaudio.xinit:	c4d9bd5c632fe8dfcadd69e52fdc04b30d344067
+  pulseaudio-2.99.3.tar.xz:   96ec4143f96a382eeec649ca0b0967e1df7f36fa

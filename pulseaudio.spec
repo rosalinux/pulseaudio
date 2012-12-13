@@ -329,14 +329,13 @@ install -m755 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
 install -m644 %{SOURCE3} -D %{buildroot}%{_sysconfdir}/esd.conf
 install -m644 %{SOURCE4} -D %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/devices
+ldroot}%{_datadir}/icons/hicolor/scalable/devices
 ln -s ../apps/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/devices/audio-backend-pulseaudio.svg
 for size in 16 22 32 48 64 128; do
   mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/{apps,devices}
-  convert -geometry ${size}x${size} %{SOURCE4} %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
+  convert -geometry ${size}x${size} %{_sourcedir}/%{name}.svg %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
   ln -s ../apps/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/devices/audio-backend-pulseaudio.png
 done
-
 # Remove static and metalink libraries
 find %{buildroot} \( -name *.a -o -name *.la \) -exec rm {} \;
 
