@@ -23,7 +23,7 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	2.1
+Version:	2.99.3
 #Release:	%{?git:0.%{git}.}1
 Release:	1
 License:	LGPLv2+
@@ -65,7 +65,6 @@ Source4:	%{name}.svg
 Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502:	0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
-Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
 
 # Fix build with >= libudev.so.1
