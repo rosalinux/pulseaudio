@@ -13,7 +13,7 @@
 # Majors
 %define	major	0
 %define	glib2major 0
-%define	apiver	2.99
+%define	apiver	3.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -23,7 +23,7 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	2.99.3
+Version:	3.0
 #Release:	%{?git:0.%{git}.}1
 Release:	1
 License:	LGPLv2+
