@@ -11,9 +11,9 @@
 
 
 # Majors
-%define	major	0
-%define	glib2major 0
-%define	apiver	3.0
+%define major 0
+%define glib2major 0
+%define apiver 3.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -25,7 +25,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	3.0
 #Release:	%{?git:0.%{git}.}1
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -377,6 +377,7 @@ fi
 %files -f %{name}.lang
 %doc README
 %dir %{_sysconfdir}/pulse/
+%dir %{_libdir}/pulse-%{apiver}
 %config(noreplace) %{_sysconfdir}/pulse/daemon.conf
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
