@@ -178,6 +178,7 @@ to interface with a PulseAudio sound server.
 %package client-config
 Summary:	Client configuration for PulseAudio clients
 Group:		System/Libraries
+Requires:	alsa-plugins-pulse-config
 Requires(post):	ccp
 Requires(post):	update-alternatives
 Requires(postun):	update-alternatives
