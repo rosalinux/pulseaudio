@@ -25,7 +25,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	3.0
 #Release:	%{?git:0.%{git}.}1
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -317,7 +317,16 @@ echo "clean:" > Makefile
 %endif
 
 %build
-%configure2_5x
+# (tpg) kill rpaths
+%if "%{_libdir}" != "/usr/lib"
+sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
+%endif
+
+%configure2_5x \
+		--disable-hal \
+        --disable-static \
+        --disable-rpath \
+        --enable-systemd
 
 %make
 make doxygen
