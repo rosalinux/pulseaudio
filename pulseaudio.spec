@@ -13,7 +13,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 3.0
+%define apiver 4.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -23,9 +23,9 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	3.0
+Version:	4.0
 #Release:	%{?git:0.%{git}.}1
-Release:	3
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -392,6 +392,7 @@ fi
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%{_sysconfdir}/bash_completion.d/%{name}-bash-completion.sh
 %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1.*
 %{_mandir}/man5/pulse-client.conf.5.*
@@ -478,6 +479,8 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-switch-on-connect.so
 %{_libdir}/pulse-%{apiver}/modules/module-filter-apply.so
 %{_libdir}/pulse-%{apiver}/modules/module-filter-heuristics.so
+%{_libdir}/pulse-%{apiver}/modules/module-remap-source.so
+%{_libdir}/pulse-%{apiver}/modules/module-role-ducking.so
 
 %files -n %{libname}
 %{_libdir}/libpulse.so.%{major}*
