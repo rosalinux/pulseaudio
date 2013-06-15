@@ -25,7 +25,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	4.0
 #Release:	%{?git:0.%{git}.}1
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -89,7 +89,7 @@ BuildRequires:	pkgconfig(gconf-2.0)
 BuildRequires:	pkgconfig(gio-2.0)
 BuildRequires:	pkgconfig(ice)
 BuildRequires:	pkgconfig(jack)
-BuildRequires:	pkgconfig(json)
+BuildRequires:	pkgconfig(json-c)
 BuildRequires:	pkgconfig(libasyncns)
 BuildRequires:	pkgconfig(webrtc-audio-processing)
 BuildRequires:	pkgconfig(sbc)
