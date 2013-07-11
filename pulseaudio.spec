@@ -323,9 +323,11 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %endif
 
 %configure2_5x \
-		--disable-hal \
         --disable-static \
         --disable-rpath \
+%ifarch %{arm}
+	--disable-neon-opt \
+%endif
         --enable-systemd
 
 %make
