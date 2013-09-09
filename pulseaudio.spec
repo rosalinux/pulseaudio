@@ -25,7 +25,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	4.0
 #Release:	%{?git:0.%{git}.}1
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -247,6 +247,7 @@ for headsets and proximity detection.
 Summary:	X11 support for the PulseAudio sound server
 Group:		Sound
 Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-utils = %{version}-%{release}
 
 %description module-x11
 X11 bell and security modules for the PulseAudio sound server.
