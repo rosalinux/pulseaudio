@@ -55,12 +55,12 @@ Source4:	%{name}.svg
 # git checkout mdv-0.9.22-cherry-picks
 # git cherry-pick <blah>
 # git checkout mdv-0.9.22-patches
-Patch500: 0500-Customise-startup-so-we-can-easily-disable-PA.patch
-Patch501: 0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-Patch502: 0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
-#Patch503: 0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
-Patch504: 0504-Apply-startup-customisation-to-new-KDE-module.patch
-Patch505: 0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git rebase mdv-0.9.22-cherry-picks
+Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
+Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
+Patch502:	0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
+#Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
+Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
+Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git rebase mdv-0.9.22-cherry-picks
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.22..stable-queue
@@ -73,8 +73,8 @@ Patch505: 0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git r
 #Patch600:	0001-Remove-usage-of-deprecated-udev_get_-_path.patch
 
 BuildRequires:	doxygen
-BuildRequires:	intltool
 BuildRequires:	imagemagick
+BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	cap-devel
 BuildRequires:	gettext-devel
@@ -91,13 +91,13 @@ BuildRequires:	pkgconfig(ice)
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(json-c)
 BuildRequires:	pkgconfig(libasyncns)
+BuildRequires:	pkgconfig(liblircclient0)
 BuildRequires:	pkgconfig(webrtc-audio-processing)
 BuildRequires:	pkgconfig(sbc)
-BuildRequires:	pkgconfig(liblircclient0)
 # (cg) Needed for airtunes
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	pkgconfig(systemd)
-BuildRequires:  pkgconfig(udev) >= 186
+BuildRequires:	pkgconfig(udev) >= 186
 BuildRequires:	pkgconfig(orc-0.4)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(samplerate)
@@ -270,9 +270,9 @@ JACK sink and source modules for the PulseAudio sound server.
 
 %ifarch %{ix86} x86_64 ia64
 %package module-xen
-Summary:   Xen guest support for the PulseAudio sound server
-Group:     Sound/Mixers
-Requires:  %{name} = %{version}-%{release}
+Summary:	Xen guest support for the PulseAudio sound server
+Group:		Sound/Mixers
+Requires:	%{name} = %{version}-%{release}
 
 %description module-xen
 Xen guest support for the PulseAudio sound server.
@@ -325,7 +325,6 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 
 %configure2_5x \
         --disable-static \
-        --disable-rpath \
 %ifarch %{arm}
 	--disable-neon-opt \
 %endif
@@ -336,7 +335,6 @@ make doxygen
 
 %install
 %makeinstall_std
-
 
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -D -m 0755 %{SOURCE2} %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
@@ -350,9 +348,6 @@ for size in 16 22 32 48 64 128; do
   convert -geometry ${size}x${size} %{SOURCE4} %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
   ln -s ../apps/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/devices/audio-backend-pulseaudio.png
 done
-
-# Remove static and metalink libraries
-find %{buildroot} \( -name *.a -o -name *.la \) -exec rm {} \;
 
 # Fix esd
 ln -s esdcompat %{buildroot}%{_bindir}/esd
@@ -572,7 +567,6 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-equalizer-sink.so
 
 %ifarch %{ix86} x86_64 ia64
-%defattr(-,root,root)
 %{_libdir}/pulse-%{apiver}/modules/module-xenpv-sink.so
 %endif
 
@@ -592,3 +586,4 @@ fi
 %{_mandir}/man1/padsp.1.*
 %{_mandir}/man1/paplay.1.*
 %{_mandir}/man1/pasuspender.1.*
+
