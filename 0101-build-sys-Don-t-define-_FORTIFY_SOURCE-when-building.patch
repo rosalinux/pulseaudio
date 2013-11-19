@@ -1,0 +1,36 @@
+From 9305286ad80bba12c721fa3473f718444190edb1 Mon Sep 17 00:00:00 2001
+From: Tanu Kaskinen <tanu.kaskinen@linux.intel.com>
+Date: Sat, 12 Oct 2013 12:45:09 +0300
+Subject: [PATCH 101/103] build-sys: Don't define _FORTIFY_SOURCE when building
+ with -O0
+
+---
+ configure.ac | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 42cb8b8..e2465e4 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -165,12 +165,17 @@ esac
+ #### Compiler flags ####
+ 
+ AX_APPEND_COMPILE_FLAGS(
+-    [-Wall -W -Wextra -pipe -Wno-long-long -Wno-overlength-strings -Wunsafe-loop-optimizations -Wundef -Wformat=2 -Wlogical-op -Wsign-compare -Wformat-security -Wmissing-include-dirs -Wformat-nonliteral -Wold-style-definition -Wpointer-arith -Winit-self -Wdeclaration-after-statement -Wfloat-equal -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-declarations -Wmissing-noreturn -Wshadow -Wendif-labels -Wcast-align -Wstrict-aliasing -Wwrite-strings -Wno-unused-parameter -ffast-math -Wp,-D_FORTIFY_SOURCE=2 -fno-common -fdiagnostics-show-option],
++    [-Wall -W -Wextra -pipe -Wno-long-long -Wno-overlength-strings -Wunsafe-loop-optimizations -Wundef -Wformat=2 -Wlogical-op -Wsign-compare -Wformat-security -Wmissing-include-dirs -Wformat-nonliteral -Wold-style-definition -Wpointer-arith -Winit-self -Wdeclaration-after-statement -Wfloat-equal -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-declarations -Wmissing-noreturn -Wshadow -Wendif-labels -Wcast-align -Wstrict-aliasing -Wwrite-strings -Wno-unused-parameter -ffast-math -fno-common -fdiagnostics-show-option],
+     [], [-pedantic -Werror])
+ 
+ # Only enable fastpath asserts when doing a debug build, e.g. from bootstrap.sh.
+ AS_CASE([" $CFLAGS "], [*" -O0 "*], [], [AX_APPEND_FLAG(["-DFASTPATH"], [CPPFLAGS])])
+ 
++# Only set _FORTIFY_SOURCE when optimizations are enabled. If optimizations
++# are disabled, _FORTIFY_SOURCE doesn't do anything, and causes tons of
++# warnings during compiling on some distributions (at least Fedora).
++AS_CASE([" $CFLAGS "], [*" -O0 "*], [], [AX_APPEND_FLAG(["-D_FORTIFY_SOURCE=2"], [CPPFLAGS])])
++
+ 
+ #### Linker flags ####
+ 
+-- 
+1.8.4
+

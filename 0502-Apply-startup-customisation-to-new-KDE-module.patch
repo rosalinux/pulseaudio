@@ -1,14 +1,14 @@
-From 8b39dd8bcd91790c9af5b6a2b0bc53aed8a55e08 Mon Sep 17 00:00:00 2001
+From 228d9e6824391105917f1ca2ab29060dfd1d7fb3 Mon Sep 17 00:00:00 2001
 From: Colin Guthrie <cguthrie@mandriva.org>
 Date: Thu, 1 Oct 2009 23:45:49 +0100
-Subject: [PATCH 504/504] Apply startup customisation to new KDE module
+Subject: [PATCH 502/502] Apply startup customisation to new KDE module
 
 ---
- src/daemon/start-pulseaudio-kde.in |   16 +++++++++++++++-
- 1 files changed, 15 insertions(+), 1 deletions(-)
+ src/daemon/start-pulseaudio-kde.in | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/src/daemon/start-pulseaudio-kde.in b/src/daemon/start-pulseaudio-kde.in
-index a79a50b..dfd8d13 100644
+index c319e7d..84dc1db 100755
 --- a/src/daemon/start-pulseaudio-kde.in
 +++ b/src/daemon/start-pulseaudio-kde.in
 @@ -21,10 +21,24 @@ set -e
@@ -38,5 +38,5 @@ index a79a50b..dfd8d13 100644
 +
 +fi
 -- 
-1.6.4.4
+1.8.4
 

@@ -63,10 +63,6 @@ Source4:	%{name}.svg
 # git checkout mdv-0.9.22-cherry-picks
 # git cherry-pick <blah>
 # git checkout mdv-0.9.22-patches
-#Patch502:	0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
-#Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
-#Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
-#Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git rebase mdv-0.9.22-cherry-picks
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.22..stable-queue
@@ -80,6 +76,7 @@ Patch103:	0103-bluetooth-Track-discovery-modules-by-index.patch
 Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502:	0502-Apply-startup-customisation-to-new-KDE-module.patch
+Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch # git rebase mdv-0.9.22-cherry-picks
 
 
 # Fix build with >= libudev.so.1
