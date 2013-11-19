@@ -1,3 +1,8 @@
+%define name pulseaudio
+%define version 5.0
+%define fullgit f81e3e1d7852c05b4b737ac7dac4db95798f0117
+%define git 20131010
+
 %bcond_with	bootstrap
 
 # (cg) Lennart has introduced a circular dependancy in the libraries
@@ -13,7 +18,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 4.0
+%define apiver 5.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -21,16 +26,19 @@
 
 %define glib2libname %mklibname pulseglib2 %{glib2major}
 
+# API libs (not real shared libs - mostly private but needed by other libs and server)
+%define corelibname %mklibname pulsecore %{apiver}
+%define commonlibname %mklibname pulsecommon %{apiver}
+
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	4.0
-#Release:	%{?git:0.%{git}.}1
-Release:	3
+Version:	5.0
+Release:	%{?git:0.%{git}.}1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
 #Source0:	%{name}-%{version}%{?git:-%{git}}.tar.xz
-Source0:	http://freedesktop.org/software/pulseaudio/releases/%{name}-%{version}.tar.xz
+Source0:	http://freedesktop.org/software/pulseaudio/releases/%{name}-%{version}%{?git:-%{fullgit}}.tar.xz
 Source1:	%{name}.sysconfig
 Source2:	%{name}.xinit
 # (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
@@ -55,18 +63,23 @@ Source4:	%{name}.svg
 # git checkout mdv-0.9.22-cherry-picks
 # git cherry-pick <blah>
 # git checkout mdv-0.9.22-patches
-Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
-Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-Patch502:	0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
+#Patch502:	0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 #Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
-Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
-Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git rebase mdv-0.9.22-cherry-picks
+#Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
+#Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git rebase mdv-0.9.22-cherry-picks
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.22..stable-queue
+Patch100:	0100-sndfile-util-fix-format-for-24bit-depth-wav-files.patch
+Patch101:	0101-build-sys-Don-t-define-_FORTIFY_SOURCE-when-building.patch
+Patch102:	0102-build-sys-Print-CPPFLAGS-in-configure.patch
+Patch103:	0103-bluetooth-Track-discovery-modules-by-index.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.22-stable..mdv-0.9.22-patches
+Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
+Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
+Patch502:	0502-Apply-startup-customisation-to-new-KDE-module.patch
 
 
 # Fix build with >= libudev.so.1
@@ -171,6 +184,25 @@ Suggests:	libpulse.so.0
 %description -n	%{libname}
 This package contains the runtime libraries for any application that wishes
 to interface with a PulseAudio sound server.
+
+%package -n %{corelibname}
+Summary:	Core Library for PulseAudio
+Group:		System/Libraries
+Obsoletes:	%mklibname pulsezeroconf 0
+Conflicts:	%{libname} < 5.0
+
+%description -n %{corelibname}
+This package contains a library needed by the PulseAudio sound server and
+modules.
+
+%package -n %{commonlibname}
+Summary:	Common Library for PulseAudio
+Group:		System/Libraries
+Conflicts:	%{libname} < 5.0
+
+%description -n %{commonlibname}
+This package contains a library needed by the PulseAudio sound server, modules
+and clients.
 
 %define alt_name soundprofile
 %define alt_priority 20
@@ -302,7 +334,7 @@ Group:		Sound
 This package contains command line utilities for the PulseAudio sound server.
 
 %prep
-%setup -q -n %{name}-%{version}%{?git:-%{git}}
+%setup -q -n %{name}-%{version}%{?git:-%{fullgit}}
 %apply_patches
 
 # (cg) If autoconf is retriggered (which can happen automatically) we need this file.
@@ -328,7 +360,11 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %ifarch %{arm}
 	--disable-neon-opt \
 %endif
-        --enable-systemd
+        --enable-systemd \
+%if !%{with bootstrap}
+	--enable-bluez5 \
+%endif
+	--disable-bluez4
 
 %make
 make doxygen
@@ -390,7 +426,6 @@ fi
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%{_sysconfdir}/bash_completion.d/%{name}-bash-completion.sh
 %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1.*
 %{_mandir}/man5/pulse-client.conf.5.*
@@ -425,8 +460,7 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-combine.so
 %{_libdir}/pulse-%{apiver}/modules/module-combine-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-role-cork.so
-%{_libdir}/pulse-%{apiver}/modules/module-switch-on-port-available.so
-%{_libdir}/pulse-%{apiver}/modules/module-virtual-surround-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-systemd-login.so
 %{_libdir}/pulse-%{apiver}/modules/module-dbus-protocol.so
 %{_libdir}/pulse-%{apiver}/modules/module-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-device-manager.so
@@ -452,7 +486,6 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-oss.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-source.so
-%{_libdir}/pulse-%{apiver}/modules/module-systemd-login.so
 %{_libdir}/pulse-%{apiver}/modules/module-raop-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-rygel-media-server.so
 %{_libdir}/pulse-%{apiver}/modules/module-position-event-sounds.so
@@ -465,6 +498,8 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-sine-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-tunnel-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-tunnel-source.so
+%{_libdir}/pulse-%{apiver}/modules/module-tunnel-sink-new.so
+%{_libdir}/pulse-%{apiver}/modules/module-tunnel-source-new.so
 %{_libdir}/pulse-%{apiver}/modules/module-udev-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-volume-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-virtual-sink.so
@@ -474,21 +509,28 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-default-device-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-ladspa-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-remap-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-remap-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-switch-on-connect.so
 %{_libdir}/pulse-%{apiver}/modules/module-filter-apply.so
 %{_libdir}/pulse-%{apiver}/modules/module-filter-heuristics.so
-%{_libdir}/pulse-%{apiver}/modules/module-remap-source.so
+%{_libdir}/pulse-%{apiver}/modules/module-virtual-surround-sink.so
+%{_libdir}/pulse-%{apiver}/modules/module-switch-on-port-available.so
 %{_libdir}/pulse-%{apiver}/modules/module-role-ducking.so
 
 %files -n %{libname}
 %{_libdir}/libpulse.so.%{major}*
 %{_libdir}/libpulse-simple.so.%{major}*
-%{_libdir}/pulseaudio/libpulsecommon-%{apiver}.so
-%{_libdir}/pulseaudio/libpulsedsp.so
-%{_libdir}/libpulsecore-%{apiver}.so
 # (cg) Although the following is not a shared library, putting this file here
 # will allow padsp to work on dual arch machines... (e.g. using padsp to start
 # a 32-bit app).
+%{_libdir}/%{name}/libpulsedsp.so
+
+%files -n %{corelibname}
+%{_libdir}/libpulsecore-%{apiver}.so
+
+%files -n %{commonlibname}
+%dir %{_libdir}/%{name}
+%{_libdir}/%{name}/libpulsecommon-%{apiver}.so
 
 %files client-config
 %config(noreplace) %{_sysconfdir}/pulse/client.conf
@@ -504,9 +546,9 @@ fi
 %{_libdir}/libpulse-mainloop-glib.so
 %{_libdir}/libpulse-simple.so
 %dir %{_includedir}/pulse
-%{_libdir}/cmake/PulseAudio
 %{_includedir}/pulse/*.h
 %{_libdir}/pkgconfig/*.pc
+%{_libdir}/cmake/PulseAudio
 %{_datadir}/vala/vapi/libpulse.deps
 %{_datadir}/vala/vapi/libpulse.vapi
 %{_datadir}/vala/vapi/libpulse-mainloop-glib.deps
@@ -520,12 +562,11 @@ fi
 
 %if !%{with bootstrap}
 %files module-bluetooth
-%{_libdir}/pulse-%{apiver}/modules/libbluetooth-util.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-device.so
+%{_libdir}/pulse-%{apiver}/modules/libbluez5-util.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-discover.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-proximity.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-policy.so
-%{_libdir}/pulse/proximity-helper
+%{_libdir}/pulse-%{apiver}/modules/module-bluez5-device.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluez5-discover.so
 %endif
 
 %files module-lirc
@@ -571,6 +612,7 @@ fi
 %endif
 
 %files utils
+%{_sysconfdir}/bash_completion.d/pulseaudio-bash-completion.sh
 %{_bindir}/pacat
 %{_bindir}/pacmd
 %{_bindir}/pactl
