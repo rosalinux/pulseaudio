@@ -116,8 +116,10 @@ BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(speex)
 BuildRequires:	pkgconfig(tdb)
 BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(x11-xcb)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xtst)
+BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-util)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
@@ -625,4 +627,3 @@ fi
 %{_mandir}/man1/padsp.1.*
 %{_mandir}/man1/paplay.1.*
 %{_mandir}/man1/pasuspender.1.*
-
