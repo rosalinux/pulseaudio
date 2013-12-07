@@ -25,7 +25,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	4.0
 #Release:	%{?git:0.%{git}.}1
-Release:	6
+Release:	7
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
