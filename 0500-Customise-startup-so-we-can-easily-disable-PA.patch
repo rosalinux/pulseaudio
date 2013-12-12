@@ -1,11 +1,11 @@
-From ce41a03b3439ac72ffec8b051a9e9890ce48473f Mon Sep 17 00:00:00 2001
+From d40cb8ad2083810117021f1664fb6d55ff0dafb1 Mon Sep 17 00:00:00 2001
 From: Colin Guthrie <development@colin.guthr.ie>
 Date: Wed, 8 Oct 2008 20:13:15 +0100
-Subject: [PATCH 500/505] Customise startup so we can easily disable PA
+Subject: [PATCH 500/502] Customise startup so we can easily disable PA
 
 ---
- src/daemon/start-pulseaudio-x11.in |   16 +++++++++++++++-
- 1 files changed, 15 insertions(+), 1 deletions(-)
+ src/daemon/start-pulseaudio-x11.in | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/src/daemon/start-pulseaudio-x11.in b/src/daemon/start-pulseaudio-x11.in
 index 391a6d3..89f98ee 100755
@@ -39,5 +39,5 @@ index 391a6d3..89f98ee 100755
 +
 +fi
 -- 
-1.7.4.1
+1.8.4
 
