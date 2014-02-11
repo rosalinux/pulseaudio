@@ -365,7 +365,7 @@ rm -f %{buildroot}%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
 
 # (cg) Disable x11-cork-request... it should be ahndled in the apps as we cannot
 #      maintain state via this mechanism. Should be a patch, but I'm lazy.
-sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
+#sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
 
 %find_lang %{name}
 
