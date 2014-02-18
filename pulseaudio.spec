@@ -109,6 +109,8 @@ BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xtst)
 BuildRequires:	pkgconfig(xcb-util)
+BuildRequires:	pkgconfig(x11-xcb)‎
+BuildRequires:	pkgconfig(xcb)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
 %endif
@@ -325,6 +327,7 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 
 %configure2_5x \
         --disable-static \
+        --enbble-x11 \
 %ifarch %{arm}
 	--disable-neon-opt \
 %endif
