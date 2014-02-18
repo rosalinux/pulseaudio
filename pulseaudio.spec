@@ -327,7 +327,7 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 
 %configure2_5x \
         --disable-static \
-        --enbble-x11 \
+        --enable-x11 \
 %ifarch %{arm}
 	--disable-neon-opt \
 %endif
