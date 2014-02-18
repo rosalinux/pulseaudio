@@ -109,7 +109,7 @@ BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xtst)
 BuildRequires:	pkgconfig(xcb-util)
-BuildRequires:	pkgconfig(x11-xcb)‎
+BuildRequires:	pkgconfig(x11-xcb)
 BuildRequires:	pkgconfig(xcb)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
