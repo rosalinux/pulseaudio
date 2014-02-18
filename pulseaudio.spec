@@ -25,7 +25,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	4.0
 #Release:	%{?git:0.%{git}.}1
-Release:	7
+Release:	8
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -528,7 +528,7 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-discover.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-proximity.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-policy.so
-%{_libdir}/pulse/proximity-helper
+%{_libexecdir}/pulse/proximity-helper
 %endif
 
 %files module-lirc
@@ -562,8 +562,8 @@ fi
 
 %files module-gconf
 %{_libdir}/pulse-%{apiver}/modules/module-gconf.so
-%dir %{_libdir}/pulse/
-%{_libdir}/pulse/gconf-helper
+%dir %{_libexecdir}/pulse/
+%{_libexecdir}/pulse/gconf-helper
 
 %files module-equalizer
 %{_bindir}/qpaeq
