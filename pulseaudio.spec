@@ -111,6 +111,7 @@ BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(ice)
 BuildRequires:	pkgconfig(sm)
 BuildRequires:	pkgconfig(xtst)
+BuildRequires:	pkgconfig(xfixes)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
 %endif
