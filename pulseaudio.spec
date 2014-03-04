@@ -1,7 +1,5 @@
-%define name pulseaudio
-%define version 5.0
 %define fullgit f81e3e1d7852c05b4b737ac7dac4db95798f0117
-%define git 20131010
+#define git 0
 
 %bcond_with	bootstrap
 
@@ -66,10 +64,6 @@ Source4:	%{name}.svg
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.22..stable-queue
-Patch100:	0100-sndfile-util-fix-format-for-24bit-depth-wav-files.patch
-Patch101:	0101-build-sys-Don-t-define-_FORTIFY_SOURCE-when-building.patch
-Patch102:	0102-build-sys-Print-CPPFLAGS-in-configure.patch
-Patch103:	0103-bluetooth-Track-discovery-modules-by-index.patch
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.22-stable..mdv-0.9.22-patches
@@ -600,8 +594,8 @@ fi
 
 %files module-gconf
 %{_libdir}/pulse-%{apiver}/modules/module-gconf.so
-%dir %{_libdir}/pulse/
-%{_libdir}/pulse/gconf-helper
+%dir %{_libexecdir}/pulse/
+%{_libexecdir}/pulse/gconf-helper
 
 %files module-equalizer
 %{_bindir}/qpaeq
