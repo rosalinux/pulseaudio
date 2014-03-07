@@ -531,12 +531,8 @@ fi
 
 %if !%{with bootstrap}
 %files module-bluetooth
-%{_libdir}/pulse-%{apiver}/modules/libbluetooth-util.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-device.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-discover.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-proximity.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-policy.so
-%{_libexecdir}/pulse/proximity-helper
 %endif
 
 %files module-lirc
