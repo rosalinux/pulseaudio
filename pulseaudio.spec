@@ -13,7 +13,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 4.0
+%define apiver 5.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -23,9 +23,9 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	4.0
+Version:	5.0
 #Release:	%{?git:0.%{git}.}1
-Release:	8
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -57,7 +57,6 @@ Source4:	%{name}.svg
 # git checkout mdv-0.9.22-patches
 Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-Patch502:	0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 #Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
 Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git rebase mdv-0.9.22-cherry-picks
@@ -483,6 +482,14 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-filter-heuristics.so
 %{_libdir}/pulse-%{apiver}/modules/module-remap-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-role-ducking.so
+%{_libdir}/pulse-%{apiver}/modules/libbluez4-util.so
+%{_libdir}/pulse-%{apiver}/modules/libbluez5-util.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluez4-device.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluez4-discover.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluez5-device.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluez5-discover.so
+%{_libdir}/pulse-%{apiver}/modules/module-tunnel-sink-new.so
+%{_libdir}/pulse-%{apiver}/modules/module-tunnel-source-new.so
 
 %files -n %{libname}
 %{_libdir}/libpulse.so.%{major}*
@@ -524,12 +531,8 @@ fi
 
 %if !%{with bootstrap}
 %files module-bluetooth
-%{_libdir}/pulse-%{apiver}/modules/libbluetooth-util.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-device.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-discover.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluetooth-proximity.so
 %{_libdir}/pulse-%{apiver}/modules/module-bluetooth-policy.so
-%{_libexecdir}/pulse/proximity-helper
 %endif
 
 %files module-lirc
