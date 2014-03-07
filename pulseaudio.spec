@@ -13,7 +13,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 4.0
+%define apiver 5.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -23,9 +23,9 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	4.0
+Version:	5.0
 #Release:	%{?git:0.%{git}.}1
-Release:	8
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -57,7 +57,6 @@ Source4:	%{name}.svg
 # git checkout mdv-0.9.22-patches
 Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-Patch502:	0502-Change-the-default-resample-method-to-speex-fixed-0-.patch
 #Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
 Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
 Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git rebase mdv-0.9.22-cherry-picks
