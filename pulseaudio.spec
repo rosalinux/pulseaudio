@@ -25,7 +25,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	5.0
 #Release:	%{?git:0.%{git}.}1
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -164,11 +164,6 @@ Summary:	Libraries for PulseAudio clients
 Group:		System/Libraries
 Requires:	%{name}-client-config
 Suggests:	%{mklibname alsa-plugins}-pulseaudio
-%ifarch x86_64
-# (cg) Suggest the 32 bit library on 64 bits to ensure compatibility
-#      with (typically closed source) 32 bit apps.
-Suggests:	libpulse.so.0
-%endif
 
 %description -n	%{libname}
 This package contains the runtime libraries for any application that wishes
