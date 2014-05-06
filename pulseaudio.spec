@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	5.0
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -501,14 +501,6 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-virtual-surround-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-switch-on-port-available.so
 %{_libdir}/pulse-%{apiver}/modules/module-role-ducking.so
-%{_libdir}/pulse-%{apiver}/modules/libbluez4-util.so
-%{_libdir}/pulse-%{apiver}/modules/libbluez5-util.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluez4-device.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluez4-discover.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluez5-device.so
-%{_libdir}/pulse-%{apiver}/modules/module-bluez5-discover.so
-%{_libdir}/pulse-%{apiver}/modules/module-tunnel-sink-new.so
-%{_libdir}/pulse-%{apiver}/modules/module-tunnel-source-new.so
 
 %files -n %{libname}
 %{_libdir}/libpulse.so.%{major}*
