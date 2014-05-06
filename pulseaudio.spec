@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	5.0
-Release:	%{?git:0.%{git}.}1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -56,11 +56,6 @@ Source4:	%{name}.svg
 # To apply new custom patches
 # git checkout mdv-0.9.22-patches
 # (do stuff)
-
-# To apply new cherry-picks
-# git checkout mdv-0.9.22-cherry-picks
-# git cherry-pick <blah>
-# git checkout mdv-0.9.22-patches
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.22..stable-queue
@@ -105,17 +100,17 @@ BuildRequires:	pkgconfig(udev) >= 186
 BuildRequires:	pkgconfig(orc-0.4)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(samplerate)
-BuildRequires:	pkgconfig(sm)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(speex)
+BuildRequires:	pkgconfig(sm)
 BuildRequires:	pkgconfig(tdb)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(x11-xcb)
+BuildRequires:	pkgconfig(xcb)
+BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xfixes)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xtst)
-BuildRequires:	pkgconfig(xcb)
-BuildRequires:	pkgconfig(xcb-util)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
 %endif
@@ -169,11 +164,6 @@ Summary:	Libraries for PulseAudio clients
 Group:		System/Libraries
 Requires:	%{name}-client-config
 Suggests:	%{mklibname alsa-plugins}-pulseaudio
-%ifarch x86_64
-# (cg) Suggest the 32 bit library on 64 bits to ensure compatibility
-#      with (typically closed source) 32 bit apps.
-Suggests:	libpulse.so.0
-%endif
 
 %description -n	%{libname}
 This package contains the runtime libraries for any application that wishes
@@ -351,6 +341,7 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 
 %configure2_5x \
         --disable-static \
+        --enable-x11 \
 %ifarch %{arm}
 	--disable-neon-opt \
 %endif
@@ -395,7 +386,7 @@ rm -f %{buildroot}%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
 
 # (cg) Disable x11-cork-request... it should be ahndled in the apps as we cannot
 #      maintain state via this mechanism. Should be a patch, but I'm lazy.
-sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
+#sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
 
 %find_lang %{name}
 
@@ -510,6 +501,14 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-virtual-surround-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-switch-on-port-available.so
 %{_libdir}/pulse-%{apiver}/modules/module-role-ducking.so
+%{_libdir}/pulse-%{apiver}/modules/libbluez4-util.so
+%{_libdir}/pulse-%{apiver}/modules/libbluez5-util.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluez4-device.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluez4-discover.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluez5-device.so
+%{_libdir}/pulse-%{apiver}/modules/module-bluez5-discover.so
+%{_libdir}/pulse-%{apiver}/modules/module-tunnel-sink-new.so
+%{_libdir}/pulse-%{apiver}/modules/module-tunnel-source-new.so
 
 %files -n %{libname}
 %{_libdir}/libpulse.so.%{major}*
