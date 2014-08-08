@@ -25,7 +25,7 @@ Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	5.0
 #Release:	%{?git:0.%{git}.}1
-Release:	2
+Release:	2.1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -95,6 +95,8 @@ BuildRequires:	pkgconfig(sbc)
 # (cg) Needed for airtunes
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	pkgconfig(systemd)
+BuildRequires:	pkgconfig(libsystemd-login)
+BuildRequires:	pkgconfig(libsystemd-journal)
 BuildRequires:	pkgconfig(udev) >= 186
 BuildRequires:	pkgconfig(orc-0.4)
 BuildRequires:	pkgconfig(polkit-gobject-1)
