@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	5.0
-Release:	5
+Release:	6
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -390,6 +390,10 @@ rm -f %{buildroot}%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
 #      maintain state via this mechanism. Should be a patch, but I'm lazy.
 #sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
 
+# Speed up pulseaudio shutdown so that it exits immediately with
+# the last user session (module-systemd-login keeps it alive)
+sed -e "/exit-idle-time/iexit-idle-time=0" -i %{buildroot}%{_sysconfdir}/pulse/daemon.conf
+    
 %find_lang %{name}
 
 %post
