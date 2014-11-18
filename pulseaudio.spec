@@ -342,7 +342,7 @@ echo "clean:" > Makefile
 sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %endif
 
-%configure2_5x \
+%configure \
         --disable-static \
         --enable-x11 \
 %ifarch %{arm}
