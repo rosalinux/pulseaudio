@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	5.0
-Release:	6
+Release:	7
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -165,7 +165,6 @@ provides pulseaudio has:
 Summary:	Libraries for PulseAudio clients
 Group:		System/Libraries
 Requires:	%{name}-client-config
-Suggests:	%{mklibname alsa-plugins}-pulseaudio
 
 %description -n	%{libname}
 This package contains the runtime libraries for any application that wishes
@@ -196,7 +195,9 @@ and clients.
 %package client-config
 Summary:	Client configuration for PulseAudio clients
 Group:		System/Libraries
-Requires:	alsa-plugins-pulse-config
+# (proyvind): leave thix as suggests, do not change into requires, otherwise
+#             pulseaudio cannot be disabled by default
+Suggests:	%{mklibname alsa-plugins}-pulseaudio
 Requires(post):	ccp
 Requires(post):	update-alternatives
 Requires(postun):	update-alternatives
