@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	5.0
-Release:	7
+Release:	8
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -342,6 +342,7 @@ echo "clean:" > Makefile
 sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %endif
 
+%define	__cc gcc
 %configure \
         --disable-static \
         --enable-x11 \
