@@ -30,8 +30,8 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	5.0
-Release:	9
+Version:	5.99.3
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -395,7 +395,7 @@ rm -f %{buildroot}%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
 # Speed up pulseaudio shutdown so that it exits immediately with
 # the last user session (module-systemd-login keeps it alive)
 sed -e "/exit-idle-time/iexit-idle-time=0" -i %{buildroot}%{_sysconfdir}/pulse/daemon.conf
-    
+
 %find_lang %{name}
 
 %post
