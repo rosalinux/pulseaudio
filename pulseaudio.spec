@@ -16,7 +16,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 5.0
+%define apiver 5.99
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -422,6 +422,7 @@ fi
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%{_sysconfdir}/bash_completion.d/*
 %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1.*
 %{_mandir}/man5/pulse-client.conf.5.*
@@ -429,6 +430,9 @@ fi
 %{_mandir}/man5/default.pa.5.*
 %{_mandir}/man5/pulse-cli-syntax.5.*
 %{_datadir}/icons/hicolor/*
+%{_datadir}/zsh/site-functions/_pulseaudio
+%{_unitdir}/pulseaudio.service
+%{_unitdir}/pulseaudio.socket
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
 /lib/udev/rules.d/90-pulseaudio.rules
