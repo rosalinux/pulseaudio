@@ -38,7 +38,6 @@ Url:		http://pulseaudio.org/
 #Source0:	%{name}-%{version}%{?git:-%{git}}.tar.xz
 Source0:	http://freedesktop.org/software/pulseaudio/releases/%{name}-%{version}%{?git:-%{fullgit}}.tar.xz
 Source1:	%{name}.sysconfig
-Source2:	%{name}.xinit
 # (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
 # libesound from.... you guessed it... auto spawning.
 Source3:	esd.conf
@@ -129,6 +128,7 @@ BuildRequires:	xen-devel
 Requires:	udev >= 143
 Requires:	rtkit
 Requires(post):	ccp
+Requires(post):	rpm-helper
 # (cg) When upgrading from pa < 0.9.7-1 things break due to spec restructure
 Conflicts:	%{libname} < 0.9.7-2
 Obsoletes:	%{mklibname pulsezeroconf 0} < 1.0
@@ -365,7 +365,6 @@ make doxygen
 %makeinstall_std
 
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -D -m 0755 %{SOURCE2} %{buildroot}%{_sysconfdir}/X11/xinit.d/50%{name}
 install -D -m 0755 %{SOURCE3} %{buildroot}%{_sysconfdir}/
 install -D -m 0644 %{SOURCE4} %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
@@ -403,6 +402,9 @@ sed -e "/exit-idle-time/iexit-idle-time=0" -i %{buildroot}%{_sysconfdir}/pulse/d
 
 %post
 ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %{_sysconfdir}/pulse/daemon.conf.rpmnew
+/bin/systemctl --user --global enable pulseaudio.socket >/dev/null 2>&1 || :
+/bin/systemctl --user --global enable pulseaudio.service >/dev/null 2>&1 || :
+
 
 %post client-config
 %{_sbindir}/update-alternatives \
@@ -422,7 +424,6 @@ fi
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%{_sysconfdir}/bash_completion.d/*
 %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1.*
 %{_mandir}/man5/pulse-client.conf.5.*
@@ -553,6 +554,8 @@ fi
 %{_datadir}/vala/vapi/libpulse.vapi
 %{_datadir}/vala/vapi/libpulse-mainloop-glib.deps
 %{_datadir}/vala/vapi/libpulse-mainloop-glib.vapi
+%{_datadir}/vala/vapi/libpulse-simple.deps
+%{_datadir}/vala/vapi/libpulse-simple.vapi
 
 %files esound-compat
 %config(noreplace) %{_sysconfdir}/esd.conf
@@ -573,19 +576,15 @@ fi
 %{_libdir}/pulse-%{apiver}/modules/module-lirc.so
 
 %files module-x11
-%{_sysconfdir}/X11/xinit.d/50%{name}
 %{_bindir}/pax11publish
 %{_bindir}/start-pulseaudio-x11
-%{_bindir}/start-pulseaudio-kde
 %{_mandir}/man1/pax11publish.1.*
 %{_mandir}/man1/start-pulseaudio-x11.1.*
-%{_mandir}/man1/start-pulseaudio-kde.1.*
 %{_libdir}/pulse-%{apiver}/modules/module-x11-bell.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-cork-request.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-publish.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-xsmp.so
 %{_sysconfdir}/xdg/autostart/pulseaudio.desktop
-%{_sysconfdir}/xdg/autostart/pulseaudio-kde.desktop
 
 %files module-zeroconf
 %{_libdir}/pulse-%{apiver}/modules/libavahi-wrap.so
@@ -612,7 +611,7 @@ fi
 %endif
 
 %files utils
-%{_sysconfdir}/bash_completion.d/pulseaudio-bash-completion.sh
+%{_sysconfdir}/bash_completion.d/*
 %{_bindir}/pacat
 %{_bindir}/pacmd
 %{_bindir}/pactl
