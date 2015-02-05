@@ -62,10 +62,13 @@ Source4:	%{name}.svg
 
 # Mandriva Patches
 # git format-patch --start-number 500 0.9.22-stable..mdv-0.9.22-patches
-Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
+# doubt this is still needed when systemd is in use ?
+#Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-Patch502:	0502-Apply-startup-customisation-to-new-KDE-module.patch
-Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch # git rebase mdv-0.9.22-cherry-picks
+# doubt this is still needed when systemd is in use ?
+#Patch502:	0502-Apply-startup-customisation-to-new-KDE-module.patch
+# dunnot if still needed, further investigation
+#Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch # git rebase mdv-0.9.22-cherry-picks
 
 
 # Fix build with >= libudev.so.1
@@ -346,10 +349,10 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %configure \
         --disable-static \
         --enable-x11 \
+        --with-systemduserunitdir=%{_unitdir} \
 %ifarch %{arm}
 	--disable-neon-opt \
 %endif
-        --enable-systemd \
 %if !%{with bootstrap}
 	--enable-bluez5 \
 %endif
