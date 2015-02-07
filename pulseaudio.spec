@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	5.99.3
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -398,6 +398,11 @@ rm -f %{buildroot}%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
 # the last user session (module-systemd-login keeps it alive)
 sed -e "/exit-idle-time/iexit-idle-time=0" -i %{buildroot}%{_sysconfdir}/pulse/daemon.conf
 
+# (tpg) enable pulseaudio in userland
+mkdir -p %{buildroot}%{_sysconfdir}/systemd/user
+cp -f %{buildroot}%{_unitdir}/pulseaudio.service %{buildroot}%{_sysconfdir}/systemd/user/pulseaudio.service
+cp -f %{buildroot}%{_unitdir}/pulseaudio.socket %{buildroot}%{_sysconfdir}/systemd/user/pulseaudio.socket
+
 %find_lang %{name}
 
 %post
@@ -432,6 +437,7 @@ fi
 %{_mandir}/man5/pulse-cli-syntax.5.*
 %{_datadir}/icons/hicolor/*
 %{_datadir}/zsh/site-functions/_pulseaudio
+%{_sysconfdir}/systemd/user/pulseaudio.s*
 %{_unitdir}/pulseaudio.service
 %{_unitdir}/pulseaudio.socket
 %dir %{_datadir}/%{name}/
