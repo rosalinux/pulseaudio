@@ -30,8 +30,8 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	5.99.3
-Release:	2
+Version:	6.0
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -103,7 +103,6 @@ BuildRequires:	pkgconfig(libsystemd-journal)
 BuildRequires:	pkgconfig(udev) >= 186
 BuildRequires:	pkgconfig(orc-0.4)
 BuildRequires:	pkgconfig(polkit-gobject-1)
-BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(speex)
 BuildRequires:	pkgconfig(sm)
