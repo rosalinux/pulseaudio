@@ -1,7 +1,7 @@
 %define fullgit f81e3e1d7852c05b4b737ac7dac4db95798f0117
 #define git 0
 
-%bcond_with	bootstrap
+%bcond_with bootstrap
 
 # (cg) Lennart has introduced a circular dependancy in the libraries
 # libpulse requires libpulsecommon but libpulsecommon requires libpulse.
@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	6.0
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
