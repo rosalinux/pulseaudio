@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	6.0
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -348,7 +348,6 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %configure \
         --disable-static \
         --enable-x11 \
-        --with-systemduserunitdir=%{_unitdir} \
 %ifarch %{arm}
 	--disable-neon-opt \
 %endif
@@ -391,24 +390,21 @@ rm -f %{buildroot}%{_libdir}/pulse-%{apiver}/modules/module-console-kit.so
 
 # (cg) Disable x11-cork-request... it should be ahndled in the apps as we cannot
 #      maintain state via this mechanism. Should be a patch, but I'm lazy.
-#sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
+sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildroot}%{_bindir}/start-pulseaudio-x11
 
 # Speed up pulseaudio shutdown so that it exits immediately with
 # the last user session (module-systemd-login keeps it alive)
 sed -e "/exit-idle-time/iexit-idle-time=0" -i %{buildroot}%{_sysconfdir}/pulse/daemon.conf
 
+
 # (tpg) enable pulseaudio in userland
-mkdir -p %{buildroot}%{_sysconfdir}/systemd/user
-cp -f %{buildroot}%{_unitdir}/pulseaudio.service %{buildroot}%{_sysconfdir}/systemd/user/pulseaudio.service
-cp -f %{buildroot}%{_unitdir}/pulseaudio.socket %{buildroot}%{_sysconfdir}/systemd/user/pulseaudio.socket
+mkdir -p %{buildroot}%{_userunitdir}/sockets.target.wants
+ln -sf %{_userunitdir}/pulseaudio.socket %{buildroot}%{_userunitdir}/sockets.target.wants/pulseaudio.socket
 
 %find_lang %{name}
 
 %post
 ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %{_sysconfdir}/pulse/daemon.conf.rpmnew
-/bin/systemctl --user --global enable pulseaudio.socket >/dev/null 2>&1 || :
-/bin/systemctl --user --global enable pulseaudio.service >/dev/null 2>&1 || :
-
 
 %post client-config
 %{_sbindir}/update-alternatives \
@@ -419,6 +415,12 @@ ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/client.conf --newfile %
 if [ ! -f %{_sysconfdir}/sound/profiles/pulse/profile.conf ]; then
   /usr/sbin/update-alternatives --remove %{alt_name} %{_sysconfdir}/sound/profiles/pulse
 fi
+
+%triggerin client-config -- %{name}-client-config < 6.0-3
+# Autospawn behaviour changed to use systemd, so tidy up the client.conf
+# by setting it back to the default value - it no longer changes depending on
+# the users soundprofile choice - it always defaults to no.
+sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse/client.conf
 
 %files -f %{name}.lang
 %doc README
@@ -436,9 +438,9 @@ fi
 %{_mandir}/man5/pulse-cli-syntax.5.*
 %{_datadir}/icons/hicolor/*
 %{_datadir}/zsh/site-functions/_pulseaudio
-%{_sysconfdir}/systemd/user/pulseaudio.s*
-%{_unitdir}/pulseaudio.service
-%{_unitdir}/pulseaudio.socket
+%{_userunitdir}/pulseaudio.service
+%{_userunitdir}/pulseaudio.socket
+%{_userunitdir}/sockets.target.wants/pulseaudio.socket
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
 /lib/udev/rules.d/90-pulseaudio.rules
