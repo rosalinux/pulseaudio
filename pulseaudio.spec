@@ -86,6 +86,7 @@ BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(avahi-client)
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(fftw3)
+BuildRequires:	pkgconfig(gconf-2.0)
 BuildRequires:	pkgconfig(gio-2.0)
 BuildRequires:	pkgconfig(ice)
 BuildRequires:	pkgconfig(jack)
@@ -353,8 +354,7 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %if !%{with bootstrap}
 	--enable-bluez5 \
 %endif
-	--disable-bluez4 \
-	--disable-gconf
+	--disable-bluez4
 
 %make
 make doxygen
