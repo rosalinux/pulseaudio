@@ -98,6 +98,7 @@ BuildRequires:	pkgconfig(sbc)
 # (cg) Needed for airtunes
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	pkgconfig(systemd)
+BuildRequires:	pkgconfig(libsystemd-daemon)
 BuildRequires:	pkgconfig(libsystemd-login)
 BuildRequires:	pkgconfig(libsystemd-journal)
 BuildRequires:	pkgconfig(udev) >= 186
