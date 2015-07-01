@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	6.0
-Release:	3
+Release:	4
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -186,6 +186,7 @@ modules.
 Summary:	Common Library for PulseAudio
 Group:		System/Libraries
 Conflicts:	%{libname} < 5.0
+Provides:	%{mklibname pulsecommon 5.0}
 
 %description -n %{commonlibname}
 This package contains a library needed by the PulseAudio sound server, modules
