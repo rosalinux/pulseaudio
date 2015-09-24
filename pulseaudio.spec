@@ -355,7 +355,7 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %configure \
         --disable-static \
         --enable-x11 \
-%ifarch %{arm}
+%ifarch %{armx}
 	--disable-neon-opt \
 %endif
 %if !%{with bootstrap}
