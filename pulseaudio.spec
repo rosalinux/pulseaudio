@@ -30,8 +30,8 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	6.0
-Release:	5
+Version:	7.0
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
