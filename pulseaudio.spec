@@ -16,7 +16,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 6.0
+%define apiver 7.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -115,6 +115,7 @@ BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xfixes)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xtst)
+BuildRequires:	pkgconfig(bash-completion)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
 %endif
@@ -335,6 +336,11 @@ echo -n %{version}.0-%{release}
 EOF
 chmod a+x git-version-gen
 
+libtoolize --copy --force
+autopoint --force
+autoreconf --force --install --verbose
+intltoolize --automake --copy --force
+
 %if %{?git}0
 echo "clean:" > Makefile
 ./bootstrap.sh -V
@@ -346,7 +352,6 @@ echo "clean:" > Makefile
 sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %endif
 
-%define	__cc gcc
 %configure \
         --disable-static \
         --enable-x11 \
@@ -620,7 +625,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %endif
 
 %files utils
-%{_sysconfdir}/bash_completion.d/*
+%{_datadir}/bash-completion/completions/p*
 %{_bindir}/pacat
 %{_bindir}/pacmd
 %{_bindir}/pactl
@@ -631,6 +636,9 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_bindir}/parecord
 %{_bindir}/pasuspender
 %{_mandir}/man1/pacat.1.*
+%{_mandir}/man1/pamon.1.*
+%{_mandir}/man1/parec.1.*
+%{_mandir}/man1/parecord.1.*
 %{_mandir}/man1/pacmd.1.*
 %{_mandir}/man1/pactl.1.*
 %{_mandir}/man1/padsp.1.*
