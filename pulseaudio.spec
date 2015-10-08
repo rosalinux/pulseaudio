@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	7.0
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -73,6 +73,7 @@ Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 # Fix build with >= libudev.so.1
 #Patch600:	0001-Remove-usage-of-deprecated-udev_get_-_path.patch
 
+Patch601:	pulseaudio-7.0-localedir.patch
 BuildRequires:	doxygen
 BuildRequires:	imagemagick
 BuildRequires:	intltool
@@ -95,6 +96,7 @@ BuildRequires:	pkgconfig(libasyncns)
 BuildRequires:	pkgconfig(liblircclient0)
 BuildRequires:	pkgconfig(webrtc-audio-processing)
 BuildRequires:	pkgconfig(sbc)
+BuildRequires:	pkgconfig(soxr)
 # (cg) Needed for airtunes
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	pkgconfig(systemd)
@@ -105,7 +107,7 @@ BuildRequires:	pkgconfig(udev) >= 186
 BuildRequires:	pkgconfig(orc-0.4)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(sndfile)
-BuildRequires:	pkgconfig(speex)
+BuildRequires:	pkgconfig(speexdsp)
 BuildRequires:	pkgconfig(sm)
 BuildRequires:	pkgconfig(tdb)
 BuildRequires:	pkgconfig(x11)
