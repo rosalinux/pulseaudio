@@ -1,0 +1,36 @@
+diff -urN pulseaudio-5.0/configure.ac pulseaudio-5.0-patched/configure.ac
+--- pulseaudio-5.0/configure.ac	2014-02-15 19:33:32.000000000 +1100
++++ pulseaudio-5.0-patched/configure.ac	2014-06-23 15:16:26.000000000 +1100
+@@ -1086,7 +1086,9 @@
+ AS_IF([test "x$with_fftw" = "xyes" && test "x$HAVE_FFTW" = "x0"],
+     [AC_MSG_ERROR([*** FFTW support not found])])
+ 
++AC_SUBST(HAVE_FFTW)
+ AM_CONDITIONAL([HAVE_FFTW], [test "x$HAVE_FFTW" = "x1"])
++AS_IF([test "x$HAVE_FFTW" = "x1"], AC_DEFINE([HAVE_FFTW], 1, [Have FFTW.]))
+ 
+ #### speex (optional) ####
+ 
+diff -urN pulseaudio-5.0/src/daemon/default.pa.in pulseaudio-5.0-patched/src/daemon/default.pa.in
+--- pulseaudio-5.0/src/daemon/default.pa.in	2014-01-24 05:57:55.000000000 +1100
++++ pulseaudio-5.0-patched/src/daemon/default.pa.in	2014-06-23 15:05:10.702996828 +1100
+@@ -189,6 +189,19 @@
+ #.endif
+ ])dnl
+ 
++ifelse(@HAVE_DBUS@, 1, [dnl
++.ifexists module-dbus-protocol@PA_SOEXT@
++load-module module-dbus-protocol
++.endif
++])dnl
++
++ifelse(@HAVE_FFTW@, 1, [dnl
++.ifexists module-equalizer-sink@PA_SOEXT@
++load-module module-equalizer-sink
++.endif
++])dnl
++
+ ### Make some devices default
+ #set-default-sink output
+ #set-default-source input
++

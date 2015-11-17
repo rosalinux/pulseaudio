@@ -31,7 +31,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	7.1
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -42,36 +42,13 @@ Source1:	%{name}.sysconfig
 # libesound from.... you guessed it... auto spawning.
 Source3:	esd.conf
 Source4:	%{name}.svg
-
-# (cg) Using git to manage patches
-# To recreate the structure
-# git clone git://git.0pointer.de/pulseaudio
-# git checkout v0.9.22
-# git checkout -b mdv-0.9.22-cherry-picks
-# git am 00*.patch
-# git checkout -b mdv-0.9.22-patches
-# git am 05*.patch
-
-# To apply new custom patches
-# git checkout mdv-0.9.22-patches
-# (do stuff)
-
-# Stable Branch Patches
-# git format-patch --start-number 100 v0.9.22..stable-queue
-
-# Mandriva Patches
-# git format-patch --start-number 500 0.9.22-stable..mdv-0.9.22-patches
-# doubt this is still needed when systemd is in use ?
-#Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
+# Load more modules if they are available
+Patch0:		pulseaudio-5.0-defaults.patch
+Patch1:		pulseaudio-6.0-kde-delay.patch
+Patch2:		pulseaudio-7.0-localedir.patch
+# Load device-manager module
+Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-# doubt this is still needed when systemd is in use ?
-#Patch502:	0502-Apply-startup-customisation-to-new-KDE-module.patch
-# dunnot if still needed, further investigation
-#Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch # git rebase mdv-0.9.22-cherry-picks
-
-
-# Fix build with >= libudev.so.1
-#Patch600:	0001-Remove-usage-of-deprecated-udev_get_-_path.patch
 
 Patch601:	pulseaudio-7.0-localedir.patch
 BuildRequires:	doxygen

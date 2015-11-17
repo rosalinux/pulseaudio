@@ -1,0 +1,14 @@
+diff -urN pulseaudio-7.1/src/daemon/default.pa.in pulseaudio-7.1-patched/src/daemon/default.pa.in
+--- pulseaudio-7.1/src/daemon/default.pa.in	2015-11-17 16:20:44.762841506 +1000
++++ pulseaudio-7.1-patched/src/daemon/default.pa.in	2015-11-17 16:23:48.291849858 +1000
+@@ -200,6 +200,10 @@
+ .endif
+ ])dnl
+ 
++.ifexists module-device-manager@PA_SOEXT@
++load-module module-device-manager
++.endif
++
+ ### Make some devices default
+ #set-default-sink output
+ #set-default-source input
