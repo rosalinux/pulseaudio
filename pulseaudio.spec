@@ -50,7 +50,6 @@ Patch2:		pulseaudio-7.0-localedir.patch
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 
-Patch601:	pulseaudio-7.0-localedir.patch
 BuildRequires:	doxygen
 BuildRequires:	imagemagick
 BuildRequires:	intltool
