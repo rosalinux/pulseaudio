@@ -23,9 +23,9 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	5.0
+Version:	6.0
 #Release:	%{?git:0.%{git}.}1
-Release:	2.1
+Release:	0.1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -58,8 +58,6 @@ Source4:	%{name}.svg
 Patch500:	0500-Customise-startup-so-we-can-easily-disable-PA.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 #Patch503:	0503-start-PA-earlier-in-GNOME-Mdv-bug-47594.patch
-Patch504:	0504-Apply-startup-customisation-to-new-KDE-module.patch
-Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git rebase mdv-0.9.22-cherry-picks
 
 # Stable Branch Patches
 # git format-patch --start-number 100 v0.9.22..stable-queue
@@ -71,54 +69,54 @@ Patch505:	0505-alsa-mixer-Allow-speakers-even-when-no-specific-path.patch# git r
 # Fix build with >= libudev.so.1
 #Patch600:	0001-Remove-usage-of-deprecated-udev_get_-_path.patch
 
-BuildRequires:	doxygen
-BuildRequires:	imagemagick
-BuildRequires:	intltool
-BuildRequires:	libtool
-BuildRequires:	cap-devel
-BuildRequires:	gettext-devel
-BuildRequires:	libatomic_ops-devel
-BuildRequires:	libtool-devel
-BuildRequires:	wrap-devel
-BuildRequires:	pkgconfig(alsa)
-BuildRequires:	pkgconfig(avahi-client)
-BuildRequires:	pkgconfig(dbus-glib-1)
-BuildRequires:	pkgconfig(fftw3)
-BuildRequires:	pkgconfig(gconf-2.0)
-BuildRequires:	pkgconfig(gio-2.0)
-BuildRequires:	pkgconfig(jack)
-BuildRequires:	pkgconfig(json-c)
-BuildRequires:	pkgconfig(libasyncns)
-BuildRequires:	pkgconfig(liblircclient0)
-BuildRequires:	pkgconfig(webrtc-audio-processing)
-BuildRequires:	pkgconfig(sbc)
+#BuildRequires:	doxygen
+#BuildRequires:	imagemagick
+#BuildRequires:	intltool
+#BuildRequires:	libtool
+#BuildRequires:	cap-devel
+#BuildRequires:	gettext-devel
+#BuildRequires:	libatomic_ops-devel
+#BuildRequires:	libtool-devel
+#BuildRequires:	wrap-devel
+#BuildRequires:	pkgconfig(alsa)
+#BuildRequires:	pkgconfig(avahi-client)
+#BuildRequires:	pkgconfig(dbus-glib-1)
+#BuildRequires:	pkgconfig(fftw3)
+#BuildRequires:	pkgconfig(gconf-2.0)
+#BuildRequires:	pkgconfig(gio-2.0)
+#BuildRequires:	pkgconfig(jack)
+#BuildRequires:	pkgconfig(json-c)
+#BuildRequires:	pkgconfig(libasyncns)
+#BuildRequires:	pkgconfig(liblircclient0)
+#BuildRequires:	pkgconfig(webrtc-audio-processing)
+#BuildRequires:	pkgconfig(sbc)
 # (cg) Needed for airtunes
-BuildRequires:	pkgconfig(libssl)
-BuildRequires:	pkgconfig(systemd)
-BuildRequires:	pkgconfig(libsystemd-login)
-BuildRequires:	pkgconfig(libsystemd-journal)
-BuildRequires:	pkgconfig(udev) >= 186
-BuildRequires:	pkgconfig(orc-0.4)
-BuildRequires:	pkgconfig(polkit-gobject-1)
-BuildRequires:	pkgconfig(samplerate)
-BuildRequires:	pkgconfig(sndfile)
-BuildRequires:	pkgconfig(speex)
-BuildRequires:	pkgconfig(tdb)
-BuildRequires:	pkgconfig(xi)
-BuildRequires:	pkgconfig(x11)
-BuildRequires:	pkgconfig(x11-xcb)
-BuildRequires:	pkgconfig(xcb)
-BuildRequires:	pkgconfig(xcb-util)
-BuildRequires:	pkgconfig(ice)
-BuildRequires:	pkgconfig(sm)
-BuildRequires:	pkgconfig(xtst)
-BuildRequires:	pkgconfig(xfixes)
+#BuildRequires:	pkgconfig(libssl)
+#BuildRequires:	pkgconfig(systemd)
+#BuildRequires:	pkgconfig(libsystemd-login)
+#BuildRequires:	pkgconfig(libsystemd-journal)
+#BuildRequires:	pkgconfig(udev) >= 186
+#BuildRequires:	pkgconfig(orc-0.4)
+#BuildRequires:	pkgconfig(polkit-gobject-1)
+#BuildRequires:	pkgconfig(samplerate)
+#BuildRequires:	pkgconfig(sndfile)
+#BuildRequires:	pkgconfig(speex)
+#BuildRequires:	pkgconfig(tdb)
+#BuildRequires:	pkgconfig(xi)
+#BuildRequires:	pkgconfig(x11)
+#BuildRequires:	pkgconfig(x11-xcb)
+#BuildRequires:	pkgconfig(xcb)
+#BuildRequires:	pkgconfig(xcb-util)
+#BuildRequires:	pkgconfig(ice)
+#BuildRequires:	pkgconfig(sm)
+#BuildRequires:	pkgconfig(xtst)
+#BuildRequires:	pkgconfig(xfixes)
 %if !%{with bootstrap}
-BuildRequires:	pkgconfig(bluez)
+#BuildRequires:	pkgconfig(bluez)
 %endif
 
 %ifarch %{ix86} x86_64 ia64
-BuildRequires:	xen-devel
+#BuildRequires:	xen-devel
 %endif
 
 %rename		polypaudio
@@ -590,4 +588,3 @@ fi
 %{_mandir}/man1/padsp.1.*
 %{_mandir}/man1/paplay.1.*
 %{_mandir}/man1/pasuspender.1.*
-

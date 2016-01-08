@@ -1,5 +1,5 @@
 removed_sources:
   pulseaudio-4.0.tar.xz: 9f0769dcb25318ba3faaa453fd2ed0c509fa9c5c
 sources:
-  pulseaudio-5.0.tar.xz: e420931a0b9cf37331cd06e30ba415046317ab85
+  pulseaudio-6.0.tar.xz: 3607d523fb270d9b68463de30f5d9e17957f1088
   pulseaudio.svg: 5e32c3d5cd8da5eb88130c3bd55175059bf27704
