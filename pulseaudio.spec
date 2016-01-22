@@ -23,10 +23,6 @@
 
 %define glib2libname %mklibname pulseglib2 %{glib2major}
 
-# API libs (not real shared libs - mostly private but needed by other libs and server)
-%define corelibname %mklibname pulsecore %{apiver}
-%define commonlibname %mklibname pulsecommon %{apiver}
-
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	8.0
@@ -111,14 +107,25 @@ Requires(post):	rpm-helper
 Conflicts:	%{libname} < 0.9.7-2
 Obsoletes:	%{mklibname pulsezeroconf 0} < 1.0
 # (cg) libpulsecore has been moved to a dlopen'ed system.
-Obsoletes:	%mklibname pulsecore 1
-Obsoletes:	%mklibname pulsecore 2
-Obsoletes:	%mklibname pulsecore 3
-Obsoletes:	%mklibname pulsecore 4
-Obsoletes:	%mklibname pulsecore 5
-Obsoletes:	%mklibname pulsecore 6
-Obsoletes:	%mklibname pulsecore 7
-Obsoletes:	%mklibname pulsecore 8
+Obsoletes:	%{mklibname pulsecore 1}
+Obsoletes:	%{mklibname pulsecore 2}
+Obsoletes:	%{mklibname pulsecore 3}
+Obsoletes:	%{mklibname pulsecore 4}
+Obsoletes:	%{mklibname pulsecore 5}
+Obsoletes:	%{mklibname pulsecore 6}
+Obsoletes:	%{mklibname pulsecore 7}
+Obsoletes:	%{mklibname pulsecore 8}
+Obsoletes:	%{mklibname pulsecore 7.0} < 8.0
+Obsoletes:	%{mklibname pulsecore 7.1} < 8.0
+Provides:	%{mklibname pulsecore 7.0} = 8.0
+Provides:	%{mklibname pulsecore 7.1} = 8.0
+Obsoletes:	%{mklibname pulsezeroconf 0}
+Conflicts:	%{libname} < 5.0
+Obsoletes:	%{mklibname pulsecommon 7.0} < 8.0
+Obsoletes:	%{mklibname pulsecommon 7.1} < 8.0
+Provides:	%{mklibname pulsecommon 7.0} = 8.0
+Provides:	%{mklibname pulsecommon 7.1} = 8.0
+Provides:	%{mklibname pulsecommon 5.0}
 
 %description
 pulseaudio is a sound server for Linux and other Unix like operating
@@ -150,26 +157,6 @@ Requires:	%{name}-client-config
 %description -n	%{libname}
 This package contains the runtime libraries for any application that wishes
 to interface with a PulseAudio sound server.
-
-%package -n %{corelibname}
-Summary:	Core Library for PulseAudio
-Group:		System/Libraries
-Obsoletes:	%mklibname pulsezeroconf 0
-Conflicts:	%{libname} < 5.0
-
-%description -n %{corelibname}
-This package contains a library needed by the PulseAudio sound server and
-modules.
-
-%package -n %{commonlibname}
-Summary:	Common Library for PulseAudio
-Group:		System/Libraries
-Conflicts:	%{libname} < 5.0
-Provides:	%{mklibname pulsecommon 5.0}
-
-%description -n %{commonlibname}
-This package contains a library needed by the PulseAudio sound server, modules
-and clients.
 
 %define alt_name soundprofile
 %define alt_priority 20
@@ -428,6 +415,9 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
 /lib/udev/rules.d/90-pulseaudio.rules
+%dir %{_libdir}/%{name}
+%{_libdir}/%{name}/libpulsecore-%{apiver}.so
+%{_libdir}/%{name}/libpulsecommon-%{apiver}.so
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
@@ -516,13 +506,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 # will allow padsp to work on dual arch machines... (e.g. using padsp to start
 # a 32-bit app).
 %{_libdir}/%{name}/libpulsedsp.so
-
-%files -n %{corelibname}
-%{_libdir}/libpulsecore-%{apiver}.so
-
-%files -n %{commonlibname}
-%dir %{_libdir}/%{name}
-%{_libdir}/%{name}/libpulsecommon-%{apiver}.so
 
 %files client-config
 %config(noreplace) %{_sysconfdir}/pulse/client.conf
