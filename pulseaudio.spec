@@ -12,11 +12,10 @@
 %define _disable_ld_as_needed 1
 %define __noautoreq 'devel\\(libpulsecommon
 
-
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 7.1
+%define apiver 8.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -30,8 +29,8 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	7.1
-Release:	2
+Version:	8.0
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
