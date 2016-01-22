@@ -44,7 +44,7 @@ Source4:	%{name}.svg
 # Load more modules if they are available
 Patch0:		pulseaudio-5.0-defaults.patch
 Patch1:		pulseaudio-6.0-kde-delay.patch
-Patch2:		pulseaudio-7.0-localedir.patch
+#Patch2:		pulseaudio-7.0-localedir.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
