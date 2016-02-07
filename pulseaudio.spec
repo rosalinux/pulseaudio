@@ -26,7 +26,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	8.0
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -415,7 +415,14 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
 /lib/udev/rules.d/90-pulseaudio.rules
+
+%files -n %{libname}
+%{_libdir}/libpulse.so.%{major}*
+%{_libdir}/libpulse-simple.so.%{major}*
+# Modules go to the library package because 32-bit versions of the libraries
+# require 32-bit versions of the core modules.
 %dir %{_libdir}/%{name}
+%{_libdir}/%{name}/libpulsedsp.so
 %{_libdir}/%{name}/libpulsecore-%{apiver}.so
 %{_libdir}/%{name}/libpulsecommon-%{apiver}.so
 %dir %{_libdir}/pulse-%{apiver}/modules/
@@ -498,14 +505,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/pulse-%{apiver}/modules/module-virtual-surround-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-switch-on-port-available.so
 %{_libdir}/pulse-%{apiver}/modules/module-role-ducking.so
-
-%files -n %{libname}
-%{_libdir}/libpulse.so.%{major}*
-%{_libdir}/libpulse-simple.so.%{major}*
-# (cg) Although the following is not a shared library, putting this file here
-# will allow padsp to work on dual arch machines... (e.g. using padsp to start
-# a 32-bit app).
-%{_libdir}/%{name}/libpulsedsp.so
 
 %files client-config
 %config(noreplace) %{_sysconfdir}/pulse/client.conf
