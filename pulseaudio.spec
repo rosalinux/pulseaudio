@@ -309,7 +309,7 @@ echo "clean:" > Makefile
 
 %build
 %ifarch %{ix86}
-export CC=gg
+export CC=gcc
 export CXX=g++
 %endif
 
