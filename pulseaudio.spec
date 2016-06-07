@@ -26,7 +26,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	8.0
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -70,10 +70,7 @@ BuildRequires:	pkgconfig(sbc)
 BuildRequires:	pkgconfig(soxr)
 # (cg) Needed for airtunes
 BuildRequires:	pkgconfig(libssl)
-BuildRequires:	pkgconfig(systemd)
-BuildRequires:	pkgconfig(libsystemd-daemon)
-BuildRequires:	pkgconfig(libsystemd-login)
-BuildRequires:	pkgconfig(libsystemd-journal)
+BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(udev) >= 186
 BuildRequires:	pkgconfig(orc-0.4)
 BuildRequires:	pkgconfig(polkit-gobject-1)
@@ -366,7 +363,6 @@ sed -i 's,\(/usr/bin/pactl load-module module-x11-cork-request\),#\1,' %{buildro
 # Speed up pulseaudio shutdown so that it exits immediately with
 # the last user session (module-systemd-login keeps it alive)
 sed -e "/exit-idle-time/iexit-idle-time=0" -i %{buildroot}%{_sysconfdir}/pulse/daemon.conf
-
 
 # (tpg) enable pulseaudio in userland
 mkdir -p %{buildroot}%{_userunitdir}/sockets.target.wants
