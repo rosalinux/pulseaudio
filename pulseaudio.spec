@@ -308,6 +308,11 @@ echo "clean:" > Makefile
 %endif
 
 %build
+%ifarch %{ix86}
+export CC=gg
+export CXX=g++
+%endif
+
 # (tpg) kill rpaths
 %if "%{_libdir}" != "/usr/lib"
 sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
