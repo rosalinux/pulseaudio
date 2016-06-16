@@ -1,7 +1,8 @@
-diff -urN pulseaudio-5.0/configure.ac pulseaudio-5.0-patched/configure.ac
---- pulseaudio-5.0/configure.ac	2014-02-15 19:33:32.000000000 +1100
-+++ pulseaudio-5.0-patched/configure.ac	2014-06-23 15:16:26.000000000 +1100
-@@ -1086,7 +1086,9 @@
+diff --git a/configure.ac b/configure.ac
+index 4edc8e0..648ad77 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1162,7 +1162,9 @@ AS_IF([test "x$with_fftw" != "xno"],
  AS_IF([test "x$with_fftw" = "xyes" && test "x$HAVE_FFTW" = "x0"],
      [AC_MSG_ERROR([*** FFTW support not found])])
  
@@ -11,11 +12,12 @@ diff -urN pulseaudio-5.0/configure.ac pulseaudio-5.0-patched/configure.ac
  
  #### speex (optional) ####
  
-diff -urN pulseaudio-5.0/src/daemon/default.pa.in pulseaudio-5.0-patched/src/daemon/default.pa.in
---- pulseaudio-5.0/src/daemon/default.pa.in	2014-01-24 05:57:55.000000000 +1100
-+++ pulseaudio-5.0-patched/src/daemon/default.pa.in	2014-06-23 15:05:10.702996828 +1100
-@@ -189,6 +189,19 @@
- #.endif
+diff --git a/src/daemon/default.pa.in b/src/daemon/default.pa.in
+index 7a68653..4fd192e 100755
+--- a/src/daemon/default.pa.in
++++ b/src/daemon/default.pa.in
+@@ -161,6 +161,19 @@ load-module module-filter-heuristics
+ load-module module-filter-apply
  ])dnl
  
 +ifelse(@HAVE_DBUS@, 1, [dnl

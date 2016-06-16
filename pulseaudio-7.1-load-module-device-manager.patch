@@ -1,7 +1,8 @@
-diff -urN pulseaudio-7.1/src/daemon/default.pa.in pulseaudio-7.1-patched/src/daemon/default.pa.in
---- pulseaudio-7.1/src/daemon/default.pa.in	2015-11-17 16:20:44.762841506 +1000
-+++ pulseaudio-7.1-patched/src/daemon/default.pa.in	2015-11-17 16:23:48.291849858 +1000
-@@ -200,6 +200,10 @@
+diff --git a/src/daemon/default.pa.in b/src/daemon/default.pa.in
+index 4fd192e..4b58565 100755
+--- a/src/daemon/default.pa.in
++++ b/src/daemon/default.pa.in
+@@ -173,6 +173,10 @@ load-module module-equalizer-sink
  .endif
  ])dnl
  

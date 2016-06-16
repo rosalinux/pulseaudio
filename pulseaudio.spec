@@ -15,7 +15,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 8.0
+%define apiver 8.99
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -25,8 +25,8 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	8.0
-Release:	4
+Version:	8.99.2
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -40,7 +40,6 @@ Source4:	%{name}.svg
 # Load more modules if they are available
 Patch0:		pulseaudio-5.0-defaults.patch
 Patch1:		pulseaudio-6.0-kde-delay.patch
-#Patch2:		pulseaudio-7.0-localedir.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
