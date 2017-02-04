@@ -428,6 +428,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/%{name}/libpulsecore-%{apiver}.so
 %{_libdir}/%{name}/libpulsecommon-%{apiver}.so
 %dir %{_libdir}/pulse-%{apiver}/modules/
+%{_libdir}/pulse-%{apiver}/modules/module-allow-passthrough.so
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
 %{_libdir}/pulse-%{apiver}/modules/liboss-util.so
@@ -580,10 +581,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %files module-equalizer
 %{_bindir}/qpaeq
 %{_libdir}/pulse-%{apiver}/modules/module-equalizer-sink.so
-
-%ifarch %{ix86} x86_64 ia64
-%{_libdir}/pulse-%{apiver}/modules/module-xenpv-sink.so
-%endif
 
 %files utils
 %{_datadir}/bash-completion/completions/p*
