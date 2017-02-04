@@ -307,10 +307,12 @@ echo "clean:" > Makefile
 %endif
 
 %build
-%ifarch %{ix86}
+# (tpg) build with gcc because of introduced VLAIS
+# https://bugs.freedesktop.org/show_bug.cgi?id=99458
+#ifarch %{ix86}
 export CC=gcc
 export CXX=g++
-%endif
+#endif
 
 # (tpg) kill rpaths
 %if "%{_libdir}" != "/usr/lib"
