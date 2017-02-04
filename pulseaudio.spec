@@ -15,7 +15,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 9.0
+%define apiver 10.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -25,7 +25,7 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	9.0
+Version:	10.0
 Release:	1
 License:	LGPLv2+
 Group:		Sound
@@ -307,10 +307,12 @@ echo "clean:" > Makefile
 %endif
 
 %build
-%ifarch %{ix86}
+# (tpg) build with gcc because of introduced VLAIS
+# https://bugs.freedesktop.org/show_bug.cgi?id=99458
+#ifarch %{ix86}
 export CC=gcc
 export CXX=g++
-%endif
+#endif
 
 # (tpg) kill rpaths
 %if "%{_libdir}" != "/usr/lib"
