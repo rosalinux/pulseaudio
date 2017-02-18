@@ -43,7 +43,8 @@ Patch1:		pulseaudio-6.0-kde-delay.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-
+# (tpg) fix build with LLVM/clang https://bugs.freedesktop.org/show_bug.cgi?id=99458
+Patch502:	pulseaudio-discuss-iochannel-don-t-use-variable-length-array-in-union.patch
 BuildRequires:	doxygen
 BuildRequires:	imagemagick
 BuildRequires:	intltool
@@ -307,13 +308,6 @@ echo "clean:" > Makefile
 %endif
 
 %build
-# (tpg) build with gcc because of introduced VLAIS
-# https://bugs.freedesktop.org/show_bug.cgi?id=99458
-#ifarch %{ix86}
-export CC=gcc
-export CXX=g++
-#endif
-
 # (tpg) kill rpaths
 %if "%{_libdir}" != "/usr/lib"
 sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
