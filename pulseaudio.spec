@@ -15,7 +15,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 10.0
+%define apiver 11.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -25,8 +25,8 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	10.0
-Release:	2
+Version:	11.0
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -43,8 +43,6 @@ Patch1:		pulseaudio-6.0-kde-delay.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-# (tpg) fix build with LLVM/clang https://bugs.freedesktop.org/show_bug.cgi?id=99458
-Patch502:	pulseaudio-discuss-iochannel-don-t-use-variable-length-array-in-union.patch
 BuildRequires:	doxygen
 BuildRequires:	imagemagick
 BuildRequires:	intltool
