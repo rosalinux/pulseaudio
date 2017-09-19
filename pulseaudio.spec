@@ -15,7 +15,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 11.0
+%define apiver 11.1
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
@@ -25,7 +25,7 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	11.0
+Version:	11.1
 Release:	1
 License:	LGPLv2+
 Group:		Sound
