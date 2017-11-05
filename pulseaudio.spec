@@ -26,7 +26,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	11.1
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -370,6 +370,7 @@ ln -sf %{_userunitdir}/pulseaudio.socket %{buildroot}%{_userunitdir}/sockets.tar
 
 %post
 ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %{_sysconfdir}/pulse/daemon.conf.rpmnew
+%systemd_user_post pulseaudio.socket
 
 %post client-config
 %{_sbindir}/update-alternatives \
