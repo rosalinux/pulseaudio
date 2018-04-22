@@ -26,7 +26,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	11.1
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -42,10 +42,11 @@ Patch0:		pulseaudio-5.0-defaults.patch
 Patch1:		pulseaudio-6.0-kde-delay.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
+Patch4:		pulseaudio-11.1-glibc-2.27.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 BuildRequires:	doxygen
 BuildRequires:	imagemagick
-BuildRequires:	intltool
+BuildRequires:	intltool >= 0.51.0
 BuildRequires:	libtool
 BuildRequires:	cap-devel
 BuildRequires:	gettext-devel
@@ -313,6 +314,7 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 
 %configure \
         --disable-static \
+	--with-systemduserunitdir=%{_userunitdir} \
         --enable-x11 \
 %ifarch %{armx}
 	--disable-neon-opt \
