@@ -54,7 +54,7 @@ BuildRequires:	libatomic_ops-devel
 BuildRequires:	libtool-devel
 BuildRequires:	wrap-devel
 BuildRequires:	pkgconfig(alsa)
-BuildRequires:	pkgconfig(avahi-client)
+BuildRequires:	pkgconfig(avahi-client) avahi-common-devel
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(gconf-2.0)
