@@ -26,7 +26,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	11.1
-Release:	3
+Release:	4
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -164,8 +164,8 @@ Group:		System/Libraries
 #             pulseaudio cannot be disabled by default
 Suggests:	%{mklibname alsa-plugins}-pulseaudio
 Requires(post):	ccp
-Requires(post):	update-alternatives
-Requires(postun):	update-alternatives
+Requires(post):	chkconfig
+Requires(postun):	chkconfig
 Conflicts:	%{name} < 0.9.16-0.20090816.1
 # (cg) Adding the obsoletes here as this package is almost always installed
 #      and doing it in task-pulseaudio would cause it to be installed when not needed.
