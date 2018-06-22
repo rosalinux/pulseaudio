@@ -42,7 +42,6 @@ Patch0:		pulseaudio-5.0-defaults.patch
 Patch1:		pulseaudio-6.0-kde-delay.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
-Patch4:		pulseaudio-11.1-glibc-2.27.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 BuildRequires:	doxygen
 BuildRequires:	imagemagick
