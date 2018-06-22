@@ -92,7 +92,7 @@ BuildRequires:	pkgconfig(bluez)
 %ifarch %{ix86} x86_64 ia64
 BuildRequires:	xen-devel
 %endif
-%rename:	%{name}-module-gconf
+%rename		%{name}-module-gconf
 
 %rename		polypaudio
 # (cg) Just incase people backport, require specific udev
