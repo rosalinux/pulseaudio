@@ -64,7 +64,7 @@ BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(json-c)
 BuildRequires:	pkgconfig(libasyncns)
 BuildRequires:	pkgconfig(liblircclient0)
-BuildRequires:	pkgconfig(webrtc-audio-processing)
+BuildRequires:	pkgconfig(webrtc-audio-processing) >= 0.2
 BuildRequires:	pkgconfig(sbc)
 BuildRequires:	pkgconfig(soxr)
 # (cg) Needed for airtunes
@@ -88,15 +88,8 @@ BuildRequires:	pkgconfig(bash-completion)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
 %endif
-
-%ifarch %{ix86} x86_64 ia64
-BuildRequires:	xen-devel
-%endif
-%rename		pulseaudio-module-gconf
-
+%rename		pulseaudio-module-xen
 %rename		polypaudio
-# (cg) Just incase people backport, require specific udev
-Requires:	udev >= 143
 Requires:	rtkit
 Requires(post):	ccp
 Requires(post):	rpm-helper
@@ -198,6 +191,14 @@ Obsoletes:	%mklibname -d %{name} %{major}
 Headers and libraries for developing applications that can communicate with
 a PulseAudio sound server.
 
+%package module-gsettings
+Summary:	Gsettings support for the PulseAudio sound server
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+%rename		pulseaudio-module-gconf
+
+%description module-gsettings
+GSettings configuration backend for the PulseAudio sound server.
+
 %package esound-compat
 Summary:	PulseAudio EsounD daemon compatibility script
 Group:		Sound
@@ -253,16 +254,6 @@ Requires:	%{name} = %{version}-%{release}
 %description module-jack
 JACK sink and source modules for the PulseAudio sound server.
 
-%ifarch %{ix86} x86_64 ia64
-%package module-xen
-Summary:	Xen guest support for the PulseAudio sound server
-Group:		Sound/Mixers
-Requires:	%{name} = %{version}-%{release}
-
-%description module-xen
-Xen guest support for the PulseAudio sound server.
-%endif
-
 %package module-equalizer
 Summary:	Equalizer support for the PulseAudio sound server
 Group:		Sound
@@ -308,7 +299,11 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %configure \
         --disable-static \
 	--with-systemduserunitdir=%{_userunitdir} \
+	--disable-oss-output \
+	--enable-webrtc-aec \
         --enable-x11 \
+	--enable-gconf \
+	--enable-gsettings \
 %ifarch %{armx}
 	--disable-neon-opt \
 %endif
@@ -419,7 +414,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/pulse-%{apiver}/modules/module-allow-passthrough.so
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
-%{_libdir}/pulse-%{apiver}/modules/liboss-util.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-cli.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-esound.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-http.so
@@ -428,6 +422,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/pulse-%{apiver}/modules/libraop.so
 %{_libdir}/pulse-%{apiver}/modules/librtp.so
 %{_libdir}/pulse-%{apiver}/modules/libwebrtc-util.so
+%{_libdir}/pulse-%{apiver}/modules/module-always-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-card.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-source.so
@@ -463,7 +458,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/pulse-%{apiver}/modules/module-native-protocol-unix.so
 %{_libdir}/pulse-%{apiver}/modules/module-null-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-null-source.so
-%{_libdir}/pulse-%{apiver}/modules/module-oss.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-pipe-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-raop-sink.so
@@ -520,6 +514,12 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_datadir}/vala/vapi/libpulse-mainloop-glib.vapi
 %{_datadir}/vala/vapi/libpulse-simple.deps
 %{_datadir}/vala/vapi/libpulse-simple.vapi
+
+%files module-gsettings
+%{_libdir}/pulse-%{apiver}/modules/module-gsettings.so
+%{_libexecdir}/pulse/gsettings-helper
+%{_datadir}/GConf/gsettings/pulseaudio.convert
+%{_datadir}/glib-2.0/schemas/org.freedesktop.pulseaudio.gschema.xml
 
 %files esound-compat
 %config(noreplace) %{_sysconfdir}/esd.conf
