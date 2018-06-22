@@ -57,6 +57,7 @@ BuildRequires:	pkgconfig(avahi-client) avahi-common-devel
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(gconf-2.0)
+BuildRequires:	pkgconfig(gtk-3.0)
 BuildRequires:	pkgconfig(gio-2.0)
 BuildRequires:	pkgconfig(ice)
 BuildRequires:	pkgconfig(jack)
