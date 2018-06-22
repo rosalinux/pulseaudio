@@ -92,6 +92,7 @@ BuildRequires:	pkgconfig(bluez)
 %ifarch %{ix86} x86_64 ia64
 BuildRequires:	xen-devel
 %endif
+%rename:	%{name}-module-gconf
 
 %rename		polypaudio
 # (cg) Just incase people backport, require specific udev
@@ -261,14 +262,6 @@ Requires:	%{name} = %{version}-%{release}
 %description module-xen
 Xen guest support for the PulseAudio sound server.
 %endif
-
-%package module-gconf
-Summary:	GConf support for the PulseAudio sound server
-Group:		Sound
-Requires:	%{name} = %{version}-%{release}
-
-%description module-gconf
-GConf configuration backend for the PulseAudio sound server.
 
 %package module-equalizer
 Summary:	Equalizer support for the PulseAudio sound server
@@ -567,11 +560,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/pulse-%{apiver}/modules/module-jack-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-jack-source.so
 %{_libdir}/pulse-%{apiver}/modules/module-jackdbus-detect.so
-
-%files module-gconf
-%{_libdir}/pulse-%{apiver}/modules/module-gconf.so
-%dir %{_libexecdir}/pulse/
-%{_libexecdir}/pulse/gconf-helper
 
 %files module-equalizer
 %{_bindir}/qpaeq
