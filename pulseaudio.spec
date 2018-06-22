@@ -15,7 +15,7 @@
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 11.1
+%define apiver 12.0
 
 # Library names
 %define	libname	%mklibname %{name} %{major}
