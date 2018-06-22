@@ -191,10 +191,17 @@ Obsoletes:	%mklibname -d %{name} %{major}
 Headers and libraries for developing applications that can communicate with
 a PulseAudio sound server.
 
+%package module-gconf
+Summary:	GConf support for the PulseAudio sound server
+Group:		Sound
+Requires:	%{name} = %{version}-%{release}
+
+%description module-gconf
+GConf configuration backend for the PulseAudio sound server.
+
 %package module-gsettings
 Summary:	Gsettings support for the PulseAudio sound server
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-%rename		pulseaudio-module-gconf
 
 %description module-gsettings
 GSettings configuration backend for the PulseAudio sound server.
@@ -514,6 +521,11 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_datadir}/vala/vapi/libpulse-mainloop-glib.vapi
 %{_datadir}/vala/vapi/libpulse-simple.deps
 %{_datadir}/vala/vapi/libpulse-simple.vapi
+
+%files module-gconf
+%{_libdir}/pulse-%{apiver}/modules/module-gconf.so
+%dir %{_libexecdir}/pulse/
+%{_libexecdir}/pulse/gconf-helper
 
 %files module-gsettings
 %{_libdir}/pulse-%{apiver}/modules/module-gsettings.so
