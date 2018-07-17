@@ -25,8 +25,8 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	12.0
-Release:	2
+Version:	12.2
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
