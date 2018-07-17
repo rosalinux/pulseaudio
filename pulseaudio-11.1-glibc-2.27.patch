@@ -1,0 +1,22 @@
+diff -up pulseaudio-11.1/src/pulsecore/memfd-wrappers.h.omv~ pulseaudio-11.1/src/pulsecore/memfd-wrappers.h
+--- pulseaudio-11.1/src/pulsecore/memfd-wrappers.h.omv~	2018-04-22 23:38:14.189076444 +0200
++++ pulseaudio-11.1/src/pulsecore/memfd-wrappers.h	2018-04-22 23:38:25.150008632 +0200
+@@ -25,18 +25,6 @@
+ #include <sys/syscall.h>
+ #include <fcntl.h>
+ 
+-/*
+- * No glibc wrappers exist for memfd_create(2), so provide our own.
+- *
+- * Also define memfd fcntl sealing macros. While they are already
+- * defined in the kernel header file <linux/fcntl.h>, that file as
+- * a whole conflicts with the original glibc header <fnctl.h>.
+- */
+-
+-static inline int memfd_create(const char *name, unsigned int flags) {
+-    return syscall(SYS_memfd_create, name, flags);
+-}
+-
+ /* memfd_create(2) flags */
+ 
+ #ifndef MFD_CLOEXEC
