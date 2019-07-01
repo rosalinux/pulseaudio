@@ -11,6 +11,7 @@
 %define _disable_ld_no_undefined 1
 %define _disable_ld_as_needed 1
 %global __requires_exclude devel\\(libpulsecommon
+%global optflags %{optflags} -O3
 
 # Majors
 %define major 0
@@ -26,7 +27,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	12.2
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -53,10 +54,10 @@ BuildRequires:	libatomic_ops-devel
 BuildRequires:	libtool-devel
 BuildRequires:	wrap-devel
 BuildRequires:	pkgconfig(alsa)
-BuildRequires:	pkgconfig(avahi-client) avahi-common-devel
+BuildRequires:	pkgconfig(avahi-client)
+BuildRequires:	avahi-common-devel
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(fftw3)
-BuildRequires:	pkgconfig(gconf-2.0)
 BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(gio-2.0)
 BuildRequires:	pkgconfig(ice)
@@ -191,17 +192,10 @@ Obsoletes:	%mklibname -d %{name} %{major}
 Headers and libraries for developing applications that can communicate with
 a PulseAudio sound server.
 
-%package module-gconf
-Summary:	GConf support for the PulseAudio sound server
-Group:		Sound
-Requires:	%{name} = %{version}-%{release}
-
-%description module-gconf
-GConf configuration backend for the PulseAudio sound server.
-
 %package module-gsettings
 Summary:	Gsettings support for the PulseAudio sound server
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{EVRD}
+%rename	%{name}-module-gconf
 
 %description module-gsettings
 GSettings configuration backend for the PulseAudio sound server.
@@ -209,7 +203,7 @@ GSettings configuration backend for the PulseAudio sound server.
 %package esound-compat
 Summary:	PulseAudio EsounD daemon compatibility script
 Group:		Sound
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{EVRD}
 %rename		esound
 %rename		esound-daemon
 
@@ -220,7 +214,7 @@ and start PulseAudio with EsounD protocol modules.
 %package module-lirc
 Summary:	LIRC support for the PulseAudio sound server
 Group:		Sound
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{vEVRD}
 
 %description module-lirc
 LIRC volume control module for the PulseAudio sound server.
@@ -229,7 +223,7 @@ LIRC volume control module for the PulseAudio sound server.
 %package module-bluetooth
 Summary:	Bluetooth support for the PulseAudio sound server
 Group:		Sound
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{EVRD}
 
 %description module-bluetooth
 Bluetooth modules for the PulseAudio sound server to provide support
@@ -239,8 +233,8 @@ for headsets and proximity detection.
 %package module-x11
 Summary:	X11 support for the PulseAudio sound server
 Group:		Sound
-Requires:	%{name} = %{version}-%{release}
-Requires:	%{name}-utils = %{version}-%{release}
+Requires:	%{name} = %{EVRD}
+Requires:	%{name}-utils = %{EVRD}
 
 %description module-x11
 X11 bell and security modules for the PulseAudio sound server.
@@ -248,7 +242,7 @@ X11 bell and security modules for the PulseAudio sound server.
 %package module-zeroconf
 Summary:	Zeroconf support for the PulseAudio sound server
 Group:		Sound
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{EVRD}
 
 %description module-zeroconf
 Zeroconf publishing module for the PulseAudio sound server.
@@ -256,7 +250,7 @@ Zeroconf publishing module for the PulseAudio sound server.
 %package module-jack
 Summary:	JACK support for the PulseAudio sound server
 Group:		Sound
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{EVRD}
 
 %description module-jack
 JACK sink and source modules for the PulseAudio sound server.
@@ -264,7 +258,7 @@ JACK sink and source modules for the PulseAudio sound server.
 %package module-equalizer
 Summary:	Equalizer support for the PulseAudio sound server
 Group:		Sound
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{EVRD}
 
 %description module-equalizer
 Equalizer support and GUI for the PulseAudio sound server.
@@ -277,8 +271,7 @@ Group:		Sound
 This package contains command line utilities for the PulseAudio sound server.
 
 %prep
-%setup -q -n %{name}-%{version}%{?git:-%{fullgit}}
-%apply_patches
+%autosetup -n %{name}-%{version}%{?git:-%{fullgit}} -p1
 
 # (cg) If autoconf is retriggered (which can happen automatically) we need this file.
 cat >git-version-gen <<EOF
@@ -309,7 +302,7 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 	--disable-oss-output \
 	--enable-webrtc-aec \
         --enable-x11 \
-	--enable-gconf \
+	--disable-gconf \
 	--enable-gsettings \
 %ifarch %{armx}
 	--disable-neon-opt \
@@ -319,11 +312,11 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %endif
 	--disable-bluez4
 
-%make
+%make_build
 make doxygen
 
 %install
-%makeinstall_std
+%make_install
 
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -D -m 0755 %{SOURCE3} %{buildroot}%{_sysconfdir}/
@@ -521,11 +514,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_datadir}/vala/vapi/libpulse-mainloop-glib.vapi
 %{_datadir}/vala/vapi/libpulse-simple.deps
 %{_datadir}/vala/vapi/libpulse-simple.vapi
-
-%files module-gconf
-%{_libdir}/pulse-%{apiver}/modules/module-gconf.so
-%dir %{_libexecdir}/pulse/
-%{_libexecdir}/pulse/gconf-helper
 
 %files module-gsettings
 %{_libdir}/pulse-%{apiver}/modules/module-gsettings.so
