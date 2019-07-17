@@ -9,9 +9,9 @@
 # Further issues in some test apps (maybe more) require that disabling
 # as-needed is also required.
 %define _disable_ld_no_undefined 1
-%define _disable_ld_as_needed 1
 %global __requires_exclude devel\\(libpulsecommon
-%global optflags %{optflags} -O3
+%global optflags %{optflags} -O3-fuse-ld=ld.bfd
+%global ldflags %{ldflags} -fuse-ld=ld.bfd
 
 # Majors
 %define major 0
@@ -19,8 +19,8 @@
 %define apiver 12.2
 
 # Library names
-%define	libname	%mklibname %{name} %{major}
-%define	devname	%mklibname -d %{name}
+%define libname %mklibname %{name} %{major}
+%define devname %mklibname -d %{name}
 
 %define glib2libname %mklibname pulseglib2 %{glib2major}
 
@@ -176,7 +176,7 @@ wishes to interface with a PulseAudio sound server.
 Summary:	GLIB 2.x bindings for PulseAudio clients
 Group:		System/Libraries
 
-%description -n	%{glib2libname}
+%description -n %{glib2libname}
 This package contains bindings to integrate the PulseAudio client library with
 a GLIB 2.x based application.
 
@@ -188,7 +188,7 @@ Requires:	%{glib2libname} = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	%mklibname -d %{name} %{major}
 
-%description -n	%{devname}
+%description -n %{devname}
 Headers and libraries for developing applications that can communicate with
 a PulseAudio sound server.
 
@@ -297,11 +297,11 @@ sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 %endif
 
 %configure \
-        --disable-static \
+	--disable-static \
 	--with-systemduserunitdir=%{_userunitdir} \
 	--disable-oss-output \
 	--enable-webrtc-aec \
-        --enable-x11 \
+	--enable-x11 \
 	--disable-gconf \
 	--enable-gsettings \
 %ifarch %{armx}
