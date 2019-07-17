@@ -10,7 +10,7 @@
 # as-needed is also required.
 %define _disable_ld_no_undefined 1
 %global __requires_exclude devel\\(libpulsecommon
-%global optflags %{optflags} -O3 -fuse-ld=bfd
+%global optflags %{optflags} -O3
 %global ldflags %{ldflags} -fuse-ld=bfd
 
 # Majors
