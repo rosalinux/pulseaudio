@@ -1,0 +1,16 @@
+--- pulseaudio-11.1/src/pulsecore/memfd-wrappers.h~	2016-08-23 12:50:11.000000000 +0000
++++ pulseaudio-11.1/src/pulsecore/memfd-wrappers.h	2018-04-16 01:31:09.834575440 +0000
+@@ -32,11 +32,11 @@
+  * defined in the kernel header file <linux/fcntl.h>, that file as
+  * a whole conflicts with the original glibc header <fnctl.h>.
+  */
+-
++/*
+ static inline int memfd_create(const char *name, unsigned int flags) {
+     return syscall(SYS_memfd_create, name, flags);
+ }
+-
++*/
+ /* memfd_create(2) flags */
+ 
+ #ifndef MFD_CLOEXEC

@@ -27,7 +27,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	12.2
-Release:	3
+Release:	4
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -44,6 +44,10 @@ Patch1:		pulseaudio-6.0-kde-delay.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
+Patch502:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/0002-alsa-Fix-inclusion-of-use-case.h.patch
+Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/lessfence.patch
+Patch504:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/memfd.patch
+
 BuildRequires:	doxygen
 BuildRequires:	imagemagick
 BuildRequires:	intltool >= 0.51.0
