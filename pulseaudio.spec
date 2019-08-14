@@ -218,7 +218,7 @@ and start PulseAudio with EsounD protocol modules.
 %package module-lirc
 Summary:	LIRC support for the PulseAudio sound server
 Group:		Sound
-Requires:	%{name} = %{vEVRD}
+Requires:	%{name} = %{EVRD}
 
 %description module-lirc
 LIRC volume control module for the PulseAudio sound server.
