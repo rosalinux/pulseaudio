@@ -26,8 +26,8 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	12.2
-Release:	4
+Version:	13.0
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -47,7 +47,8 @@ Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
 Patch502:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/0002-alsa-Fix-inclusion-of-use-case.h.patch
 Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/lessfence.patch
 Patch504:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/memfd.patch
-
+BuildRequires:	meson
+BuildRequires:	ninja
 BuildRequires:	doxygen
 BuildRequires:	imagemagick
 BuildRequires:	intltool >= 0.51.0
@@ -277,50 +278,12 @@ This package contains command line utilities for the PulseAudio sound server.
 %prep
 %autosetup -n %{name}-%{version}%{?git:-%{fullgit}} -p1
 
-# (cg) If autoconf is retriggered (which can happen automatically) we need this file.
-cat >git-version-gen <<EOF
-#!/bin/bash
-echo -n %{version}.0-%{release}
-EOF
-chmod a+x git-version-gen
-
-libtoolize --copy --force
-autopoint --force
-autoreconf --force --install --verbose
-intltoolize --automake --copy --force
-
-%if %{?git}0
-echo "clean:" > Makefile
-./bootstrap.sh -V
-%endif
-
 %build
-# (tpg) kill rpaths
-%if "%{_libdir}" != "/usr/lib"
-sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
-%endif
-
-%configure \
-	--disable-static \
-	--with-systemduserunitdir=%{_userunitdir} \
-	--disable-oss-output \
-	--enable-webrtc-aec \
-	--enable-x11 \
-	--disable-gconf \
-	--enable-gsettings \
-%ifarch %{armx}
-	--disable-neon-opt \
-%endif
-%if !%{with bootstrap}
-	--enable-bluez5 \
-%endif
-	--disable-bluez4
-
-%make_build
-make doxygen
+%meson -GNinja
+%ninja_build
 
 %install
-%make_install
+%ninja_install
 
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -D -m 0755 %{SOURCE3} %{buildroot}%{_sysconfdir}/
