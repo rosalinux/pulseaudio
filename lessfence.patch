@@ -1,7 +1,8 @@
---- pulseaudio-9.0/src/pulsecore/atomic.h~	2016-06-01 10:50:54.000000000 +0000
-+++ pulseaudio-9.0/src/pulsecore/atomic.h	2016-12-31 16:24:53.882627380 +0000
-@@ -51,13 +51,13 @@
- #define PA_ATOMIC_INIT(v) { .value = (v) }
+diff -up pulseaudio-13.0/src/pulsecore/atomic.h.5~ pulseaudio-13.0/src/pulsecore/atomic.h
+--- pulseaudio-13.0/src/pulsecore/atomic.h.5~	2019-09-16 23:05:46.031493339 +0200
++++ pulseaudio-13.0/src/pulsecore/atomic.h	2019-09-16 23:06:21.983865077 +0200
+@@ -65,13 +65,13 @@ static inline void pa_atomic_store(pa_at
+ #else
  
  static inline int pa_atomic_load(const pa_atomic_t *a) {
 -    __sync_synchronize();
@@ -15,9 +16,9 @@
 +    asm volatile("": : :"memory");
  }
  
- /* Returns the previously set value */
-@@ -92,13 +92,13 @@
- #define PA_ATOMIC_PTR_INIT(v) { .value = (long) (v) }
+ #endif
+@@ -123,13 +123,13 @@ static inline void pa_atomic_ptr_store(p
+ #else
  
  static inline void* pa_atomic_ptr_load(const pa_atomic_ptr_t *a) {
 -    __sync_synchronize();
@@ -31,4 +32,4 @@
 +    asm volatile("": : :"memory");
  }
  
- static inline bool pa_atomic_ptr_cmpxchg(pa_atomic_ptr_t *a, void *old_p, void* new_p) {
+ #endif

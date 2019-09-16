@@ -10,13 +10,13 @@
 # as-needed is also required.
 %define _disable_ld_no_undefined 1
 %global __requires_exclude devel\\(libpulsecommon
-%global optflags %{optflags} -O3
+%global optflags %{optflags} -Ofast
 %global ldflags %{ldflags} -fuse-ld=bfd
 
 # Majors
 %define major 0
 %define glib2major 0
-%define apiver 12.2
+%define apiver %(echo %{version} |cut -d. -f1-2)
 
 # Library names
 %define libname %mklibname %{name} %{major}
@@ -34,19 +34,15 @@ Url:		http://pulseaudio.org/
 #Source0:	%{name}-%{version}%{?git:-%{git}}.tar.xz
 Source0:	http://freedesktop.org/software/pulseaudio/releases/%{name}-%{version}%{?git:-%{fullgit}}.tar.xz
 Source1:	%{name}.sysconfig
-# (cg) We have to ship an esd.conf file with auto_spawn=0 to stop
-# libesound from.... you guessed it... auto spawning.
-Source3:	esd.conf
 Source4:	%{name}.svg
 # Load more modules if they are available
 Patch0:		pulseaudio-5.0-defaults.patch
 Patch1:		pulseaudio-6.0-kde-delay.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
-Patch501:	0501-Some-customisations-to-esdcompat-in-order-to-adhere-.patch
-Patch502:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/0002-alsa-Fix-inclusion-of-use-case.h.patch
 Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/lessfence.patch
 Patch504:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/memfd.patch
+Patch505:	pulseaudio-13.0-clang.patch
 BuildRequires:	meson
 BuildRequires:	ninja
 BuildRequires:	doxygen
@@ -205,17 +201,6 @@ Requires:	%{name}%{?_isa} = %{EVRD}
 %description module-gsettings
 GSettings configuration backend for the PulseAudio sound server.
 
-%package esound-compat
-Summary:	PulseAudio EsounD daemon compatibility script
-Group:		Sound
-Requires:	%{name} = %{EVRD}
-%rename		esound
-%rename		esound-daemon
-
-%description esound-compat
-A compatibility script that allows applications to call /usr/bin/esd
-and start PulseAudio with EsounD protocol modules.
-
 %package module-lirc
 Summary:	LIRC support for the PulseAudio sound server
 Group:		Sound
@@ -277,16 +262,15 @@ This package contains command line utilities for the PulseAudio sound server.
 
 %prep
 %autosetup -n %{name}-%{version}%{?git:-%{fullgit}} -p1
+%meson
 
 %build
-%meson -GNinja
-%ninja_build
+%ninja_build -C build
 
 %install
-%ninja_install
+%ninja_install -C build
 
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -D -m 0755 %{SOURCE3} %{buildroot}%{_sysconfdir}/
 install -D -m 0644 %{SOURCE4} %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/devices
@@ -296,9 +280,6 @@ for size in 16 22 32 48 64 128; do
   convert -geometry ${size}x${size} %{SOURCE4} %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
   ln -s ../apps/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/devices/audio-backend-pulseaudio.png
 done
-
-# Fix esd
-ln -s esdcompat %{buildroot}%{_bindir}/esd
 
 # (cg) For sound profile support
 mkdir -p %{buildroot}%{_sysconfdir}/sound/profiles/pulse
@@ -354,6 +335,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %{_bindir}/%{name}
+%{_bindir}/pa-info
 %{_mandir}/man1/%{name}.1.*
 %{_mandir}/man5/pulse-client.conf.5.*
 %{_mandir}/man5/pulse-daemon.conf.5.*
@@ -380,9 +362,9 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/module-allow-passthrough.so
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
+%{_libdir}/pulse-%{apiver}/modules/liboss-util.so
 %{_libdir}/pulse-%{apiver}/modules/libcli.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-cli.so
-%{_libdir}/pulse-%{apiver}/modules/libprotocol-esound.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-http.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-native.so
 %{_libdir}/pulse-%{apiver}/modules/libprotocol-simple.so
@@ -393,6 +375,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-card.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-alsa-source.so
+%{_libdir}/pulse-%{apiver}/modules/module-oss.so
 %{_libdir}/pulse-%{apiver}/modules/module-always-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-augment-properties.so
 %{_libdir}/pulse-%{apiver}/modules/module-card-restore.so
@@ -408,11 +391,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/pulse-%{apiver}/modules/module-device-manager.so
 %{_libdir}/pulse-%{apiver}/modules/module-device-restore.so
 %{_libdir}/pulse-%{apiver}/modules/module-echo-cancel.so
-%{_libdir}/pulse-%{apiver}/modules/module-esound-compat-spawnfd.so
-%{_libdir}/pulse-%{apiver}/modules/module-esound-compat-spawnpid.so
-%{_libdir}/pulse-%{apiver}/modules/module-esound-protocol-tcp.so
-%{_libdir}/pulse-%{apiver}/modules/module-esound-protocol-unix.so
-%{_libdir}/pulse-%{apiver}/modules/module-esound-sink.so
 %{_libdir}/pulse-%{apiver}/modules/module-hal-detect.so
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-tcp.so
 %{_libdir}/pulse-%{apiver}/modules/module-http-protocol-unix.so
@@ -467,7 +445,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/libpulse-mainloop-glib.so.%{glib2major}*
 
 %files -n %{devname}
-%doc doxygen/html
 %{_libdir}/libpulse.so
 %{_libdir}/libpulse-mainloop-glib.so
 %{_libdir}/libpulse-simple.so
@@ -487,12 +464,6 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libexecdir}/pulse/gsettings-helper
 %{_datadir}/GConf/gsettings/pulseaudio.convert
 %{_datadir}/glib-2.0/schemas/org.freedesktop.pulseaudio.gschema.xml
-
-%files esound-compat
-%config(noreplace) %{_sysconfdir}/esd.conf
-%{_bindir}/esdcompat
-%{_bindir}/esd
-%{_mandir}/man1/esdcompat.1.*
 
 %if !%{with bootstrap}
 %files module-bluetooth
