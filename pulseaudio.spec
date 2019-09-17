@@ -44,7 +44,7 @@ Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/le
 Patch504:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/memfd.patch
 Patch505:	pulseaudio-13.0-clang.patch
 BuildRequires:	meson
-BuildRequires:	ninja
+BuildRequires:	cmake
 BuildRequires:	doxygen
 BuildRequires:	imagemagick
 BuildRequires:	intltool >= 0.51.0
