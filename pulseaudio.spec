@@ -54,6 +54,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	libatomic_ops-devel
 BuildRequires:	libtool-devel
 BuildRequires:	wrap-devel
+BuildRequires:	pkgconfig(check)
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(avahi-client)
 BuildRequires:	avahi-common-devel
