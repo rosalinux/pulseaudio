@@ -1,3 +1,10 @@
+# pulseaudio is used by wine and some of its dependencies
+%ifarch %{x86_64}
+%bcond_without compat32
+%else
+%bcond_with compat32
+%endif
+
 %define fullgit f81e3e1d7852c05b4b737ac7dac4db95798f0117
 #define git 0
 
@@ -10,7 +17,8 @@
 # as-needed is also required.
 %define _disable_ld_no_undefined 1
 %global __requires_exclude devel\\(libpulsecommon
-%global optflags %{optflags} -Ofast
+# src/pulsecore/sink-input.c:1508:59: warning: dereferencing type-punned pointer might break strict-aliasing rules
+%global optflags %{optflags} -Ofast -fno-strict-aliasing
 %global ldflags %{ldflags} -fuse-ld=bfd
 
 # Majors
@@ -24,9 +32,13 @@
 
 %define glib2libname %mklibname pulseglib2 %{glib2major}
 
+%define lib32name lib%{name}%{major}
+%define dev32name lib%{name}-devel
+%define glib2lib32name libpulseglib2_%{glib2major}
+
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	13.0
+Version:	13.99.1
 Release:	1
 License:	LGPLv2+
 Group:		Sound
@@ -42,7 +54,6 @@ Patch1:		pulseaudio-6.0-kde-delay.patch
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/lessfence.patch
 Patch504:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/memfd.patch
-Patch505:	pulseaudio-13.0-clang.patch
 BuildRequires:	meson
 BuildRequires:	cmake
 BuildRequires:	doxygen
@@ -51,7 +62,7 @@ BuildRequires:	intltool >= 0.51.0
 BuildRequires:	libtool
 BuildRequires:	cap-devel
 BuildRequires:	gettext-devel
-BuildRequires:	libatomic_ops-devel
+BuildRequires:	pkgconfig(atomic_ops)
 BuildRequires:	libtool-devel
 BuildRequires:	wrap-devel
 BuildRequires:	pkgconfig(check)
@@ -90,6 +101,8 @@ BuildRequires:	pkgconfig(xtst)
 BuildRequires:	pkgconfig(bash-completion)
 %if !%{with bootstrap}
 BuildRequires:	pkgconfig(bluez)
+BuildRequires:	pkgconfig(gstreamer-1.0)
+BuildRequires:	pkgconfig(gstreamer-app-1.0)
 %endif
 %rename		pulseaudio-module-xen
 %rename		polypaudio
@@ -119,6 +132,49 @@ Obsoletes:	%{mklibname pulsecommon 7.1} < 8.0
 Provides:	%{mklibname pulsecommon 7.0} = 8.0
 Provides:	%{mklibname pulsecommon 7.1} = 8.0
 Provides:	%{mklibname pulsecommon 5.0}
+
+%if %{with compat32}
+BuildRequires:	devel(libatomic_ops)
+BuildRequires:	devel(libasound)
+BuildRequires:	devel(libltdl)
+BuildRequires:	devel(libsndfile)
+BuildRequires:	devel(libcheck)
+BuildRequires:	devel(libtdb)
+BuildRequires:	devel(liborc-0.4)
+BuildRequires:	devel(libsoxr)
+BuildRequires:	devel(libxml2)
+BuildRequires:	devel(libxslt)
+BuildRequires:	devel(libXtst)
+BuildRequires:	devel(libdaemon)
+BuildRequires:	devel(libsbc)
+BuildRequires:	devel(libbluetooth)
+BuildRequires:	devel(libfftw3f)
+BuildRequires:	devel(libavahi-client)
+BuildRequires:	devel(libjack)
+BuildRequires:	devel(libspeex)
+BuildRequires:	devel(libspeexdsp)
+BuildRequires:	devel(libdbus-1)
+BuildRequires:	devel(libgio-2.0)
+BuildRequires:	devel(libgobject-2.0)
+BuildRequires:	devel(libffi)
+BuildRequires:	devel(libmount)
+BuildRequires:	devel(libblkid)
+BuildRequires:	devel(libsystemd)
+BuildRequires:	devel(libsamplerate)
+BuildRequires:	devel(libX11-xcb)
+BuildRequires:	devel(libxcb)
+BuildRequires:	devel(libcap)
+BuildRequires:	devel(libXau)
+BuildRequires:	devel(libXdmcp)
+BuildRequires:	devel(libICE)
+BuildRequires:	devel(libSM)
+BuildRequires:	devel(libXtst)
+BuildRequires:	devel(libXi)
+BuildRequires:	devel(libXfixes)
+BuildRequires:	devel(libXext)
+BuildRequires:	devel(libssl)
+BuildRequires:	devel(libudev)
+%endif
 
 %description
 pulseaudio is a sound server for Linux and other Unix like operating
@@ -261,14 +317,60 @@ Group:		Sound
 %description utils
 This package contains command line utilities for the PulseAudio sound server.
 
+%if %{with compat32}
+%package -n %{lib32name}
+Summary:	Libraries for PulseAudio clients (32-bit)
+Group:		System/Libraries
+Requires:	%{name}-client-config
+
+%description -n	%{lib32name}
+This package contains the runtime libraries for any application that wishes
+to interface with a PulseAudio sound server.
+
+%package -n %{glib2lib32name}
+Summary:	GLIB 2.x bindings for PulseAudio clients (32-bit)
+Group:		System/Libraries
+
+%description -n %{glib2lib32name}
+This package contains bindings to integrate the PulseAudio client library with
+a GLIB 2.x based application.
+
+%package -n %{dev32name}
+Summary:	Headers and libraries for PulseAudio client development (32-bit)
+Group:		Development/C
+Requires:	%{devname} = %{version}-%{release}
+Requires:	%{lib32name} = %{version}-%{release}
+Requires:	%{glib2lib32name} = %{version}-%{release}
+
+%description -n %{dev32name}
+Headers and libraries for developing applications that can communicate with
+a PulseAudio sound server.
+%endif
+
 %prep
 %autosetup -n %{name}-%{version}%{?git:-%{fullgit}} -p1
-%meson
+%if %{with compat32}
+%meson32 -Dgtk=disabled \
+	-Dasyncns=disabled \
+	-Dlirc=disabled \
+	-Dwebrtc-aec=disabled \
+	-Dgstreamer=disabled
+%endif
+%meson \
+%if %{with bootstrap}
+	-Dgstreamer=disabled
+%endif
 
 %build
+%if %{with compat32}
+%ninja_build -C build32
+%endif
 %ninja_build -C build
 
 %install
+%if %{with compat32}
+%ninja_install -C build32
+%endif
 %ninja_install -C build
 
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
@@ -524,3 +626,119 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_mandir}/man1/padsp.1.*
 %{_mandir}/man1/paplay.1.*
 %{_mandir}/man1/pasuspender.1.*
+
+%if %{with compat32}
+%files -n %{lib32name}
+%{_prefix}/lib/libpulse.so.%{major}*
+%{_prefix}/lib/libpulse-simple.so.%{major}*
+%dir %{_prefix}/lib/%{name}
+%{_prefix}/lib/%{name}/libpulsedsp.so
+%{_prefix}/lib/%{name}/libpulsecore-%{apiver}.so
+%{_prefix}/lib/%{name}/libpulsecommon-%{apiver}.so
+%dir %{_prefix}/lib/pulse-%{apiver}/modules/
+%{_prefix}/lib/pulse-%{apiver}/modules/module-allow-passthrough.so
+%{_prefix}/lib/pulse-%{apiver}/modules/libalsa-util.so
+%{_prefix}/lib/pulse-%{apiver}/modules/liboss-util.so
+%{_prefix}/lib/pulse-%{apiver}/modules/libcli.so
+%{_prefix}/lib/pulse-%{apiver}/modules/libprotocol-cli.so
+%{_prefix}/lib/pulse-%{apiver}/modules/libprotocol-http.so
+%{_prefix}/lib/pulse-%{apiver}/modules/libprotocol-native.so
+%{_prefix}/lib/pulse-%{apiver}/modules/libprotocol-simple.so
+%{_prefix}/lib/pulse-%{apiver}/modules/libraop.so
+%{_prefix}/lib/pulse-%{apiver}/modules/librtp.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-always-source.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-alsa-card.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-alsa-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-alsa-source.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-oss.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-always-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-augment-properties.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-card-restore.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-cli-protocol-tcp.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-cli-protocol-unix.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-cli.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-combine.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-combine-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-role-cork.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-systemd-login.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-dbus-protocol.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-detect.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-device-manager.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-device-restore.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-echo-cancel.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-hal-detect.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-http-protocol-tcp.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-http-protocol-unix.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-intended-roles.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-loopback.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-match.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-mmkbd-evdev.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-native-protocol-fd.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-native-protocol-tcp.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-native-protocol-unix.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-null-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-null-source.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-pipe-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-pipe-source.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-raop-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-rygel-media-server.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-position-event-sounds.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-rescue-streams.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-rtp-recv.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-rtp-send.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-simple-protocol-tcp.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-simple-protocol-unix.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-sine.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-sine-source.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-tunnel-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-tunnel-source.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-tunnel-sink-new.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-tunnel-source-new.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-udev-detect.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-volume-restore.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-virtual-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-virtual-source.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-stream-restore.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-suspend-on-idle.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-default-device-restore.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-ladspa-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-remap-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-remap-source.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-switch-on-connect.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-filter-apply.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-filter-heuristics.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-virtual-surround-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-switch-on-port-available.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-role-ducking.so
+%{_prefix}/lib/pulse-%{apiver}/modules/libavahi-wrap.so
+%{_prefix}/lib/pulse-%{apiver}/modules/libbluez5-util.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-bluetooth-discover.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-bluetooth-policy.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-bluez5-device.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-bluez5-discover.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-console-kit.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-equalizer-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-gsettings.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-jack-sink.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-jack-source.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-jackdbus-detect.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-raop-discover.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-x11-bell.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-x11-cork-request.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-x11-publish.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-x11-xsmp.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-zeroconf-discover.so
+%{_prefix}/lib/pulse-%{apiver}/modules/module-zeroconf-publish.so
+# FIXME do we need those? (Not all dependencies built for 32-bit so far)
+#{_prefix}/lib/pulse-%{apiver}/modules/libwebrtc-util.so
+
+%files -n %{glib2lib32name}
+%{_prefix}/lib/libpulse-mainloop-glib.so.%{glib2major}*
+
+%files -n %{dev32name}
+%{_prefix}/lib/libpulse.so
+%{_prefix}/lib/libpulse-mainloop-glib.so
+%{_prefix}/lib/libpulse-simple.so
+%{_prefix}/lib/pkgconfig/*.pc
+%{_prefix}/lib/cmake/PulseAudio
+%endif
