@@ -1,0 +1,30 @@
+diff -up pulseaudio-13.99.1/src/pulsecore/core-util.c.omv~ pulseaudio-13.99.1/src/pulsecore/core-util.c
+--- pulseaudio-13.99.1/src/pulsecore/core-util.c.omv~	2020-09-01 04:05:24.959230710 +0000
++++ pulseaudio-13.99.1/src/pulsecore/core-util.c	2020-09-01 04:07:11.052034194 +0000
+@@ -109,9 +109,11 @@
+ #include <sys/personality.h>
+ #endif
+ 
++#if defined(__i386__) || defined(__x86_64__)
+ #ifdef HAVE_CPUID_H
+ #include <cpuid.h>
+ #endif
++#endif
+ 
+ #include <pulse/xmalloc.h>
+ #include <pulse/util.h>
+diff -up pulseaudio-13.99.1/src/pulsecore/cpu-x86.c.omv~ pulseaudio-13.99.1/src/pulsecore/cpu-x86.c
+--- pulseaudio-13.99.1/src/pulsecore/cpu-x86.c.omv~	2020-09-01 04:07:28.696828993 +0000
++++ pulseaudio-13.99.1/src/pulsecore/cpu-x86.c	2020-09-01 04:07:39.249303814 +0000
+@@ -24,9 +24,11 @@
+ 
+ #include <stdint.h>
+ 
++#if defined(__i386__) || defined(__x86_64__)
+ #ifdef HAVE_CPUID_H
+ #include <cpuid.h>
+ #endif
++#endif
+ 
+ #include <pulsecore/log.h>
+ 

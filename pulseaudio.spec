@@ -18,8 +18,11 @@
 %define _disable_ld_no_undefined 1
 %global __requires_exclude devel\\(libpulsecommon
 # src/pulsecore/sink-input.c:1508:59: warning: dereferencing type-punned pointer might break strict-aliasing rules
+%ifarch %{armx}
+%global optflags %{optflags} -fno-strict-aliasing
+%else
 %global optflags %{optflags} -Ofast -fno-strict-aliasing
-%global ldflags %{ldflags} -fuse-ld=bfd
+%endif
 
 # Majors
 %define major 0
@@ -36,10 +39,12 @@
 %define dev32name lib%{name}-devel
 %define glib2lib32name libpulseglib2_%{glib2major}
 
+%global debug_package %{nil}
+
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	13.99.1
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -50,6 +55,7 @@ Source4:	%{name}.svg
 # Load more modules if they are available
 Patch0:		pulseaudio-5.0-defaults.patch
 Patch1:		pulseaudio-6.0-kde-delay.patch
+Patch2:		pulseaudio-13.99.1-non-x86.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/lessfence.patch
@@ -357,6 +363,10 @@ a PulseAudio sound server.
 	-Dgstreamer=disabled
 %endif
 %meson \
+%ifarch %{armx}
+	-Datomic-arm-linux-helpers=true \
+	-Datomic-arm-memory-barrier=true \
+%endif
 %if %{with bootstrap}
 	-Dgstreamer=disabled
 %endif
