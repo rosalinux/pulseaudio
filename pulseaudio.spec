@@ -43,7 +43,7 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	13.99.2
+Version:	13.99.3
 Release:	1
 License:	LGPLv2+
 Group:		Sound
@@ -66,7 +66,7 @@ BuildRequires:	doxygen
 BuildRequires:	imagemagick
 BuildRequires:	intltool >= 0.51.0
 BuildRequires:	libtool
-BuildRequires:	cap-devel
+BuildRequires:	pkgconfig(libcap)
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(atomic_ops)
 BuildRequires:	libtool-devel
