@@ -58,6 +58,7 @@ Patch1:		pulseaudio-6.0-kde-delay.patch
 Patch2:		pulseaudio-13.99.1-non-x86.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
+Patch4:		https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/395.patch
 Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/lessfence.patch
 Patch504:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/memfd.patch
 BuildRequires:	meson
@@ -85,6 +86,7 @@ BuildRequires:	pkgconfig(json-c)
 BuildRequires:	pkgconfig(libasyncns)
 BuildRequires:	pkgconfig(liblircclient0)
 BuildRequires:	pkgconfig(webrtc-audio-processing-1)
+BuildRequires:	cmake(absl)
 BuildRequires:	pkgconfig(sbc)
 BuildRequires:	pkgconfig(soxr)
 # (cg) Needed for airtunes
