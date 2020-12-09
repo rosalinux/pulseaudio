@@ -84,7 +84,7 @@ BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(json-c)
 BuildRequires:	pkgconfig(libasyncns)
 BuildRequires:	pkgconfig(liblircclient0)
-BuildRequires:	pkgconfig(webrtc-audio-processing) >= 0.2
+BuildRequires:	pkgconfig(webrtc-audio-processing-1)
 BuildRequires:	pkgconfig(sbc)
 BuildRequires:	pkgconfig(soxr)
 # (cg) Needed for airtunes
