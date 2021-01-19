@@ -364,6 +364,13 @@ a PulseAudio sound server.
 	-Dwebrtc-aec=disabled \
 	-Dgstreamer=disabled
 %endif
+
+%ifarch %{arm}
+# https://bugs.llvm.org/show_bug.cgi?id=48797
+export CC=gcc
+export CXX=g++
+%endif
+
 %meson \
 %ifarch %{armx}
 	-Datomic-arm-linux-helpers=true \
