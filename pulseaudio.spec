@@ -44,7 +44,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	14.2
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -116,7 +116,7 @@ BuildRequires:	pkgconfig(gstreamer-app-1.0)
 %rename		polypaudio
 Requires:	rtkit
 Requires(post):	ccp
-Requires(post):	rpm-helper
+%systemd_requires
 # (cg) When upgrading from pa < 0.9.7-1 things break due to spec restructure
 Conflicts:	%{libname} < 0.9.7-2
 Obsoletes:	%{mklibname pulsezeroconf 0} < 1.0
@@ -211,7 +211,7 @@ Summary:	Libraries for PulseAudio clients
 Group:		System/Libraries
 Requires:	%{name}-client-config
 
-%description -n	%{libname}
+%description -n %{libname}
 This package contains the runtime libraries for any application that wishes
 to interface with a PulseAudio sound server.
 
@@ -331,7 +331,7 @@ Summary:	Libraries for PulseAudio clients (32-bit)
 Group:		System/Libraries
 Requires:	%{name}-client-config
 
-%description -n	%{lib32name}
+%description -n %{lib32name}
 This package contains the runtime libraries for any application that wishes
 to interface with a PulseAudio sound server.
 
