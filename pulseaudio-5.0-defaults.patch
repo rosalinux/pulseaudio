@@ -1,22 +1,7 @@
-diff --git a/configure.ac b/configure.ac
-index 4edc8e0..648ad77 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -1162,7 +1162,9 @@ AS_IF([test "x$with_fftw" != "xno"],
- AS_IF([test "x$with_fftw" = "xyes" && test "x$HAVE_FFTW" = "x0"],
-     [AC_MSG_ERROR([*** FFTW support not found])])
- 
-+AC_SUBST(HAVE_FFTW)
- AM_CONDITIONAL([HAVE_FFTW], [test "x$HAVE_FFTW" = "x1"])
-+AS_IF([test "x$HAVE_FFTW" = "x1"], AC_DEFINE([HAVE_FFTW], 1, [Have FFTW.]))
- 
- #### speex (optional) ####
- 
-diff --git a/src/daemon/default.pa.in b/src/daemon/default.pa.in
-index 7a68653..4fd192e 100755
---- a/src/daemon/default.pa.in
-+++ b/src/daemon/default.pa.in
-@@ -161,6 +161,19 @@ load-module module-filter-heuristics
+diff -up pulseaudio-14.99.1/src/daemon/default.pa.in.1~ pulseaudio-14.99.1/src/daemon/default.pa.in
+--- pulseaudio-14.99.1/src/daemon/default.pa.in.1~	2021-05-18 20:31:23.278952737 +0200
++++ pulseaudio-14.99.1/src/daemon/default.pa.in	2021-05-18 20:32:34.227534783 +0200
+@@ -165,6 +165,18 @@ load-module module-filter-heuristics
  load-module module-filter-apply
  ])dnl
  
@@ -35,4 +20,3 @@ index 7a68653..4fd192e 100755
  ### Make some devices default
  #set-default-sink output
  #set-default-source input
-+

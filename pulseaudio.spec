@@ -39,12 +39,10 @@
 %define dev32name lib%{name}-devel
 %define glib2lib32name libpulseglib2_%{glib2major}
 
-%global debug_package %{nil}
-
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	14.2
-Release:	2
+Version:	14.99.1
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -362,7 +360,10 @@ a PulseAudio sound server.
 	-Dasyncns=disabled \
 	-Dlirc=disabled \
 	-Dwebrtc-aec=disabled \
-	-Dgstreamer=disabled
+	-Dgstreamer=disabled \
+	-Dsystemd=enabled \
+	-Delogind=disabled \
+	-Dtcpwrap=disabled
 %endif
 
 %ifarch %{arm}
@@ -372,6 +373,8 @@ export CXX=g++
 %endif
 
 %meson \
+	-Dsystemd=enabled \
+	-Delogind=disabled \
 %ifarch %{armx}
 	-Datomic-arm-linux-helpers=true \
 	-Datomic-arm-memory-barrier=true \
@@ -609,6 +612,8 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/pulse-%{apiver}/modules/module-x11-publish.so
 %{_libdir}/pulse-%{apiver}/modules/module-x11-xsmp.so
 %{_sysconfdir}/xdg/autostart/pulseaudio.desktop
+%{_sysconfdir}/xdg/Xwayland-session.d/00-pulseaudio-x11
+%{_prefix}/lib/systemd/user/pulseaudio-x11.service
 
 %files module-zeroconf
 %{_libdir}/pulse-%{apiver}/modules/libavahi-wrap.so

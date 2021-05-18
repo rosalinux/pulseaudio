@@ -1,9 +1,9 @@
-diff -up pulseaudio-13.0/src/daemon/pulseaudio.desktop.in.2~ pulseaudio-13.0/src/daemon/pulseaudio.desktop.in
---- pulseaudio-13.0/src/daemon/pulseaudio.desktop.in.2~	2019-09-16 23:02:47.788169699 +0200
-+++ pulseaudio-13.0/src/daemon/pulseaudio.desktop.in	2019-09-16 23:03:48.731267742 +0200
-@@ -6,4 +6,4 @@ Exec=start-pulseaudio-x11
- Terminal=false
+diff -up pulseaudio-14.99.1/src/daemon/pulseaudio.desktop.in.2~ pulseaudio-14.99.1/src/daemon/pulseaudio.desktop.in
+--- pulseaudio-14.99.1/src/daemon/pulseaudio.desktop.in.2~	2021-05-18 20:35:03.338758242 +0200
++++ pulseaudio-14.99.1/src/daemon/pulseaudio.desktop.in	2021-05-18 20:36:58.242701140 +0200
+@@ -7,4 +7,4 @@ Terminal=false
  Type=Application
  X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-HiddenUnderSystemd=true
 -X-KDE-autostart-phase=1
 +NotShowIn=KDE;

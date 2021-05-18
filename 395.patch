@@ -638,31 +638,6 @@ index ec3ba0689..ed4bb65a5 100644
 GitLab
 
 
-From 547cb7960efd15cd0ef6c817f7066055968928cf Mon Sep 17 00:00:00 2001
-From: Arun Raghavan <arun@asymptotic.io>
-Date: Tue, 20 Oct 2020 16:22:46 -0400
-Subject: [PATCH 3/4] gitignore: Add install/ for local prefixed installs
-
----
- .gitignore | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/.gitignore b/.gitignore
-index 9ec236705..d86eed290 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -26,6 +26,7 @@ cscope.in.out
- cscope.po.out
- pulse-daemon.log
- depcomp
-+install/
- install-sh
- libltdl
- libtool
--- 
-GitLab
-
-
 From b201aa1f90a841df7d1dedad72abc192795de839 Mon Sep 17 00:00:00 2001
 From: Arun Raghavan <arun@asymptotic.io>
 Date: Tue, 20 Oct 2020 17:29:55 -0400
@@ -675,19 +650,6 @@ that.
  meson.build  | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 88a37c1af..54a1229a9 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -1432,7 +1432,7 @@ AS_IF([test "x$enable_webrtc_aec" = "xyes" && test "$HAVE_CXX11" = "0"],
-     [AC_MSG_ERROR([*** webrtc-audio-processing needs C++11 support])])
- 
- AS_IF([test "x$enable_webrtc_aec" != "xno"],
--    [PKG_CHECK_MODULES(WEBRTC, [ webrtc-audio-processing >= 0.2 ], [HAVE_WEBRTC=1], [HAVE_WEBRTC=0])],
-+    [PKG_CHECK_MODULES(WEBRTC, [ webrtc-audio-processing-1 >= 1.0 ], [HAVE_WEBRTC=1], [HAVE_WEBRTC=0])],
-     [HAVE_WEBRTC=0])
- 
- AS_IF([test "x$enable_webrtc_aec" = "xyes" && test "x$HAVE_WEBRTC" = "x0"],
 diff --git a/meson.build b/meson.build
 index 02c4d99fe..ac85f66ac 100644
 --- a/meson.build
