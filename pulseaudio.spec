@@ -362,6 +362,7 @@ a PulseAudio sound server.
 	-Dlirc=disabled \
 	-Dwebrtc-aec=disabled \
 	-Dgstreamer=disabled \
+	-Dbluez5-gstreamer=disabled \
 	-Dsystemd=enabled \
 	-Delogind=disabled \
 	-Dtcpwrap=disabled
