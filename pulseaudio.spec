@@ -70,6 +70,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(atomic_ops)
 BuildRequires:	libtool-devel
 BuildRequires:	wrap-devel
+BuildRequires:	valgrind-devel
 BuildRequires:	pkgconfig(check)
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(avahi-client)
