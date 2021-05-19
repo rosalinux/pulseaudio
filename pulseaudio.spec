@@ -17,12 +17,9 @@
 # as-needed is also required.
 %define _disable_ld_no_undefined 1
 %global __requires_exclude devel\\(libpulsecommon
+
 # src/pulsecore/sink-input.c:1508:59: warning: dereferencing type-punned pointer might break strict-aliasing rules
-%ifarch %{armx}
-%global optflags %{optflags} -fno-strict-aliasing
-%else
-%global optflags %{optflags} -Ofast -fno-strict-aliasing
-%endif
+%global optflags %{optflags} -O3 -fno-strict-aliasing
 
 # Majors
 %define major 0
@@ -42,7 +39,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	14.99.1
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -475,7 +472,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_userunitdir}/sockets.target.wants/pulseaudio.socket
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
-/lib/udev/rules.d/90-pulseaudio.rules
+%{_udevrulesdir}/90-pulseaudio.rules
 
 %files -n %{libname}
 %{_libdir}/libpulse.so.%{major}*
