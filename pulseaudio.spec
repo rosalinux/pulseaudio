@@ -38,8 +38,8 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	14.99.1
-Release:	2
+Version:	14.99.2
+Release:	1
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -54,6 +54,7 @@ Patch2:		pulseaudio-13.99.1-non-x86.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
 Patch4:		https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/395.patch
+Patch5:		https://src.fedoraproject.org/rpms/pulseaudio/raw/rawhide/f/pulseaudio-11.1-autospawn_disable.patch
 Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/lessfence.patch
 Patch504:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/memfd.patch
 BuildRequires:	meson
@@ -434,6 +435,12 @@ ln -sf %{_userunitdir}/pulseaudio.socket %{buildroot}%{_userunitdir}/sockets.tar
 ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %{_sysconfdir}/pulse/daemon.conf.rpmnew
 %systemd_user_post pulseaudio.socket
 
+%preun
+%systemd_user_preun pulseaudio.socket
+
+%postun
+%systemd_user_postun pulseaudio.socket
+
 %post client-config
 %{_sbindir}/update-alternatives \
   --install %{_sysconfdir}/sound/profiles/current %{alt_name} %{_sysconfdir}/sound/profiles/pulse %{alt_priority}
@@ -483,6 +490,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_libdir}/%{name}/libpulsedsp.so
 %{_libdir}/%{name}/libpulsecore-%{apiver}.so
 %{_libdir}/%{name}/libpulsecommon-%{apiver}.so
+%dir %{_libdir}/pulse-%{apiver}
 %dir %{_libdir}/pulse-%{apiver}/modules/
 %{_libdir}/pulse-%{apiver}/modules/module-allow-passthrough.so
 %{_libdir}/pulse-%{apiver}/modules/libalsa-util.so
@@ -658,6 +666,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_prefix}/lib/%{name}/libpulsedsp.so
 %{_prefix}/lib/%{name}/libpulsecore-%{apiver}.so
 %{_prefix}/lib/%{name}/libpulsecommon-%{apiver}.so
+%dir %{_prefix}/lib/pulse-%{apiver}
 %dir %{_prefix}/lib/pulse-%{apiver}/modules/
 %{_prefix}/lib/pulse-%{apiver}/modules/module-allow-passthrough.so
 %{_prefix}/lib/pulse-%{apiver}/modules/libalsa-util.so
