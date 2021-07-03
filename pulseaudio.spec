@@ -53,6 +53,7 @@ Patch1:		pulseaudio-6.0-kde-delay.patch
 Patch2:		pulseaudio-13.99.1-non-x86.patch
 # Load device-manager module
 Patch3:		pulseaudio-7.1-load-module-device-manager.patch
+# OM MODIFIED VERSION: Rebased to 14.99.2
 Patch4:		https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/395.patch
 Patch5:		https://src.fedoraproject.org/rpms/pulseaudio/raw/rawhide/f/pulseaudio-11.1-autospawn_disable.patch
 Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/lessfence.patch
@@ -322,6 +323,16 @@ Group:		Sound
 %description utils
 This package contains command line utilities for the PulseAudio sound server.
 
+%package server
+Summary:	PulseAudio server
+Group:		Sound
+
+%description server
+The PulseAudio server.
+
+Install %{name}-server if you don't want to use
+pipewire-pulse.
+
 %if %{with compat32}
 %package -n %{lib32name}
 Summary:	Libraries for PulseAudio clients (32-bit)
@@ -433,12 +444,14 @@ ln -sf %{_userunitdir}/pulseaudio.socket %{buildroot}%{_userunitdir}/sockets.tar
 
 %post
 ccp -i -d --set NoOrphans --oldfile %{_sysconfdir}/pulse/daemon.conf --newfile %{_sysconfdir}/pulse/daemon.conf.rpmnew
+
+%post server
 %systemd_user_post pulseaudio.socket
 
-%preun
+%preun server
 %systemd_user_preun pulseaudio.socket
 
-%postun
+%postun server
 %systemd_user_postun pulseaudio.socket
 
 %post client-config
@@ -465,21 +478,23 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %config(noreplace) %{_sysconfdir}/pulse/default.pa
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%{_bindir}/%{name}
 %{_bindir}/pa-info
-%{_mandir}/man1/%{name}.1.*
 %{_mandir}/man5/pulse-client.conf.5.*
 %{_mandir}/man5/pulse-daemon.conf.5.*
 %{_mandir}/man5/default.pa.5.*
 %{_mandir}/man5/pulse-cli-syntax.5.*
 %{_datadir}/icons/hicolor/*
+%dir %{_datadir}/%{name}/
+%{_datadir}/%{name}/alsa-mixer
+%{_udevrulesdir}/90-pulseaudio.rules
+
+%files server
+%{_bindir}/%{name}
+%{_mandir}/man1/%{name}.1.*
 %{_datadir}/zsh/site-functions/_pulseaudio
 %{_userunitdir}/pulseaudio.service
 %{_userunitdir}/pulseaudio.socket
 %{_userunitdir}/sockets.target.wants/pulseaudio.socket
-%dir %{_datadir}/%{name}/
-%{_datadir}/%{name}/alsa-mixer
-%{_udevrulesdir}/90-pulseaudio.rules
 
 %files -n %{libname}
 %{_libdir}/libpulse.so.%{major}*

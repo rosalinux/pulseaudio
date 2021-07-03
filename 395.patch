@@ -1,19 +1,18 @@
-From 3ed8536498c4cc71ad2d73a38a49c1541ec65e98 Mon Sep 17 00:00:00 2001
-From: Arun Raghavan <arun@asymptotic.io>
-Date: Tue, 20 Oct 2020 16:18:57 -0400
-Subject: [PATCH 1/4] echo-cancel-test: Drop references to internal message
- queue
-
-We don't actually initialise or use it in the test, and this just causes
-a crash at the end.
----
- src/modules/echo-cancel/module-echo-cancel.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/src/modules/echo-cancel/module-echo-cancel.c b/src/modules/echo-cancel/module-echo-cancel.c
-index f239492ce..a0becf246 100644
---- a/src/modules/echo-cancel/module-echo-cancel.c
-+++ b/src/modules/echo-cancel/module-echo-cancel.c
+diff -up pulseaudio-14.99.2/meson.build.5~ pulseaudio-14.99.2/meson.build
+--- pulseaudio-14.99.2/meson.build.5~	2021-06-16 11:24:32.427211300 +0200
++++ pulseaudio-14.99.2/meson.build	2021-07-04 00:32:34.695330689 +0200
+@@ -749,7 +749,7 @@ if udev_dep.found()
+   cdata.set('HAVE_UDEV', 1)
+ endif
+ 
+-webrtc_dep = dependency('webrtc-audio-processing', version : '>= 0.2', required : get_option('webrtc-aec'))
++webrtc_dep = dependency('webrtc-audio-processing-1', version : '>= 1.0', required : get_option('webrtc-aec'))
+ if webrtc_dep.found()
+   cdata.set('HAVE_WEBRTC', 1)
+ endif
+diff -up pulseaudio-14.99.2/src/modules/echo-cancel/module-echo-cancel.c.5~ pulseaudio-14.99.2/src/modules/echo-cancel/module-echo-cancel.c
+--- pulseaudio-14.99.2/src/modules/echo-cancel/module-echo-cancel.c.5~	2021-06-16 11:24:32.465212000 +0200
++++ pulseaudio-14.99.2/src/modules/echo-cancel/module-echo-cancel.c	2021-07-04 00:32:34.695330689 +0200
 @@ -2358,8 +2358,6 @@ int main(int argc, char* argv[]) {
      }
  
@@ -23,25 +22,9 @@ index f239492ce..a0becf246 100644
  
  out:
      if (u.captured_file)
--- 
-GitLab
-
-
-From be4a78acd8cebb58becf75234beef2975e65f004 Mon Sep 17 00:00:00 2001
-From: Eero Nurkkala <eero.nurkkala@offcode.fi>
-Date: Tue, 20 Oct 2020 16:20:23 -0400
-Subject: [PATCH 2/4] echo-cancel: add webrtc AEC3 support
-
-Drop a number of now unsupported features, and add new parameters for
-pre-/post-amplification.
----
- src/modules/echo-cancel/webrtc.cc | 433 ++++++++----------------------
- 1 file changed, 113 insertions(+), 320 deletions(-)
-
-diff --git a/src/modules/echo-cancel/webrtc.cc b/src/modules/echo-cancel/webrtc.cc
-index ec3ba0689..ed4bb65a5 100644
---- a/src/modules/echo-cancel/webrtc.cc
-+++ b/src/modules/echo-cancel/webrtc.cc
+diff -up pulseaudio-14.99.2/src/modules/echo-cancel/webrtc.cc.5~ pulseaudio-14.99.2/src/modules/echo-cancel/webrtc.cc
+--- pulseaudio-14.99.2/src/modules/echo-cancel/webrtc.cc.5~	2021-06-16 11:24:32.465212000 +0200
++++ pulseaudio-14.99.2/src/modules/echo-cancel/webrtc.cc	2021-07-04 00:35:40.477407258 +0200
 @@ -3,8 +3,8 @@
  
      Copyright 2011 Collabora Ltd.
@@ -140,20 +123,20 @@ index ec3ba0689..ed4bb65a5 100644
 -    void Print(webrtc::TraceLevel level, const char *message, int length)
 -    {
 -        if (level & webrtc::kTraceError || level & webrtc::kTraceCritical)
--            pa_log(message);
+-            pa_log("%s", message);
 -        else if (level & webrtc::kTraceWarning)
--            pa_log_warn(message);
+-            pa_log_warn("%s", message);
 -        else if (level & webrtc::kTraceInfo)
--            pa_log_info(message);
+-            pa_log_info("%s", message);
 -        else
--            pa_log_debug(message);
+-            pa_log_debug("%s", message);
 -    }
 -};
 -
  static int webrtc_volume_from_pa(pa_volume_t v)
  {
      return (v * WEBRTC_AGC_MAX_VOLUME) / PA_VOLUME_NORM;
-@@ -120,8 +87,7 @@ static pa_volume_t webrtc_volume_to_pa(int v)
+@@ -120,8 +87,7 @@ static pa_volume_t webrtc_volume_to_pa(i
  
  static void webrtc_ec_fixate_spec(pa_sample_spec *rec_ss, pa_channel_map *rec_map,
                                    pa_sample_spec *play_ss, pa_channel_map *play_map,
@@ -163,7 +146,7 @@ index ec3ba0689..ed4bb65a5 100644
  {
      rec_ss->format = PA_SAMPLE_FLOAT32NE;
      play_ss->format = PA_SAMPLE_FLOAT32NE;
-@@ -139,110 +105,22 @@ static void webrtc_ec_fixate_spec(pa_sample_spec *rec_ss, pa_channel_map *rec_ma
+@@ -139,110 +105,22 @@ static void webrtc_ec_fixate_spec(pa_sam
      *out_ss = *rec_ss;
      *out_map = *rec_map;
  
@@ -279,7 +262,7 @@ index ec3ba0689..ed4bb65a5 100644
  
      if (!(ma = pa_modargs_new(args, valid_modargs))) {
          pa_log("Failed to parse submodule arguments.");
-@@ -261,6 +139,12 @@ bool pa_webrtc_ec_init(pa_core *c, pa_echo_canceller *ec,
+@@ -261,6 +139,12 @@ bool pa_webrtc_ec_init(pa_core *c, pa_ec
          goto fail;
      }
  
@@ -292,7 +275,7 @@ index ec3ba0689..ed4bb65a5 100644
      agc = DEFAULT_ANALOG_GAIN_CONTROL;
      if (pa_modargs_get_value_boolean(ma, "analog_gain_control", &agc) < 0) {
          pa_log("Failed to parse analog_gain_control value");
-@@ -278,62 +162,47 @@ bool pa_webrtc_ec_init(pa_core *c, pa_echo_canceller *ec,
+@@ -278,62 +162,47 @@ bool pa_webrtc_ec_init(pa_core *c, pa_ec
          goto fail;
      }
  
@@ -382,7 +365,7 @@ index ec3ba0689..ed4bb65a5 100644
          goto fail;
      }
  
-@@ -348,82 +217,7 @@ bool pa_webrtc_ec_init(pa_core *c, pa_echo_canceller *ec,
+@@ -348,82 +217,7 @@ bool pa_webrtc_ec_init(pa_core *c, pa_ec
      }
      ec->params.webrtc.agc_start_volume = agc_start_volume;
  
@@ -466,7 +449,7 @@ index ec3ba0689..ed4bb65a5 100644
  
      pconfig = {
          webrtc::StreamConfig(rec_ss->rate, rec_ss->channels, false), /* input stream */
-@@ -436,46 +230,60 @@ bool pa_webrtc_ec_init(pa_core *c, pa_echo_canceller *ec,
+@@ -436,46 +230,60 @@ bool pa_webrtc_ec_init(pa_core *c, pa_ec
          goto fail;
      }
  
@@ -478,7 +461,10 @@ index ec3ba0689..ed4bb65a5 100644
 +
      if (hpf)
 -        apm->high_pass_filter()->Enable(true);
--
++        config.high_pass_filter.enabled = true;
++    else
++        config.high_pass_filter.enabled = false;
+ 
 -    if (!mobile) {
 -        apm->echo_cancellation()->enable_drift_compensation(ec->params.drift_compensation);
 -        apm->echo_cancellation()->Enable(true);
@@ -487,16 +473,12 @@ index ec3ba0689..ed4bb65a5 100644
 -        apm->echo_control_mobile()->enable_comfort_noise(cn);
 -        apm->echo_control_mobile()->Enable(true);
 -    }
-+        config.high_pass_filter.enabled = true;
-+    else
-+        config.high_pass_filter.enabled = false;
- 
+-
 -    if (ns) {
 -        apm->noise_suppression()->set_level(webrtc::NoiseSuppression::kHigh);
 -        apm->noise_suppression()->Enable(true);
 -    }
-+    config.echo_canceller.enabled = true;
- 
+-
 -    if (agc || dgc) {
 -        if (mobile && rm <= webrtc::EchoControlMobile::kEarpiece) {
 -            /* Maybe this should be a knob, but we've got a lot of knobs already */
@@ -514,17 +496,19 @@ index ec3ba0689..ed4bb65a5 100644
 -            }
 -            ec->params.webrtc.agc = true;
 -        }
++    config.echo_canceller.enabled = true;
++
 +    if (!mobile)
 +        config.echo_canceller.mobile_mode = false;
 +    else
 +        config.echo_canceller.mobile_mode = true;
-+
+ 
+-        apm->gain_control()->Enable(true);
 +    if (ns)
 +       config.noise_suppression.enabled = true;
 +    else
 +       config.noise_suppression.enabled = false;
- 
--        apm->gain_control()->Enable(true);
++
 +    if (tns)
 +       config.transient_suppression.enabled = true;
 +    else
@@ -560,7 +544,7 @@ index ec3ba0689..ed4bb65a5 100644
  
      ec->params.webrtc.apm = apm;
      ec->params.webrtc.rec_ss = *rec_ss;
-@@ -485,6 +293,8 @@ bool pa_webrtc_ec_init(pa_core *c, pa_echo_canceller *ec,
+@@ -485,6 +293,8 @@ bool pa_webrtc_ec_init(pa_core *c, pa_ec
      *nframes = ec->params.webrtc.blocksize;
      ec->params.webrtc.first = true;
  
@@ -569,7 +553,7 @@ index ec3ba0689..ed4bb65a5 100644
      for (i = 0; i < rec_ss->channels; i++)
          ec->params.webrtc.rec_buffer[i] = pa_xnew(float, *nframes);
      for (i = 0; i < play_ss->channels; i++)
-@@ -496,10 +306,7 @@ bool pa_webrtc_ec_init(pa_core *c, pa_echo_canceller *ec,
+@@ -496,10 +306,7 @@ bool pa_webrtc_ec_init(pa_core *c, pa_ec
  fail:
      if (ma)
          pa_modargs_free(ma);
@@ -581,7 +565,7 @@ index ec3ba0689..ed4bb65a5 100644
          delete apm;
  
      return false;
-@@ -515,12 +322,6 @@ void pa_webrtc_ec_play(pa_echo_canceller *ec, const uint8_t *play) {
+@@ -515,12 +322,6 @@ void pa_webrtc_ec_play(pa_echo_canceller
      pa_deinterleave(play, (void **) buf, ss->channels, pa_sample_size(ss), n);
  
      pa_assert_se(apm->ProcessReverseStream(buf, config, config, buf) == webrtc::AudioProcessing::kNoError);
@@ -594,7 +578,7 @@ index ec3ba0689..ed4bb65a5 100644
  }
  
  void pa_webrtc_ec_record(pa_echo_canceller *ec, const uint8_t *rec, uint8_t *out) {
-@@ -538,7 +339,7 @@ void pa_webrtc_ec_record(pa_echo_canceller *ec, const uint8_t *rec, uint8_t *out
+@@ -538,7 +339,7 @@ void pa_webrtc_ec_record(pa_echo_cancell
      if (ec->params.webrtc.agc) {
          pa_volume_t v = pa_echo_canceller_get_capture_volume(ec);
          old_volume = webrtc_volume_from_pa(v);
@@ -603,7 +587,7 @@ index ec3ba0689..ed4bb65a5 100644
      }
  
      apm->set_stream_delay_ms(0);
-@@ -553,7 +354,7 @@ void pa_webrtc_ec_record(pa_echo_canceller *ec, const uint8_t *rec, uint8_t *out
+@@ -553,7 +354,7 @@ void pa_webrtc_ec_record(pa_echo_cancell
              ec->params.webrtc.first = false;
              new_volume = ec->params.webrtc.agc_start_volume;
          } else {
@@ -612,7 +596,7 @@ index ec3ba0689..ed4bb65a5 100644
          }
  
          if (old_volume != new_volume)
-@@ -564,9 +365,6 @@ void pa_webrtc_ec_record(pa_echo_canceller *ec, const uint8_t *rec, uint8_t *out
+@@ -564,9 +365,6 @@ void pa_webrtc_ec_record(pa_echo_cancell
  }
  
  void pa_webrtc_ec_set_drift(pa_echo_canceller *ec, float drift) {
@@ -622,7 +606,7 @@ index ec3ba0689..ed4bb65a5 100644
  }
  
  void pa_webrtc_ec_run(pa_echo_canceller *ec, const uint8_t *rec, const uint8_t *play, uint8_t *out) {
-@@ -577,11 +375,6 @@ void pa_webrtc_ec_run(pa_echo_canceller *ec, const uint8_t *rec, const uint8_t *
+@@ -577,11 +375,6 @@ void pa_webrtc_ec_run(pa_echo_canceller
  void pa_webrtc_ec_done(pa_echo_canceller *ec) {
      int i;
  
@@ -634,35 +618,3 @@ index ec3ba0689..ed4bb65a5 100644
      if (ec->params.webrtc.apm) {
          delete (webrtc::AudioProcessing*)ec->params.webrtc.apm;
          ec->params.webrtc.apm = NULL;
--- 
-GitLab
-
-
-From b201aa1f90a841df7d1dedad72abc192795de839 Mon Sep 17 00:00:00 2001
-From: Arun Raghavan <arun@asymptotic.io>
-Date: Tue, 20 Oct 2020 17:29:55 -0400
-Subject: [PATCH 4/4] build-sys: Bump webrtc-audio-processing dependency
-
-The package name and versioning are changing upstream, so prepare for
-that.
----
- configure.ac | 2 +-
- meson.build  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/meson.build b/meson.build
-index 02c4d99fe..ac85f66ac 100644
---- a/meson.build
-+++ b/meson.build
-@@ -673,7 +673,7 @@ if udev_dep.found()
-   cdata.set('HAVE_UDEV', 1)
- endif
- 
--webrtc_dep = dependency('webrtc-audio-processing', version : '>= 0.2', required : get_option('webrtc-aec'))
-+webrtc_dep = dependency('webrtc-audio-processing-1', version : '>= 1.0', required : get_option('webrtc-aec'))
- if webrtc_dep.found()
-   cdata.set('HAVE_WEBRTC', 1)
- endif
--- 
-GitLab
-
