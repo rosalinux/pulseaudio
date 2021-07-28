@@ -38,7 +38,7 @@
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
-Version:	14.99.2
+Version:	15.0
 Release:	1
 License:	LGPLv2+
 Group:		Sound
