@@ -39,7 +39,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	15.0
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -81,6 +81,10 @@ BuildRequires:	pkgconfig(gio-2.0)
 BuildRequires:	pkgconfig(ice)
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(json-c)
+BuildRequires:	pkgconfig(ldacBT-enc)
+BuildRequires:	pkgconfig(ldacBT-abr)
+BuildRequires:	pkgconfig(libfreeaptx)
+BuildRequires:	pkgconfig(libopenaptx)
 BuildRequires:	pkgconfig(libasyncns)
 BuildRequires:	pkgconfig(liblircclient0)
 BuildRequires:	pkgconfig(webrtc-audio-processing-1)
@@ -386,12 +390,20 @@ export CXX=g++
 %meson \
 	-Dsystemd=enabled \
 	-Delogind=disabled \
+	-Dbluez5=enabled \
+	-Dbluez5-gstreamer=enabled \
+	-Dbluez5-native-headset=true \
+	-Dbluez5-ofono-headset=true \
+	-Dadrian-aec=true \
+	-Dwebrtc-aec=enabled \
 %ifarch %{armx}
 	-Datomic-arm-linux-helpers=true \
 	-Datomic-arm-memory-barrier=true \
 %endif
 %if %{with bootstrap}
 	-Dgstreamer=disabled
+%else
+	-Dgstreamer=enabled
 %endif
 
 %build
