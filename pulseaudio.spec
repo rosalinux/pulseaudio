@@ -395,7 +395,7 @@ export CXX=g++
 	-Dbluez5-native-headset=true \
 	-Dbluez5-ofono-headset=true \
 	-Dadrian-aec=true \
-	-Dwebrtc-aec=true \
+	-Dwebrtc-aec=enable \
 %ifarch %{armx}
 	-Datomic-arm-linux-helpers=true \
 	-Datomic-arm-memory-barrier=true \
