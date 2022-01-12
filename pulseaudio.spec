@@ -39,7 +39,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	15.0
-Release:	3
+Release:	4
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -495,7 +495,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_mandir}/man5/pulse-daemon.conf.5.*
 %{_mandir}/man5/default.pa.5.*
 %{_mandir}/man5/pulse-cli-syntax.5.*
-%{_datadir}/icons/hicolor/*
+%{_datadir}/icons/hicolor/*/*/*
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
 %{_udevrulesdir}/90-pulseaudio.rules
