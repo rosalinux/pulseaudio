@@ -58,6 +58,7 @@ Patch4:		https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/3
 Patch5:		https://src.fedoraproject.org/rpms/pulseaudio/raw/rawhide/f/pulseaudio-11.1-autospawn_disable.patch
 Patch503:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/lessfence.patch
 Patch504:	https://raw.githubusercontent.com/clearlinux-pkgs/pulseaudio/master/memfd.patch
+Patch515:		fix-for-ayya.patch
 BuildRequires:	meson
 BuildRequires:	cmake
 BuildRequires:	doxygen

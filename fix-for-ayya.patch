@@ -1,0 +1,106 @@
+From 6cb0cd3eace5d507dab6188865dc938ca804e664 Mon Sep 17 00:00:00 2001
+From: Igor Makarov <i.makarov@rosalinux.ru>
+Date: Wed, 9 Mar 2022 17:21:26 +0300
+Subject: [PATCH 1/2] disable all mmap in modules
+
+---
+ BUILD/pulseaudio-15.0/src/modules/alsa/alsa-sink.c   | 2 +-
+ BUILD/pulseaudio-15.0/src/modules/alsa/alsa-source.c | 2 +-
+ BUILD/pulseaudio-15.0/src/modules/oss/module-oss.c   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git pulseaudio-15.0/src/modules/alsa/alsa-sink.c pulseaudio-15.0/src/modules/alsa/alsa-sink.c
+index 76a710e..0199113 100644
+--- pulseaudio-15.0/src/modules/alsa/alsa-sink.c
++++ pulseaudio-15.0/src/modules/alsa/alsa-sink.c
+@@ -2268,7 +2268,7 @@ pa_sink *pa_alsa_sink_new(pa_module *m, pa_modargs *ma, const char*driver, pa_ca
+     uint32_t nfrags, frag_size, buffer_size, tsched_size, tsched_watermark, rewind_safeguard;
+     snd_pcm_uframes_t period_frames, buffer_frames, tsched_frames;
+     size_t frame_size;
+-    bool use_mmap = true;
++    bool use_mmap = false;
+     bool use_tsched = true;
+     bool ignore_dB = false;
+     bool namereg_fail = false;
+diff --git pulseaudio-15.0/src/modules/alsa/alsa-source.c pulseaudio-15.0/src/modules/alsa/alsa-source.c
+index 59cca12..134a61b 100644
+--- pulseaudio-15.0/src/modules/alsa/alsa-source.c
++++ pulseaudio-15.0/src/modules/alsa/alsa-source.c
+@@ -1968,7 +1968,7 @@ pa_source *pa_alsa_source_new(pa_module *m, pa_modargs *ma, const char*driver, p
+     uint32_t nfrags, frag_size, buffer_size, tsched_size, tsched_watermark;
+     snd_pcm_uframes_t period_frames, buffer_frames, tsched_frames;
+     size_t frame_size;
+-    bool use_mmap = true;
++    bool use_mmap = false;
+     bool use_tsched = true;
+     bool ignore_dB = false;
+     bool namereg_fail = false;
+diff --git pulseaudio-15.0/src/modules/oss/module-oss.c pulseaudio-15.0/src/modules/oss/module-oss.c
+index 048822c..3dd19b2 100644
+--- pulseaudio-15.0/src/modules/oss/module-oss.c
++++ pulseaudio-15.0/src/modules/oss/module-oss.c
+@@ -1185,7 +1185,7 @@ int pa__init(pa_module*m) {
+     int fd = -1;
+     int nfrags, orig_frag_size, frag_size;
+     int mode, caps;
+-    bool record = true, playback = true, use_mmap = true;
++    bool record = true, playback = true, use_mmap = false;
+     pa_sample_spec ss;
+     pa_channel_map map;
+     pa_modargs *ma = NULL;
+-- 
+2.27.0
+
+From 28a85db93c4a9a7fbccbe5e01ab312c899528261 Mon Sep 17 00:00:00 2001
+From: Igor Makarov <i.makarov@rosalinux.ru>
+Date: Sat, 5 Mar 2022 14:31:59 +0300
+Subject: [PATCH 2/2] update for ayya
+
+---
+ BUILD/pulseaudio-15.0/src/daemon/default.pa.in           | 5 ++++-
+ BUILD/pulseaudio-15.0/src/daemon/pulseaudio.desktop.in   | 1 -
+ BUILD/pulseaudio-15.0/src/daemon/start-pulseaudio-x11.in | 3 +++
+ 3 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git pulseaudio-15.0/src/daemon/default.pa.in pulseaudio-15.0/src/daemon/default.pa.in
+index 0d3b9dc..fa32a92 100755
+--- pulseaudio-15.0/src/daemon/default.pa.in
++++ pulseaudio-15.0/src/daemon/default.pa.in
+@@ -37,7 +37,10 @@ load-module module-switch-on-port-available
+ ### (it's probably better to not load these drivers manually, but instead
+ ### use module-udev-detect -- see below -- for doing this automatically)
+ ifelse(@HAVE_ALSA@, 1, [dnl
+-#load-module module-alsa-sink
++
++#setup for AYYA phone
++load-module module-alsa-sink device=hw:0,8
++
+ #load-module module-alsa-source device=hw:1,0
+ ])dnl
+ ifelse(@HAVE_OSS_OUTPUT@, 1, [dnl
+diff --git pulseaudio-15.0/src/daemon/pulseaudio.desktop.in pulseaudio-15.0/src/daemon/pulseaudio.desktop.in
+index 098bd61..3d9108e 100644
+--- pulseaudio-15.0/src/daemon/pulseaudio.desktop.in
++++ pulseaudio-15.0/src/daemon/pulseaudio.desktop.in
+@@ -7,4 +7,3 @@ Terminal=false
+ Type=Application
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-HiddenUnderSystemd=true
+-NotShowIn=KDE;
+diff --git pulseaudio-15.0/src/daemon/start-pulseaudio-x11.in pulseaudio-15.0/src/daemon/start-pulseaudio-x11.in
+index 722a639..b688c68 100755
+--- pulseaudio-15.0/src/daemon/start-pulseaudio-x11.in
++++ pulseaudio-15.0/src/daemon/start-pulseaudio-x11.in
+@@ -17,6 +17,9 @@
+ 
+ set -e
+ 
++#setup for AYYA phone
++amixer -c 0 cset numid=3 1
++
+ if [ -n "$1" ] ; then
+     case $1 in
+     stop)
+-- 
+2.27.0
+
