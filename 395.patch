@@ -1,19 +1,19 @@
-diff -up pulseaudio-14.99.2/meson.build.5~ pulseaudio-14.99.2/meson.build
---- pulseaudio-14.99.2/meson.build.5~	2021-06-16 11:24:32.427211300 +0200
-+++ pulseaudio-14.99.2/meson.build	2021-07-04 00:32:34.695330689 +0200
-@@ -749,7 +749,7 @@ if udev_dep.found()
-   cdata.set('HAVE_UDEV', 1)
- endif
+diff -up pulseaudio-16.0/meson.build.5~ pulseaudio-16.0/meson.build
+--- pulseaudio-16.0/meson.build.5~	2022-05-28 22:59:24.470892929 +0200
++++ pulseaudio-16.0/meson.build	2022-05-28 22:59:46.984860510 +0200
+@@ -717,7 +717,7 @@ if get_option('daemon')
+     cdata.set('HAVE_SOXR', 1)
+   endif
  
--webrtc_dep = dependency('webrtc-audio-processing', version : '>= 0.2', required : get_option('webrtc-aec'))
-+webrtc_dep = dependency('webrtc-audio-processing-1', version : '>= 1.0', required : get_option('webrtc-aec'))
- if webrtc_dep.found()
-   cdata.set('HAVE_WEBRTC', 1)
- endif
-diff -up pulseaudio-14.99.2/src/modules/echo-cancel/module-echo-cancel.c.5~ pulseaudio-14.99.2/src/modules/echo-cancel/module-echo-cancel.c
---- pulseaudio-14.99.2/src/modules/echo-cancel/module-echo-cancel.c.5~	2021-06-16 11:24:32.465212000 +0200
-+++ pulseaudio-14.99.2/src/modules/echo-cancel/module-echo-cancel.c	2021-07-04 00:32:34.695330689 +0200
-@@ -2358,8 +2358,6 @@ int main(int argc, char* argv[]) {
+-  webrtc_dep = dependency('webrtc-audio-processing', version : '>= 0.2', required : get_option('webrtc-aec'))
++  webrtc_dep = dependency('webrtc-audio-processing-1', version : '>= 1.0', required : get_option('webrtc-aec'))
+   if webrtc_dep.found()
+     cdata.set('HAVE_WEBRTC', 1)
+   endif
+diff -up pulseaudio-16.0/src/modules/echo-cancel/module-echo-cancel.c.5~ pulseaudio-16.0/src/modules/echo-cancel/module-echo-cancel.c
+--- pulseaudio-16.0/src/modules/echo-cancel/module-echo-cancel.c.5~	2022-05-28 17:18:37.000000000 +0200
++++ pulseaudio-16.0/src/modules/echo-cancel/module-echo-cancel.c	2022-05-28 22:59:24.470892929 +0200
+@@ -2370,8 +2370,6 @@ int main(int argc, char* argv[]) {
      }
  
      u.ec->done(u.ec);
@@ -22,9 +22,9 @@ diff -up pulseaudio-14.99.2/src/modules/echo-cancel/module-echo-cancel.c.5~ puls
  
  out:
      if (u.captured_file)
-diff -up pulseaudio-14.99.2/src/modules/echo-cancel/webrtc.cc.5~ pulseaudio-14.99.2/src/modules/echo-cancel/webrtc.cc
---- pulseaudio-14.99.2/src/modules/echo-cancel/webrtc.cc.5~	2021-06-16 11:24:32.465212000 +0200
-+++ pulseaudio-14.99.2/src/modules/echo-cancel/webrtc.cc	2021-07-04 00:35:40.477407258 +0200
+diff -up pulseaudio-16.0/src/modules/echo-cancel/webrtc.cc.5~ pulseaudio-16.0/src/modules/echo-cancel/webrtc.cc
+--- pulseaudio-16.0/src/modules/echo-cancel/webrtc.cc.5~	2022-05-28 17:18:37.000000000 +0200
++++ pulseaudio-16.0/src/modules/echo-cancel/webrtc.cc	2022-05-28 22:59:24.471892928 +0200
 @@ -3,8 +3,8 @@
  
      Copyright 2011 Collabora Ltd.

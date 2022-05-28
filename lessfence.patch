@@ -1,7 +1,7 @@
-diff -up pulseaudio-13.0/src/pulsecore/atomic.h.5~ pulseaudio-13.0/src/pulsecore/atomic.h
---- pulseaudio-13.0/src/pulsecore/atomic.h.5~	2019-09-16 23:05:46.031493339 +0200
-+++ pulseaudio-13.0/src/pulsecore/atomic.h	2019-09-16 23:06:21.983865077 +0200
-@@ -65,13 +65,13 @@ static inline void pa_atomic_store(pa_at
+diff -up pulseaudio-16.0/src/pulsecore/atomic.h.7~ pulseaudio-16.0/src/pulsecore/atomic.h
+--- pulseaudio-16.0/src/pulsecore/atomic.h.7~	2022-05-28 17:18:37.000000000 +0200
++++ pulseaudio-16.0/src/pulsecore/atomic.h	2022-05-28 23:01:05.356747662 +0200
+@@ -66,13 +66,13 @@ static inline void pa_atomic_store(pa_at
  #else
  
  static inline int pa_atomic_load(const pa_atomic_t *a) {
@@ -17,7 +17,7 @@ diff -up pulseaudio-13.0/src/pulsecore/atomic.h.5~ pulseaudio-13.0/src/pulsecore
  }
  
  #endif
-@@ -123,13 +123,13 @@ static inline void pa_atomic_ptr_store(p
+@@ -124,13 +124,13 @@ static inline void pa_atomic_ptr_store(p
  #else
  
  static inline void* pa_atomic_ptr_load(const pa_atomic_ptr_t *a) {
@@ -27,7 +27,7 @@ diff -up pulseaudio-13.0/src/pulsecore/atomic.h.5~ pulseaudio-13.0/src/pulsecore
  }
  
  static inline void pa_atomic_ptr_store(pa_atomic_ptr_t *a, void *p) {
-     a->value = (unsigned long) p;
+     a->value = (uintptr_t) p;
 -    __sync_synchronize();
 +    asm volatile("": : :"memory");
  }
