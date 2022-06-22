@@ -39,7 +39,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	16.0
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -378,7 +378,8 @@ a PulseAudio sound server.
 	-Dbluez5-gstreamer=disabled \
 	-Dsystemd=enabled \
 	-Delogind=disabled \
-	-Dtcpwrap=disabled
+	-Dtcpwrap=disabled \
+	-Dudevrulesdir=%{_udevrulesdir}
 %endif
 
 %ifarch %{arm}
@@ -389,6 +390,7 @@ export CXX=g++
 
 %meson \
 	-Dsystemd=enabled \
+	-Dudevrulesdir=%{_udevrulesdir} \
 	-Delogind=disabled \
 	-Dbluez5=enabled \
 	-Dbluez5-gstreamer=enabled \
@@ -490,10 +492,10 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %{_bindir}/pa-info
-%{_mandir}/man5/pulse-client.conf.5.*
-%{_mandir}/man5/pulse-daemon.conf.5.*
-%{_mandir}/man5/default.pa.5.*
-%{_mandir}/man5/pulse-cli-syntax.5.*
+%doc %{_mandir}/man5/pulse-client.conf.5.*
+%doc %{_mandir}/man5/pulse-daemon.conf.5.*
+%doc %{_mandir}/man5/default.pa.5.*
+%doc %{_mandir}/man5/pulse-cli-syntax.5.*
 %{_datadir}/icons/hicolor/*/*/*
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/alsa-mixer
@@ -501,7 +503,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 
 %files server
 %{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1.*
+%doc %{_mandir}/man1/%{name}.1.*
 %{_datadir}/zsh/site-functions/_pulseaudio
 %{_userunitdir}/pulseaudio.service
 %{_userunitdir}/pulseaudio.socket
@@ -637,8 +639,8 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %files module-x11
 %{_bindir}/pax11publish
 %{_bindir}/start-pulseaudio-x11
-%{_mandir}/man1/pax11publish.1.*
-%{_mandir}/man1/start-pulseaudio-x11.1.*
+%doc %{_mandir}/man1/pax11publish.1.*
+%doc %{_mandir}/man1/start-pulseaudio-x11.1.*
 %{_libdir}/pulseaudio/modules/module-x11-bell.so
 %{_libdir}/pulseaudio/modules/module-x11-cork-request.so
 %{_libdir}/pulseaudio/modules/module-x11-publish.so
@@ -673,15 +675,15 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %{_bindir}/parec
 %{_bindir}/parecord
 %{_bindir}/pasuspender
-%{_mandir}/man1/pacat.1.*
-%{_mandir}/man1/pamon.1.*
-%{_mandir}/man1/parec.1.*
-%{_mandir}/man1/parecord.1.*
-%{_mandir}/man1/pacmd.1.*
-%{_mandir}/man1/pactl.1.*
-%{_mandir}/man1/padsp.1.*
-%{_mandir}/man1/paplay.1.*
-%{_mandir}/man1/pasuspender.1.*
+%doc %{_mandir}/man1/pacat.1.*
+%doc %{_mandir}/man1/pamon.1.*
+%doc %{_mandir}/man1/parec.1.*
+%doc %{_mandir}/man1/parecord.1.*
+%doc %{_mandir}/man1/pacmd.1.*
+%doc %{_mandir}/man1/pactl.1.*
+%doc %{_mandir}/man1/padsp.1.*
+%doc %{_mandir}/man1/paplay.1.*
+%doc %{_mandir}/man1/pasuspender.1.*
 
 %if %{with compat32}
 %files -n %{lib32name}
