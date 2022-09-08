@@ -27,19 +27,19 @@
 %define apiver %(echo %{version} |cut -d. -f1-2)
 
 # Library names
-%define libname %mklibname %{name} %{major}
+%define libname %mklibname %{name}
 %define devname %mklibname -d %{name}
 
-%define glib2libname %mklibname pulseglib2 %{glib2major}
+%define glib2libname %mklibname pulseglib2
 
-%define lib32name lib%{name}%{major}
+%define lib32name lib%{name}
 %define dev32name lib%{name}-devel
-%define glib2lib32name libpulseglib2_%{glib2major}
+%define glib2lib32name libpulseglib2
 
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	16.1
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -212,6 +212,7 @@ provides pulseaudio has:
 Summary:	Libraries for PulseAudio clients
 Group:		System/Libraries
 Requires:	%{name}-client-config
+%rename %{mklibname %{name} 0}
 
 %description -n %{libname}
 This package contains the runtime libraries for any application that wishes
@@ -243,6 +244,7 @@ wishes to interface with a PulseAudio sound server.
 %package -n %{glib2libname}
 Summary:	GLIB 2.x bindings for PulseAudio clients
 Group:		System/Libraries
+%rename %{mklibname pulseglib2 0}
 
 %description -n %{glib2libname}
 This package contains bindings to integrate the PulseAudio client library with
@@ -342,6 +344,7 @@ pipewire-pulse.
 Summary:	Libraries for PulseAudio clients (32-bit)
 Group:		System/Libraries
 Requires:	%{name}-client-config
+%rename lib%{name}0
 
 %description -n %{lib32name}
 This package contains the runtime libraries for any application that wishes
@@ -350,6 +353,7 @@ to interface with a PulseAudio sound server.
 %package -n %{glib2lib32name}
 Summary:	GLIB 2.x bindings for PulseAudio clients (32-bit)
 Group:		System/Libraries
+%rename libpulseglib2_0
 
 %description -n %{glib2lib32name}
 This package contains bindings to integrate the PulseAudio client library with
