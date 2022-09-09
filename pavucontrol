@@ -1,0 +1,23 @@
+#!/bin/sh
+if echo ${XDG_CURRENT_DESKTOP} |grep -qE '(Cinnamon|GNOME|LXDE|MATE|XFCE)'; then
+	if [ -x /usr/bin/pavucontrol-gtk ]; then
+		exec /usr/bin/pavucontrol-gtk
+		exit 1
+	fi
+fi
+if [ -x /usr/bin/pavucontrol-qt ]; then
+	exec /usr/bin/pavucontrol-qt
+elif [ -x /usr/bin/pavucontrol-gtk ]; then
+	exec /usr/bin/pavucontrol-gtk
+elif [ -x /usr/bin/kmix ]; then
+	# Not quite the same, but close enough
+	exec /usr/bin/kmix
+elif [ -x /usr/bin/konsole -a -x /usr/bin/alsamixer ]; then
+	exec /usr/bin/konsole -e 'alsamixer -D pulse'
+elif [ -x /usr/bin/qterminal -a -x /usr/bin/alsamixer ]; then
+	exec /usr/bin/qterminal -e 'alsamixer -D pulse'
+elif [ -x /usr/bin/xterm -a -x /usr/bin/alsamixer ]; then
+	exec /usr/bin/xterm -e 'alsamixer -D pulse'
+fi
+echo $"No pulseaudio control tool found. Please install pavucontrol-qt or pavucontrol."
+exit 1

@@ -39,7 +39,7 @@
 Summary:	Sound server for Linux
 Name:		pulseaudio
 Version:	16.1
-Release:	3
+Release:	4
 License:	LGPLv2+
 Group:		Sound
 Url:		http://pulseaudio.org/
@@ -47,6 +47,7 @@ Url:		http://pulseaudio.org/
 Source0:	http://freedesktop.org/software/pulseaudio/releases/%{name}-%{version}%{?git:-%{fullgit}}.tar.xz
 Source1:	%{name}.sysconfig
 Source4:	%{name}.svg
+Source10:	pavucontrol
 # Load more modules if they are available
 Patch0:		pulseaudio-5.0-defaults.patch
 Patch1:		pulseaudio-6.0-kde-delay.patch
@@ -458,6 +459,9 @@ sed -e "/exit-idle-time/iexit-idle-time=0" -i %{buildroot}%{_sysconfdir}/pulse/d
 mkdir -p %{buildroot}%{_userunitdir}/sockets.target.wants
 ln -sf %{_userunitdir}/pulseaudio.socket %{buildroot}%{_userunitdir}/sockets.target.wants/pulseaudio.socket
 
+# Install the toolkit neutral pavucontrol wrapper
+install -c -m 755 %{S:10} %{buildroot}%{_bindir}/pavucontrol
+
 %find_lang %{name}
 
 %post
@@ -496,6 +500,7 @@ sed -i 's/^\(\s*\)\;\?\s*\(autospawn\s*=\s*\).*/\1\; \2no/' %{_sysconfdir}/pulse
 %config(noreplace) %{_sysconfdir}/pulse/system.pa
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %{_bindir}/pa-info
+%{_bindir}/pavucontrol
 %doc %{_mandir}/man5/pulse-client.conf.5.*
 %doc %{_mandir}/man5/pulse-daemon.conf.5.*
 %doc %{_mandir}/man5/default.pa.5.*
